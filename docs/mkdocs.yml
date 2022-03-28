@@ -1,0 +1,4 @@
+site_name: Timeflow Docs
+
+nav:
+    - Home: index.md
