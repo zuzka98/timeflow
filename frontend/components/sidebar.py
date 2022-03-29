@@ -1,6 +1,6 @@
 from turtle import title
 from typing import List
-from idom import html, run, use_state, component, event, vdom, EventHandler
+from idom import html, run, use_state, component, event, vdom
 from idom.server.sanic import PerClientStateServer
 from idom.web import module_from_url, export
 
