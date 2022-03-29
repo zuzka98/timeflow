@@ -1,4 +1,4 @@
-from idom import html, run, use_state, component, event, vdom, EventHandler
+from idom import html, run, use_state, component, event, vdom
 from idom.web import module_from_url, export
 from pages.users import page as users_page
 from pages.clients import page as clients_page
