@@ -105,7 +105,7 @@ async def delete_capacities(
     Parameters
     ----------
     capacity_id : str
-        Epic area that is to be added to the database.
+        ID of the capacity that is to be removed from the database.
     session : Session
         SQL session that is to be used to delete the capacity.
         Defaults to creating a dependency on the running SQL model session.
