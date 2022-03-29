@@ -43,7 +43,7 @@ async def post_epic_area(
 @router.get("/")
 async def get_epic_area_list(session: Session = Depends(get_session)):
     """
-    Get epic area list.
+    Get list of epic areas.
 
     Parameters
     ----------
