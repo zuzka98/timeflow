@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://dyvenia.github.io/timeflow/</loc>
+         <lastmod>2022-03-29</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://dyvenia.github.io/timeflow/api-reference/</loc>
+         <lastmod>2022-03-29</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://dyvenia.github.io/timeflow/how-tos/</loc>
+         <lastmod>2022-03-29</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://dyvenia.github.io/timeflow/tutorials/</loc>
+         <lastmod>2022-03-29</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+</urlset>
