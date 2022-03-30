@@ -99,3 +99,18 @@ def AutoSelect(
         },
         option,
     )
+
+
+@component
+def SelectPerPage(set_select_per_page, per_page_list):
+    dropdown = [html.option({'value': el}, el) for el in per_page_list]
+
+    return html.div(
+        html.select(
+            {
+                'class': class_str,
+                'onChange': lambda event: set_select_per_page(event["target"]["value"])
+            },
+            dropdown
+        ),
+    )
