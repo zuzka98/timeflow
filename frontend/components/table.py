@@ -1,20 +1,29 @@
 from typing import Any, Callable, List
 from idom import html, component, use_state
 from components.layout import Column, Row
+from components.pagination import PaginationBlock
 import math
+
+per_page_list = [
+    5,
+    10,
+    15,
+]
 
 
 @component
 def SimpleTable(rows: List[Any]):
+
     try:
+        select_per_page, set_select_per_page = use_state(per_page_list[0])
         page_number, set_page_number = use_state(1)
         trs = []
         p = page_number
         m = p - 1
-        number_of_visible_rows = 5
+        number_of_visible_rows = int(select_per_page)
         a = m * number_of_visible_rows
         b = a + number_of_visible_rows
-
+        qty_page = math.ceil(len(rows) / number_of_visible_rows)
         for row in rows[a:b]:
             tds = []
             for k in row:
@@ -22,7 +31,8 @@ def SimpleTable(rows: List[Any]):
                 tds.append(html.td({"class": "p-4 w-full"}, value))
             trs.append(html.tr({"class": "flex w-full mb-4"}, tds))
 
-        ths = [html.th({"class": "p-4 w-full"}, header) for header in rows[0].keys()]
+        ths = [html.th({"class": "p-4 w-full"}, header)
+               for header in rows[0].keys()]
         thead = html.thead(
             {"class": "flex bg-secondary-400 text-white w-full"},
             html.tr({"class": "flex w-full mb-4"}, ths),
@@ -38,23 +48,14 @@ def SimpleTable(rows: List[Any]):
         list_pages_nr = []
         for n in pg_range:
             list_pages_nr.append(n)
-
         table = html.table({"class": "text-left"}, thead, tbody)
-
-        a = 1
-        b = 2
-        c = 3
 
         return html.div(
             {"class": "flex flex-col w-full space-y-2"},
             table,
             Row(
-                Row(
-                    PaginationButton(set_page_number, page_number, button_page=a),
-                    PaginationButton(set_page_number, page_number, button_page=b),
-                    PaginationButton(set_page_number, page_number, button_page=c),
-                ),
-                justify="justify-end",
+                PaginationBlock(set_page_number, qty_page,
+                                set_select_per_page, per_page_list),
             ),
         )
     except TypeError:
@@ -73,7 +74,8 @@ def SubmitTable(rows: List[Any]):
             tds.append(html.td({"class": "p-4 w-full"}, value))
         trs.append(html.tr({"class": "flex w-full mb-4"}, tds))
 
-    ths = [html.th({"class": "p-4 w-full"}, header) for header in rows[0].keys()]
+    ths = [html.th({"class": "p-4 w-full"}, header)
+           for header in rows[0].keys()]
     thead = html.thead(
         {"class": "flex bg-secondary-400 text-white w-full"},
         html.tr({"class": "flex w-full mb-4"}, ths),
@@ -113,19 +115,3 @@ def HiddenButton(is_hidden, set_is_hidden):
     )
 
     return btn
-
-
-@component
-def PaginationButton(set_page_number, page_number, button_page):
-    def select_page_number(event):
-        set_page_number(button_page)
-
-    pgn_btn = html.button(
-        {
-            "class": "flex px-4 py-2 text-black bg-white rounded-md hover:bg-black hover:text-white",
-            "onClick": select_page_number,
-        },
-        button_page,
-    )
-
-    return pgn_btn
