@@ -145,3 +145,7 @@ node_modules
 
 # VSCode
 .vscode
+
+# Timeflow files
+/backend
+/frontend
