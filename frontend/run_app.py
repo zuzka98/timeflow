@@ -5,7 +5,7 @@ from index import page as index_page
 
 app = Sanic(__name__)
 HERE = Path(__file__).parent
-app.static("/static", str(HERE / "tailwind/build"))
+app.static("/static", str(HERE))
 PerClientStateServer(
     index_page,
     {

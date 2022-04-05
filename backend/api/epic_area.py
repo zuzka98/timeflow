@@ -208,6 +208,7 @@ async def update_epic_area(
         Defaults to creating a dependency on the running SQL model session.
     """
     statement = select(EpicArea).where(or_(EpicArea.name == name, EpicArea.id == id))
+    
     epic_area_to_update = session.exec(statement).one()
     epic_area_to_update.epic_id = epic_id
     epic_area_to_update.name = name

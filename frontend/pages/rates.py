@@ -1,6 +1,7 @@
 import asyncio
 from cProfile import label
 import json
+from turtle import width
 from idom import html, run, use_state, component, event, vdom
 import requests
 from sanic import Sanic, response
@@ -105,17 +106,20 @@ def create_rates_form(
         else:
             set_on_submit(True)
 
-    selector_user_id = Selector2(set_value=set_user_id, data=username())
+    selector_user_id = Selector2(
+        set_value=set_user_id, data=username(), width='24%')
 
     selector_client_id = Selector2(
         set_value=set_client_id,
         data=clients_names(),
+        width='24%'
     )
     selector_month_start = Selector2(
         set_value=set_month_start,
         data=months_start(),
+        width='24%'
     )
-    inp_amount = Input(set_amount, label="amount in EUR")
+    inp_amount = Input(set_amount, label="amount in EUR", width='[24%]')
 
     is_disabled = True
     if user_id != "" and client_id != "" and month_start != "" and amount != "":
@@ -124,7 +128,8 @@ def create_rates_form(
     btn = Button(is_disabled, handle_submit, label="Submit")
 
     return Column(
-        Row(selector_user_id, selector_client_id, selector_month_start, inp_amount),
+        Row(selector_user_id, selector_client_id, selector_month_start,
+            inp_amount, justify='justify-between'),
         Row(btn),
     )
 
@@ -156,6 +161,7 @@ def update_rate(set_updated_rate, user_id, client_id, month_start):
     inp_rate = Input(
         set_value=set_new_amount,
         label="new amount for current rate",
+        width='full'
     )
     is_disabled = True
     if user_id != "" and client_id != "" and month_start == "":
