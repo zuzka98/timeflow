@@ -148,8 +148,6 @@ def SelectPerPage(set_select_per_page, per_page_list):
                 'class': selectClass,
                 'onChange': lambda event: set_select_per_page(event["target"]["value"])
             },
-            html.option({'disabled': True,
-                         'selected': True}, 'Results per page'),
             dropdown
         ),
     )
