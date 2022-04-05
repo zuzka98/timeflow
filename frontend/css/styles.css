@@ -564,6 +564,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-bottom: 2rem;
 }
 
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
 .block {
   display: block;
 }
@@ -641,6 +645,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+.transform {
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
 .cursor-pointer {
   cursor: pointer;
 }
@@ -661,10 +669,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .items-center {
   align-items: center;
-}
-
-.justify-end {
-  justify-content: flex-end;
 }
 
 .justify-center {
@@ -689,6 +693,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .rounded-full {
   border-radius: 9999px;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
 }
 
 .border-\[1px\] {
@@ -728,6 +736,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: rgb(250 249 254 / var(--tw-bg-opacity));
 }
 
+.bg-select-bg {
+  --tw-bg-opacity: 1;
+  background-color: rgb(233 233 237 / var(--tw-bg-opacity));
+}
+
 .bg-button-bg {
   --tw-bg-opacity: 1;
   background-color: rgb(148 132 227 / var(--tw-bg-opacity));
@@ -743,16 +756,29 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: rgb(19 192 209 / var(--tw-bg-opacity));
 }
 
+.bg-active-sidebar {
+  --tw-bg-opacity: 1;
+  background-color: rgb(148 132 227 / var(--tw-bg-opacity));
+}
+
+.bg-transparent {
+  background-color: transparent;
+}
+
 .fill-button-text {
   fill: #FFFFFF;
 }
 
 .fill-filter-name {
-  fill: #090632;
+  fill: #9498AB;
 }
 
 .fill-text {
   fill: #1F1254;
+}
+
+.fill-nav {
+  fill: #FFFFFF;
 }
 
 .px-4 {
@@ -872,6 +898,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.text-filter-name {
+  --tw-text-opacity: 1;
+  color: rgb(148 152 171 / var(--tw-text-opacity));
+}
+
 .text-text-table-head {
   --tw-text-opacity: 1;
   color: rgb(119 104 191 / var(--tw-text-opacity));
@@ -899,6 +930,16 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .filter {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.duration-200 {
+  transition-duration: 200ms;
 }
 
 .before\:absolute::before {
@@ -962,6 +1003,40 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: rgb(240 241 244 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-active-sidebar:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(148 132 227 / var(--tw-bg-opacity));
+}
+
+.hover\:text-active-sidebar:hover {
+  --tw-text-opacity: 1;
+  color: rgb(148 132 227 / var(--tw-text-opacity));
+}
+
+.focus\:bg-active-sidebar:focus {
+  --tw-bg-opacity: 1;
+  background-color: rgb(148 132 227 / var(--tw-bg-opacity));
+}
+
+.focus\:text-active-sidebar:focus {
+  --tw-text-opacity: 1;
+  color: rgb(148 132 227 / var(--tw-text-opacity));
+}
+
+.focus\:outline-none:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.disabled\:fill-filter-name-disabled:disabled {
+  fill: #9498AB;
+}
+
+.disabled\:text-filter-name-disabled:disabled {
+  --tw-text-opacity: 1;
+  color: rgb(148 152 171 / var(--tw-text-opacity));
+}
+
 @media (min-width: 540px) {
   .sm\:w-\[48\%\] {
     width: 48%;
@@ -975,6 +1050,22 @@ Ensure the default browser behavior of the `hidden` attribute.
 
   .md\:mr-2 {
     margin-right: 0.5rem;
+  }
+
+  .md\:mt-2 {
+    margin-top: 0.5rem;
+  }
+
+  .md\:mt-1 {
+    margin-top: 0.25rem;
+  }
+
+  .md\:ml-2 {
+    margin-left: 0.5rem;
+  }
+
+  .md\:flex {
+    display: flex;
   }
 
   .md\:h-auto {
@@ -1005,20 +1096,16 @@ Ensure the default browser behavior of the `hidden` attribute.
     flex: 1 1 0%;
   }
 
+  .md\:flex-row {
+    flex-direction: row;
+  }
+
   .md\:justify-start {
     justify-content: flex-start;
   }
 
   .md\:justify-end {
     justify-content: flex-end;
-  }
-
-  .md\:flex-row {
-    flex-direction: row;
-  }
-
-  .md\:flex-wrap {
-    flex-wrap: wrap;
   }
 }
 
@@ -1067,8 +1154,28 @@ Ensure the default browser behavior of the `hidden` attribute.
     width: calc(100% - 15rem);
   }
 
-  .xl\:w-auto {
-    width: auto;
+  .xl\:w-\[14\%\] {
+    width: 14%;
+  }
+
+  .xl\:w-\[16\%\] {
+    width: 16%;
+  }
+
+  .xl\:w-\[24\%\] {
+    width: 24%;
+  }
+
+  .xl\:w-\[32\%\] {
+    width: 32%;
+  }
+
+  .xl\:w-\[48\%\] {
+    width: 48%;
+  }
+
+  .xl\:w-\[96\%\] {
+    width: 96%;
   }
 
   .xl\:max-w-\[90\%\] {
@@ -1079,8 +1186,24 @@ Ensure the default browser behavior of the `hidden` attribute.
     max-width: 401px;
   }
 
-  .xl\:justify-end {
-    justify-content: flex-end;
+  .xl\:max-w-\[96\%\] {
+    max-width: 96%;
+  }
+
+  .xl\:max-w-\[32\%\] {
+    max-width: 32%;
+  }
+
+  .xl\:max-w-\[14\%\] {
+    max-width: 14%;
+  }
+
+  .xl\:max-w-\[48\%\] {
+    max-width: 48%;
+  }
+
+  .xl\:max-w-\[24\%\] {
+    max-width: 24%;
   }
 
   .xl\:px-9 {
@@ -1098,47 +1221,9 @@ Ensure the default browser behavior of the `hidden` attribute.
     padding-right: 0px;
   }
 
-  .xl\:px-6 {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-
   .xl\:py-8 {
     padding-top: 2rem;
     padding-bottom: 2rem;
-  }
-  .xl\:w-\[14\%\] {
-    width: 14%;
-  }
-  .xl\:w-\[16\%\] {
-    width: 16%;
-  }
-  .xl\:w-\[24\%\] {
-    width: 24%;
-  }
-  .xl\:max-w-\[24\%\] {
-    max-width: 24%;
-  }
-  .xl\:max-w-\[48\%\] {
-    max-width: 48%;
-  }
-  .xl\:max-w-\[14\%\] {
-    max-width: 14%;
-  }
-  .xl\:max-w-\[32\%\] {
-    max-width: 32%;
-  }
-  .xl\:max-w-\[96\%\] {
-    max-width: 96%;
-  }
-  .xl\:w-\[32\%\] {
-    width: 32%;
-  }
-  .xl\:w-\[96\%\] {
-    width: 96%;
-  }
-  .xl\:w-\[48\%\] {
-    width: 48%;
   }
 }
 
