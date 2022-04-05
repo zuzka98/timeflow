@@ -54,7 +54,7 @@ def page():
             )
         ),
         Column(
-            Row(rates_table(user_id, client_id, month_start)),
+            Row(rates_table(user_id, client_id)),
         ),
         Row(update_rate(set_updated_rate, user_id, client_id, month_start)),
     )
@@ -130,17 +130,9 @@ def create_rates_form(
 
 
 @component
-def rates_table(user_id, client_id, month_start):
-    # Get list of rates by selected user and client containing selected date
-    ms_str = month_start_to_str(month_start)
-    if user_id != "" and client_id != "" and month_start != "":
-        rows = rates_by_user_client_date(
-            user_id=user_id, client_id=client_id, date=ms_str
-        )
-        return html.div({"class": "flex w-full"}, SimpleTable(rows))
-
-    # Get list of active rate by user and client
-    elif user_id != "" and client_id != "" and month_start == "":
+def rates_table(user_id, client_id):
+    # Get list of rates by user and client
+    if user_id != "" and client_id != "":
         rows = rate_active_by_user_client(user_id, client_id)
         return html.div({"class": "flex w-full"}, SimpleTable(rows))
 
@@ -148,17 +140,19 @@ def rates_table(user_id, client_id, month_start):
 @component
 def update_rate(set_updated_rate, user_id, client_id, month_start):
     new_amount, set_new_amount = use_state("")
+    rate_id, set_rate_id = use_state(None)
 
     def handle_submit(event):
-        rate_update(user_id, client_id, new_amount)
+        rate_update(rate_id, new_amount)
         set_updated_rate(new_amount)
 
-    inp_rate = Input(
+    inp_rate_id = Input(set_rate_id, label="rate id")
+    inp_amount = Input(
         set_value=set_new_amount,
-        label="new amount for current rate",
+        label="new amount",
     )
     is_disabled = True
-    if user_id != "" and client_id != "" and month_start == "":
+    if rate_id != None and new_amount != "":
         is_disabled = False
 
     btn = Button(is_disabled, handle_submit, label="Update")
@@ -170,4 +164,4 @@ def update_rate(set_updated_rate, user_id, client_id, month_start):
     #     },
     #     "Update",
     # )
-    return Column(Row(inp_rate), Row(btn))
+    return Column(Row(inp_rate_id, inp_amount), Row(btn))
