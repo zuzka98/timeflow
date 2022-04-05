@@ -5,9 +5,9 @@ from components.pagination import PaginationBlock
 import math
 
 per_page_list = [
-    2,
-    4,
-    6,
+    5,
+    10,
+    15,
 ]
 
 
