@@ -1,7 +1,6 @@
 from idom import html, component
 
 from components.input import SelectPerPage
-from components.icons import arrow_left, arrow_right
 
 
 class_str = """text-primary-500 placeholder-secondary-400 w-full px-4 py-2.5 mt-2 
@@ -11,9 +10,6 @@ class_str = """text-primary-500 placeholder-secondary-400 w-full px-4 py-2.5 mt-
                     focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 
                     ring-gray-400"""
 
-pageButtonClass = 'w-8 h-8 mx-3 flex items-center justify-center cursor-pointer rounded-full hover:bg-pagination-hover hover:w-8 hover:h-8'
-wrapperClass = 'flex items-center w-full justify-center text-pagination md:justify-end'
-
 
 @component
 def PaginationButton(set_page_number, number):
@@ -22,7 +18,7 @@ def PaginationButton(set_page_number, number):
 
     pgn_btn = html.button(
         {
-            "class": pageButtonClass,
+            "class": "flex px-4 py-2 ml-1 text-black bg-white rounded-md hover:bg-black hover:text-white",
             "onClick": select_page_number,
         },
         number,
@@ -39,15 +35,7 @@ def PaginationBlock(set_page_number, qty_page, set_per_page, per_page_list):
         {'class': 'flex justify-between w-full items-center'},
         SelectPerPage(set_per_page, per_page_list),
         html.div(
-            {'class': wrapperClass},
-            html.a(
-                {'class': pageButtonClass},
-                arrow_left
-            ),
-            pgn_block,
-            html.a(
-                {'class': pageButtonClass},
-                arrow_right
-            )
+            {'class': 'flex'},
+            pgn_block
         )
     )
