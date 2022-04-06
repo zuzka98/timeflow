@@ -192,10 +192,12 @@ def timelogs_table(is_true):
     for item in response.json():
         d = {
             "timelog id": item["id"],
-            "start_time": (item["start_time"]).replace("T", " "),
-            "end_time": (item["end_time"]).replace("T", " "),
-            "count_hours": item["count_hours"],
-            "count_days": item["count_days"],
+            "username": item["username"],
+            "epic name": item["epic_name"],
+            "start time": (item["start_time"]).replace("T", " "),
+            "end time": (item["end_time"]).replace("T", " "),
+            "count hours": item["count_hours"],
+            "count days": item["count_days"],
         }
         rows.append(d)
     return html.div(
