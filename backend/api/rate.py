@@ -49,7 +49,6 @@ async def rate(
             rate_to_close = session.exec(statement2).one()
             rate_to_close.valid_to = close_date
             rate_to_close.updated_at = datetime.now()
-            rate_to_close.is_active = False
             session.add(rate_to_close)
             session.add(rate)
             session.commit()
@@ -78,30 +77,27 @@ async def read_rates(
     return result
 
 
-@router.get("/users/{user_id}/clients/{client_id}/active")
-async def read_active_rate(
+@router.get("/users/{user_id}/clients/{client_id}/")
+async def rates_by_user_client(
     user_id: int,
     client_id: int,
     session: Session = Depends(get_session),
 ):
     """
-    Get a single active rate using given user ids and clients ids as keys.
+    Get list of rates using given user ids and clients ids as keys.
 
     Parameters
     ----------
     user_id : int
-        User id that is used to get the active rate.
+        User id that is used to get list of rates.
     client_id : int
-        Client id that is used to get the active rate.
+        Client id that is used to get the list of rates.
     session : Session
-        SQL session that is to be used to read a certain active rate.
+        SQL session that is to be used to read a certain rates.
         Defaults to creating a dependency on the running SQL model session.
     """
     statement = (
-        select(Rate)
-        .where(Rate.user_id == user_id)
-        .where(Rate.client_id == client_id)
-        .where(Rate.is_active == True)
+        select(Rate).where(Rate.user_id == user_id).where(Rate.client_id == client_id)
     )
     result = session.exec(statement).all()
     return result
@@ -195,8 +191,7 @@ async def deactivate_rate_id(
 
 @router.put("/")
 async def update_rates(
-    user_id: str = None,
-    client_id: str = None,
+    rate_id: int = None,
     new_amount: str = None,
     session: Session = Depends(get_session),
 ):
@@ -215,12 +210,7 @@ async def update_rates(
         SQL session that is to be used to update the rate.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = (
-        select(Rate)
-        .where(Rate.user_id == user_id)
-        .where(Rate.client_id == client_id)
-        .where(Rate.is_active == True)
-    )
+    statement = select(Rate).where(Rate.id == rate_id)
     rate_to_update = session.exec(statement).one()
     rate_to_update.amount = new_amount
     session.add(rate_to_update)
