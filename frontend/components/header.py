@@ -28,6 +28,7 @@ def Header(current_page, set_current_page, pages, title):
                     )
                 )
             ),
-            Sidebar(current_page, set_current_page, pages, isOpen, set_isOpen, title)
+            Sidebar(current_page, set_current_page,
+                    pages, isOpen, set_isOpen, title)
         )
     )

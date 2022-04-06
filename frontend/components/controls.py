@@ -56,29 +56,34 @@ def deactivation_button(name_to_deact, handle_deactivation):
 @component
 def TableActions():
     return html.div(
-        {'class': 'flex items-center flex-wrap md:justify-start'},
-        html.a(
-            {'href': 'javascript:void(0)', 'class': tableActionsClass},
+        {'class': 'flex items-center flex-wrap md:justify-start text-filter-name'},
+        html.button(
+            {'href': 'javascript:void(0)',
+             'class': tableActionsClass, 'disabled': True},
             batch_action,
             html.span('Batch actions')
         ),
-        html.a(
-            {'href': 'javascript:void(0)', 'class': tableActionsClass},
+        html.button(
+            {'href': 'javascript:void(0)',
+             'class': tableActionsClass, 'disabled': True},
             filter,
             html.span('Filter')
         ),
-        html.a(
-            {'href': 'javascript:void(0)', 'class': tableActionsClass},
+        html.button(
+            {'href': 'javascript:void(0)',
+             'class': tableActionsClass, 'disabled': True},
             edit,
             html.span('Edit selected')
         ),
-        html.a(
-            {'href': 'javascript:void(0)', 'class': tableActionsClass},
+        html.button(
+            {'href': 'javascript:void(0)',
+             'class': tableActionsClass, 'disabled': True},
             delete,
             html.span('Delete')
         ),
-        html.a(
-            {'href': 'javascript:void(0)', 'class': tableActionsClass},
+        html.button(
+            {'href': 'javascript:void(0)',
+             'class': tableActionsClass, 'disabled': True},
             done,
             html.span('Done')
         )
