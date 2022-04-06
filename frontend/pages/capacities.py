@@ -93,23 +93,26 @@ def create_capacity_form(
         switch_state(is_event, set_is_event)
 
     selector_user_id = Selector2(
-        set_value=set_user_id, data=users_names(), width='24%')
+        set_value=set_user_id, data=users_names(), width='24%', select_bg='bg-select-bg')
 
     selector_team_id = Selector2(
         set_value=set_team_id,
         data=teams_id_name(),
-        width='24%'
+        width='24%',
+        select_bg='bg-select-bg'
     )
     selector_year_month = Selector2(
         set_value=set_year_month,
         data=year_month_dict_list(),
-        width='24%'
+        width='24%',
+        select_bg='bg-select-bg'
     )
 
     selector_days = Selector2(
         set_value=set_days,
         data=capacity_days(),
-        width='24%'
+        width='24%',
+        select_bg='bg-select-bg'
     )
 
     is_disabled = True

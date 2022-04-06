@@ -81,15 +81,15 @@ def create_sponsor_form(
 
     # Create input field for the name of the sponsor
     inp_name = Input(set_value=set_name,
-                     label="full name of the sponsor", width='[32%]')
+                     label="full name of the sponsor", width='[32%]', select_bg='bg-select-bg')
 
     # Create input field for the short name of the sponsor
     inp_short_name = Input(set_value=set_short_name,
-                           label="short name of the sponsor", width='[32%]')
+                           label="short name of the sponsor", width='[32%]', select_bg='bg-select-bg')
 
     # Create a dropdown of clients which can then be selected
     selector_client_id = Selector2(
-        set_value=set_client_id, data=clients_names(), width='32%')
+        set_value=set_client_id, data=clients_names(), width='32%', select_bg='bg-select-bg')
 
     # Create submit button
     btn = submit_button(handle_submit, name, short_name, client_id)

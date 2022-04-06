@@ -2,7 +2,7 @@ from typing import Any, Callable, List, Dict
 from idom import html, component
 from data.common import Select
 
-class_str = """text-primary-500 placeholder-secondary-400 w-full px-4 py-2.5 mt-2 
+class_str = """text-primary-500 bg-transparent placeholder-secondary-400 w-full px-4 py-2.5 mt-2 
                     text-base transition duration-500 ease-in-out transform 
                     border-transparent bg-secondary-300 focus:border-blueGray-500 
                     focus:bg-white dark:focus:bg-secondary-400 focus:outline-none 
@@ -10,9 +10,13 @@ class_str = """text-primary-500 placeholder-secondary-400 w-full px-4 py-2.5 mt-
                     ring-gray-400"""
 
 inputWrapperClass = 'w-full md:w-1/2 flex justify-between items-center border-input-border border-[1px] rounded-[3px] py-2 px-4 xl:max-w-[401px]'
-selectClass = "w-full border-select-border py-3 pl-3 border-[1px] rounded-[3px] appearance-none"
+
 selectWrapperClass = "block relative w-full sm:w-[48%] md:w-[121px] md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:border-t-appearance before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute xl:w-{width} 2xl:mr-0"
 checkboxTd = 'w-6 pr-4 pt-4 pb-3'
+
+
+def selectClass(select_bg: str = ''):
+    return f"w-full border-select-border py-3 pl-3 border-[1px] rounded-[3px] appearance-none {select_bg}"
 
 
 @component
@@ -22,11 +26,12 @@ def Input(
     type: str = "text",
     placeholder: str = "Write here the",
     _class: str = class_str,
-    width: str = '[401px]'
+    width: str = '[401px]',
+    select_bg: str = ''
 ):
 
     return html.div(
-        {'class': f"w-full my-4 md:w-1/2 flex justify-between items-center border-input-border border-[1px] rounded-[3px] py-2 px-4 xl:max-w-{width} xl:w-full"},
+        {'class': f"w-full my-4 md:w-1/2 flex justify-between items-center border-input-border border-[1px] rounded-[3px] py-2 px-4 xl:max-w-{width} {select_bg} xl:w-full"},
         html.input(
             {
                 "type": type,
@@ -83,7 +88,8 @@ def Selector(
 def Selector2(
     set_value: Callable,
     data: List[Select],
-    width: str = "14%"
+    width: str = "14%",
+    select_bg='',
 ):
     options = []
     for row in data:
@@ -94,7 +100,7 @@ def Selector2(
         {'class': f"block relative w-full sm:w-[48%] md:w-[121px] md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:border-t-appearance before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute xl:w-[{width}] 2xl:mr-0"},
         html.select(
             {
-                "class": selectClass,
+                "class": selectClass(select_bg),
                 "onChange": lambda event: set_value(event["target"]["value"]),
             },
             options,
@@ -145,7 +151,7 @@ def SelectPerPage(set_select_per_page, per_page_list):
         {'class': 'block w-[176px] shrink-0 relative md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:border-t-appearance before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute 2xl:mr-0'},
         html.select(
             {
-                'class': selectClass,
+                'class': selectClass(),
                 'onChange': lambda event: set_select_per_page(event["target"]["value"])
             },
             dropdown

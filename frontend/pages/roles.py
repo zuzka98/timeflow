@@ -75,9 +75,9 @@ def create_role_form(
         set_submitted_name(name)
 
     inp_name = Input(set_value=set_name,
-                     label="name of the role",  width='[48%]')
+                     label="name of the role",  width='[48%]', select_bg='bg-select-bg')
     inp_short_name = Input(set_value=set_short_name,
-                           label="short name of the role", width='[48%]')
+                           label="short name of the role", width='[48%]', select_bg='bg-select-bg')
 
     is_disabled = True
     if name != "" and short_name != "":

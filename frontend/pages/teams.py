@@ -80,17 +80,18 @@ def create_team_form(
 
     # Create input field for the name of the team
     inp_name = Input(set_value=set_name,
-                     label="name of the team", width='[32%]')
+                     label="name of the team", width='[32%]', select_bg='bg-select-bg')
 
     # Create input field for the short name of the team
     inp_short_name = Input(set_value=set_short_name,
-                           label="short name of the team", width='[32%]')
+                           label="short name of the team", width='[32%]', select_bg='bg-select-bg')
 
     # Create a dropdown of users which can then be selected
     selector_lead_user_id = Selector2(
         set_value=set_lead_user_id,
         data=users_names(label="select user lead"),
-        width='32%'
+        width='32%',
+        select_bg='bg-select-bg'
     )
 
     # Create submit button

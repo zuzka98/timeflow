@@ -126,20 +126,22 @@ def create_user_form(
         switch_state(is_event, set_is_event)
 
     inp_short_name = Input(set_value=set_short_name,
-                           label="short name", width='[24%]')
+                           label="short name", width='[24%]', select_bg='bg-select-bg')
     inp_first_name = Input(set_value=set_first_name,
-                           label="first name", width='[24%]')
+                           label="first name", width='[24%]', select_bg='bg-select-bg')
     inp_last_name = Input(set_value=set_last_name,
-                          label="last name", width='[24%]')
-    inp_email = Input(set_value=set_email, label="email", width='[24%]')
-    selector_role = Selector2(set_role_id, roles_id_name(), width='24%')
+                          label="last name", width='[24%]', select_bg='bg-select-bg')
+    inp_email = Input(set_value=set_email, label="email",
+                      width='[24%]', select_bg='bg-select-bg')
+    selector_role = Selector2(
+        set_role_id, roles_id_name(), width='24%', select_bg='bg-select-bg')
     selector_team = Selector2(
-        set_team_id, teams_id_name(no_team=True), width='24%')
+        set_team_id, teams_id_name(no_team=True), width='24%', select_bg='bg-select-bg')
     selector_start_month = Selector2(
-        set_year_month, year_month_dict_list(label="select start month"), width='24%'
+        set_year_month, year_month_dict_list(label="select start month"), width='24%', select_bg='bg-select-bg'
     )
     selector_start_day = Selector2(
-        set_day, days_in_month(label="select start day"), width='24%')
+        set_day, days_in_month(label="select start day"), width='24%', select_bg='bg-select-bg')
 
     # is_disabled = True
     # if username != "" and name != "" and surname != "" and email != "":

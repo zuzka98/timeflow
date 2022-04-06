@@ -106,15 +106,23 @@ def create_rates_form(
         else:
             set_on_submit(True)
 
-    selector_user_id = Selector2(set_value=set_user_id, data=username(), width="24%")
+    selector_user_id = Selector2(
+        set_value=set_user_id, data=username(), width='24%', select_bg='bg-select-bg')
 
     selector_client_id = Selector2(
-        set_value=set_client_id, data=clients_names(), width="24%"
+        set_value=set_client_id,
+        data=clients_names(),
+        width='24%',
+        select_bg='bg-select-bg'
     )
     selector_month_start = Selector2(
-        set_value=set_month_start, data=months_start(), width="24%"
+        set_value=set_month_start,
+        data=months_start(),
+        width='24%',
+        select_bg='bg-select-bg'
     )
-    inp_amount = Input(set_amount, label="amount in EUR", width="[24%]")
+    inp_amount = Input(set_amount, label="amount in EUR", width='[24%]',
+                       select_bg='bg-select-bg')
 
     is_disabled = True
     if user_id != "" and client_id != "" and month_start != "" and amount != "":
@@ -152,7 +160,8 @@ def update_rate(set_updated_rate, user_id, client_id, month_start):
         set_updated_rate(new_amount)
 
     inp_rate_id = Input(set_rate_id, label="rate id", width="full")
-    inp_amount = Input(set_value=set_new_amount, label="new amount", width="full")
+    inp_amount = Input(set_value=set_new_amount,
+                       label="new amount", width="full")
     is_disabled = True
     if rate_id != None and new_amount != "":
         is_disabled = False
