@@ -45,7 +45,7 @@ def page():
     submitted_user, set_submitted_user = use_state("")
     is_true, set_is_true = use_state(True)
     return html.div(
-        {'class': "w-full"},
+        {"class": "w-full"},
         create_timelog_form(
             year_month,
             set_year_month,
@@ -66,8 +66,8 @@ def page():
             Column(
                 Row(timelogs_table(is_true)),
             ),
-            delete_timelog_input(set_deleted_timelog)
-        )
+            delete_timelog_input(set_deleted_timelog),
+        ),
     )
 
 
@@ -164,20 +164,22 @@ def create_timelog_form(
 
     btn = Button(is_disabled, handle_submit, label="Submit")
     return html.section(
-        {'class': "bg-filter-block-bg py-4 text-sm"},
+        {"class": "bg-filter-block-bg py-4 text-sm"},
         Container(
-            H3('Your current project'),
+            H3("Your current project"),
             html.div(
-                {'class': "flex flex-wrap justify-between items-center md:justify-start 2xl:justify-between"},
+                {
+                    "class": "flex flex-wrap justify-between items-center md:justify-start 2xl:justify-between"
+                },
                 selector_user,
                 selector_epic_id,
                 selector_year_month,
                 selector_days,
                 selector_start_time,
                 selector_end_time,
-                btn
-            )
-        )
+                btn,
+            ),
+        ),
     )
 
 
@@ -190,17 +192,15 @@ def timelogs_table(is_true):
     for item in response.json():
         d = {
             "timelog id": item["id"],
-            "start_time": item["start_time"],
-            "end_time": item["end_time"],
+            "start_time": (item["start_time"]).replace("T", " "),
+            "end_time": (item["end_time"]).replace("T", " "),
             "count_hours": item["count_hours"],
             "count_days": item["count_days"],
         }
         rows.append(d)
     return html.div(
-        {"class": "w-full"},
-        YourTimelog(),
-        TableActions(),
-        SimpleTable(rows=rows))
+        {"class": "w-full"}, YourTimelog(), TableActions(), SimpleTable(rows=rows)
+    )
 
 
 @component
@@ -213,9 +213,7 @@ def delete_timelog_input(set_deleted_timelog):
         set_deleted_timelog(timelog_to_delete)
 
     inp_username = Input(
-        set_value=set_timelog_to_delete,
-        label="timelog id to delete",
-        width='full'
+        set_value=set_timelog_to_delete, label="timelog id to delete", width="full"
     )
 
     return Column(Row(inp_username), Button(False, handle_delete, "Submit"))
