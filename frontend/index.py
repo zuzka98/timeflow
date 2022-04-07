@@ -12,6 +12,7 @@ from pages.sponsors import page as sponsors_page
 from pages.roles import page as roles_page
 from pages.capacities import page as capacities_page
 from pages.demands import page as demands_page
+from idom.server import fastapi
 
 from components.layout import Column, Row, FlexContainer
 from components.header import Header
@@ -19,6 +20,7 @@ from components.header import Header
 
 @component
 def page():
+    print(fastapi.use_scope())
 
     current_page, set_current_page = use_state("Timelogs")
     pages = ["Timelogs", "Forecasts"]
@@ -51,7 +53,6 @@ def page():
     return html.div(
         {"class": "md:flex w-full"},
         html.link({"href": "../static/css/styles.css", "rel": "stylesheet"}),
-        Header(current_page, set_current_page,
-               pages=pages, title="timeflow UI"),
+        Header(current_page, set_current_page, pages=pages, title="timeflow UI"),
         FlexContainer(current_page_component),
     )
