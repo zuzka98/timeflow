@@ -66,7 +66,7 @@ def create_client_form(name, set_name, set_submitted_name):
         set_submitted_name(name)
 
     inp_name = Input(set_value=set_name, label="name",
-                     select_bg='bg-select-bg')
+                     select_bg='select-bg')
     is_disabled = True
     if name != "":
         is_disabled = False

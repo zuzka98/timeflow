@@ -122,27 +122,27 @@ def create_forecast_form(
             set_on_submit(True)
 
     selector_user_id = Selector2(
-        set_value=set_user_id, data=username(), width="16%", select_bg='bg-select-bg')
+        set_value=set_user_id, data=username(), width="16%", select_bg='select-bg')
 
     selector_epic_id = Selector2(
         set_value=set_epic_id,
         data=epics_names(),
         width="16%",
-        select_bg='bg-select-bg'
+        select_bg='select-bg'
     )
     display_client = display_value(epic_id)
     selector_year_month = Selector2(
         set_value=set_year_month,
         data=year_month_dict_list(),
         width="16%",
-        select_bg='bg-select-bg'
+        select_bg='select-bg'
     )
 
     selector_days = Selector2(
         set_value=set_days,
         data=forecast_days(),
         width="16%",
-        select_bg='bg-select-bg'
+        select_bg='select-bg'
     )
 
     is_disabled = True
@@ -174,7 +174,7 @@ def display_value(epic_id):
         )
     else:
         return html.div(
-            {'class': "py-3 pl-3 border-[1px] bg-select-bg rounded-[3px] xl:w-[16%]"},
+            {'class': "py-3 pl-3 border-[1px] select-bg rounded-[3px] xl:w-[16%]"},
             html.h3(
                 {"value": client["value"]},
                 client["display_value"],

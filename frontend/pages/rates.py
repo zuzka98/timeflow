@@ -107,22 +107,22 @@ def create_rates_form(
             set_on_submit(True)
 
     selector_user_id = Selector2(
-        set_value=set_user_id, data=username(), width='24%', select_bg='bg-select-bg')
+        set_value=set_user_id, data=username(), width='24%', select_bg='select-bg')
 
     selector_client_id = Selector2(
         set_value=set_client_id,
         data=clients_names(),
         width='24%',
-        select_bg='bg-select-bg'
+        select_bg='select-bg'
     )
     selector_month_start = Selector2(
         set_value=set_month_start,
         data=months_start(),
         width='24%',
-        select_bg='bg-select-bg'
+        select_bg='select-bg'
     )
     inp_amount = Input(set_amount, label="amount in EUR", width='[24%]',
-                       select_bg='bg-select-bg')
+                       select_bg='select-bg')
 
     is_disabled = True
     if user_id != "" and client_id != "" and month_start != "" and amount != "":

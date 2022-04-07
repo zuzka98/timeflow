@@ -75,12 +75,12 @@ def create_epic_area_form(
         set_value=set_epic_id,
         data=epics_names(),
         width='48%',
-        select_bg='bg-select-bg'
+        select_bg='select-bg'
     )
 
     # Create input field for the name of the epic area
     inp_name = Input(set_value=set_name, label="name",
-                     width='[48%]', select_bg='bg-select-bg')
+                     width='[48%]', select_bg='select-bg')
 
     # Create submit button
     btn = submit_button(handle_submit, epic_id, name)
