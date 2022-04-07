@@ -1,19 +1,11 @@
-import asyncio
-from cProfile import label
-import json
-from black import click
-from idom import html, run, use_state, component, event, vdom
-import requests
-from sanic import Sanic, response
+from idom import html, use_state, component, event
 from datetime import datetime
 
 from pages.utils import switch_state
 from components.input import Input, Selector2
 from components.layout import Row, Column, Container
-from components.lists import ListSimple
 from components.table import SimpleTable
 from components.controls import Button
-from config import base_url
 
 from data.users import (
     to_user,
