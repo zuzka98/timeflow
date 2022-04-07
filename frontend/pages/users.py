@@ -3,7 +3,6 @@ from cProfile import label
 import json
 from black import click
 from idom import html, run, use_state, component, event, vdom
-from idom.server.sanic import PerClientStateServer
 import requests
 from sanic import Sanic, response
 from datetime import datetime
@@ -149,14 +148,19 @@ def create_user_form(
     btn = Button(is_disabled, handle_submit, label="Submit")
 
     return Column(
-        Row(inp_short_name, inp_first_name, inp_last_name,
-            inp_email, justify='justify-between'),
+        Row(
+            inp_short_name,
+            inp_first_name,
+            inp_last_name,
+            inp_email,
+            justify="justify-between",
+        ),
         Row(
             selector_role,
             selector_team,
             selector_start_month,
             selector_start_day,
-            justify='justify-between'
+            justify="justify-between",
         ),
         Row(btn),
     )
@@ -181,14 +185,16 @@ def update_users(is_event, set_is_event):
         switch_state(value=is_event, set_value=set_is_event)
 
     selector_user = Selector2(
-        set_update_user_id, data=users_names(label="select user to update"), width='48%'
+        set_update_user_id, data=users_names(label="select user to update"), width="48%"
     )
     selector_team = Selector2(
-        set_new_team_id, data=teams_id_name(label="select new team"), width='48%'
+        set_new_team_id, data=teams_id_name(label="select new team"), width="48%"
     )
     is_disabled = False
     btn = Button(is_disabled, handle_update, label="Update")
-    return Column(Row(selector_user, selector_team, justify='justify-between'), Row(btn))
+    return Column(
+        Row(selector_user, selector_team, justify="justify-between"), Row(btn)
+    )
 
 
 @component
@@ -205,14 +211,14 @@ def deactivate_users(is_event, set_is_event):
         return True
 
     selector_user = Selector2(
-        set_deactiv_user_id, data=users_names(
-            label="select user to deactivate"),  width='96%'
+        set_deactiv_user_id,
+        data=users_names(label="select user to deactivate"),
+        width="96%",
     )
     is_disabled = True
     if deactiv_user_id != "":
         is_disabled = False
-    btn = Button(is_disabled, handle_submit=handle_deactivation,
-                 label="Deactivate")
+    btn = Button(is_disabled, handle_submit=handle_deactivation, label="Deactivate")
     return Column(Row(selector_user), Row(btn))
 
 
@@ -230,11 +236,12 @@ def activate_users(is_event, set_is_event):
         return True
 
     selector_user = Selector2(
-        set_activ_user_id, data=users_names(label="select user to activate"),  width='96%'
+        set_activ_user_id,
+        data=users_names(label="select user to activate"),
+        width="96%",
     )
     is_disabled = True
     if activ_user_id != "":
         is_disabled = False
-    btn = Button(is_disabled, handle_submit=handle_activation,
-                 label="Activate")
-    return Column(Row(selector_user, justify='justify-end'), Row(btn))
+    btn = Button(is_disabled, handle_submit=handle_activation, label="Activate")
+    return Column(Row(selector_user, justify="justify-end"), Row(btn))
