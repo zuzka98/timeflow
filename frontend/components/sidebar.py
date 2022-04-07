@@ -1,18 +1,23 @@
 from turtle import title
 from typing import List
 from idom import html, run, use_state, component, event, vdom
-from idom.server.sanic import PerClientStateServer
 from idom.web import module_from_url, export
 from components.layout import Container
 
 
 from .icons import arrow_down, arrow_up
 
-aClass = "text-nav py-2 text-left",
+aClass = ("text-nav py-2 text-left",)
 btnClass = "text-nav py-2 flex"
-mainDivClass = "hidden absolute w-screen h-full bg-header-bg z-10  xl:w-full xl:block xl:static xl:h-auto",
-mainDivClassOpen = "absolute w-screen h-full bg-header-bg z-10  xl:w-full xl:block xl:static xl:h-auto",
-h1Class = "text-general-heading font-black uppercase text-xl font-black tracking-[2px] my-4",
+mainDivClass = (
+    "hidden absolute w-screen h-full bg-header-bg z-10 md:w-48 md:right-0 md:min-h-0 md:h-auto xl:w-full xl:block xl:static xl:h-auto",
+)
+mainDivClassOpen = (
+    "absolute w-screen h-full bg-header-bg z-10 md:w-48 md:right-0 md:min-h-0 md:h-auto xl:w-full xl:block xl:static xl:h-auto",
+)
+h1Class = (
+    "text-general-heading font-black uppercase text-xl font-black tracking-[2px] my-4",
+)
 navClass = "flex flex-col pb-4"
 
 
@@ -32,16 +37,20 @@ def Dropdown(current_page, set_current_page, set_isOpen):
                     """
     if is_down:
         btn = html.button(
-            {"class": ' w-full flex align-center text-nav py-2 text-left rounded-lg px-4 hover:bg-active-sidebar',
-                "onClick": handle_click},
+            {
+                "class": " w-full flex align-center text-nav py-2 text-left rounded-lg px-4 hover:bg-active-sidebar",
+                "onClick": handle_click,
+            },
             html.span("Admin"),
             arrow_down,
         )
         return html.div({"class": "relative"}, btn)
     else:
         btn = html.button(
-            {"class": ' w-full flex align-center text-nav py-2 text-left rounded-lg px-4 hover:bg-active-sidebar',
-                "onClick": handle_click},
+            {
+                "class": " w-full flex align-center text-nav py-2 text-left rounded-lg px-4 hover:bg-active-sidebar",
+                "onClick": handle_click,
+            },
             html.span("Admin"),
             arrow_up,
         )
@@ -82,15 +91,17 @@ def Dropdown(current_page, set_current_page, set_isOpen):
                     {
                         "class": "px-2 py-2 bg-white rounded-md shadow dark-mode:bg-gray-800"
                     },
-                    ListPages(current_page,
-                              set_current_page, set_isOpen, pages=pages),
+                    ListPages(current_page, set_current_page,
+                              set_isOpen, pages=pages),
                 ),
             ),
         )
 
 
 @component
-def ListPages(current_page, set_current_page, set_isOpen, pages: List[str], title: str = ""):
+def ListPages(
+    current_page, set_current_page, set_isOpen, pages: List[str], title: str = ""
+):
     def btn_class(btn_bg: str):
         btn_class = f"""text-nav text-left px-4 py-2 mt-2 text-nav bg-{btn_bg} rounded-lg 
                 focus:text-gray-900 hover:bg-active-sidebar focus:bg-active-sidebar
@@ -121,28 +132,30 @@ def ListPages(current_page, set_current_page, set_isOpen, pages: List[str], titl
             )
         )
 
-    return html.div(
-        {'class': 'flex flex-col'},
-        anchors
-    )
+    return html.div({"class": "flex flex-col"}, anchors)
 
 
 @component
-def Sidebar(current_page, set_current_page, pages: List[str], isOpen, set_isOpen, title: str = ""):
+def Sidebar(
+    current_page,
+    set_current_page,
+    pages: List[str],
+    isOpen,
+    set_isOpen,
+    title: str = "",
+):
     return html.div(
         {
-            'class': mainDivClassOpen if isOpen else mainDivClass,
+            "class": mainDivClassOpen if isOpen else mainDivClass,
         },
         Container(
-            html.h1(
-                {'class': h1Class},
-                title
-            ),
+            html.h1({"class": h1Class}, title),
             html.nav(
-                {'class': navClass},
-                ListPages(current_page, set_current_page, set_isOpen,
-                          pages=pages, title=title),
+                {"class": navClass},
+                ListPages(
+                    current_page, set_current_page, set_isOpen, pages=pages, title=title
+                ),
                 Dropdown(current_page, set_current_page, set_isOpen),
-            )
-        )
+            ),
+        ),
     )
