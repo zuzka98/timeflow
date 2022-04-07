@@ -3,7 +3,6 @@ from cProfile import label
 import json
 from black import click
 from idom import html, run, use_state, component, event, vdom
-from idom.server.sanic import PerClientStateServer
 import requests
 from sanic import Sanic, response
 from datetime import datetime
