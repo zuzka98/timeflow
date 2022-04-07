@@ -4,6 +4,7 @@ from sqlmodel import Session, select, SQLModel, or_
 from ..utils import engine
 from ..models.user import User
 from ..models.timelog import TimeLog
+from ..models.epic import Epic
 
 router = APIRouter(prefix="/api/timelogs", tags=["timelog"])
 
@@ -56,6 +57,13 @@ async def timelog(*, timelog: TimeLog, session: Session = Depends(get_session)):
     if results1 or results2 or results3 or results4:
         return "currently posted timelog overlaps another timelog"
     else:
+        time_delta = timelog.end_time - timelog.start_time
+        work_delta_hours = time_delta.total_seconds() / 3600
+        work_hours = "{:.2f}".format(work_delta_hours)
+        work_delta_days = time_delta.total_seconds() / 3600 / 8
+        work_days = "{:.2f}".format(work_delta_days)
+        timelog.count_hours = work_hours
+        timelog.count_days = work_days
         session.add(timelog)
         session.commit()
         session.refresh(timelog)
@@ -73,7 +81,19 @@ async def get_timelogs_all(session: Session = Depends(get_session)):
         SQL session that is to be used to get the timelogs.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(TimeLog)
+    statement = (
+        select(
+            TimeLog.id,
+            User.short_name.label("username"),
+            Epic.short_name.label("epic_name"),
+            TimeLog.start_time,
+            TimeLog.end_time,
+            TimeLog.count_hours,
+            TimeLog.count_days,
+        )
+        .join(User)
+        .join(Epic)
+    )
     results = session.exec(statement).all()
     return results
 
