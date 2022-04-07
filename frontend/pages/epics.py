@@ -107,18 +107,18 @@ def create_epic_form(
         set_submitted_name(name)
 
     inp_short_name = Input(set_short_name, "epics short name",
-                           width='[14%]', select_bg='bg-select-bg')
+                           width='[14%]', select_bg='select-bg')
     inp_name = Input(set_name, "epics full name",
-                     width='[14%]', select_bg='bg-select-bg')
+                     width='[14%]', select_bg='select-bg')
     selector_team = Selector2(
-        set_team_id, teams_id_name(), width='14%', select_bg='bg-select-bg')
+        set_team_id, teams_id_name(), width='14%', select_bg='select-bg')
     selector_sponsor = Selector2(
-        set_sponsor_id, sponsors_id_name(), width='14%', select_bg='bg-select-bg')
+        set_sponsor_id, sponsors_id_name(), width='14%', select_bg='select-bg')
     selector_start_month = Selector2(
-        set_year_month, year_month_dict_list(label="select start month"), width='14%', select_bg='bg-select-bg'
+        set_year_month, year_month_dict_list(label="select start month"), width='14%', select_bg='select-bg'
     )
     selector_start_day = Selector2(
-        set_day, days_in_month(label="select start day"), width='14%', select_bg='bg-select-bg')
+        set_day, days_in_month(label="select start day"), width='14%', select_bg='select-bg')
     is_disabled = True
     if (
         short_name != ""

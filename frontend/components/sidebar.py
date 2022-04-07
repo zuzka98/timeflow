@@ -10,8 +10,8 @@ from .icons import arrow_down, arrow_up
 
 aClass = "text-nav py-2 text-left",
 btnClass = "text-nav py-2 flex"
-mainDivClass = "hidden absolute w-screen h-full bg-header-bg z-10 md:w-48 md:right-0 md:min-h-0 md:h-auto xl:w-full xl:block xl:static xl:h-auto",
-mainDivClassOpen = "absolute w-screen h-full bg-header-bg z-10 md:w-48 md:right-0 md:min-h-0 md:h-auto xl:w-full xl:block xl:static xl:h-auto",
+mainDivClass = "hidden absolute w-screen h-full bg-header-bg z-10  xl:w-full xl:block xl:static xl:h-auto",
+mainDivClassOpen = "absolute w-screen h-full bg-header-bg z-10  xl:w-full xl:block xl:static xl:h-auto",
 h1Class = "text-general-heading font-black uppercase text-xl font-black tracking-[2px] my-4",
 navClass = "flex flex-col pb-4"
 

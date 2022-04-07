@@ -16,7 +16,7 @@ checkboxTd = 'w-6 pr-4 pt-4 pb-3'
 
 
 def selectClass(select_bg: str = ''):
-    return f"w-full border-select-border py-3 pl-3 border-[1px] rounded-[3px] appearance-none {select_bg}"
+    return f"w-full border-select-border py-3 pl-3 border-[1px] rounded-[3px] appearance-none bg-{select_bg}"
 
 
 @component
@@ -27,11 +27,11 @@ def Input(
     placeholder: str = "Write here the",
     _class: str = class_str,
     width: str = '[401px]',
-    select_bg: str = ''
+    select_bg: str = 'transparent'
 ):
 
     return html.div(
-        {'class': f"w-full my-4 md:w-1/2 flex justify-between items-center border-input-border border-[1px] rounded-[3px] py-2 px-4 xl:max-w-{width} {select_bg} xl:w-full"},
+        {'class': f"w-full my-4 md:w-1/2 flex justify-between items-center border-input-border border-[1px] rounded-[3px] py-2 px-4 xl:max-w-{width} bg-{select_bg} xl:w-full"},
         html.input(
             {
                 "type": type,
@@ -89,7 +89,7 @@ def Selector2(
     set_value: Callable,
     data: List[Select],
     width: str = "14%",
-    select_bg='',
+    select_bg='transparent',
 ):
     options = []
     for row in data:
