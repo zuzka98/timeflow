@@ -25,7 +25,7 @@ from data.common import (
     days_in_month,
 )
 
-from data.timelogs import Timelog, to_timelog
+from data.timelogs import Timelog, to_timelog, timelog_by_user_epic_year_month
 from data.epics import epics_names
 
 from config import base_url
@@ -37,7 +37,7 @@ from components.yourTimelog import YourTimelog
 def page():
     year_month, set_year_month = use_state("")
     day, set_day = use_state("")
-    user, set_user = use_state("")
+    user_id, set_user_id = use_state("")
     epic_id, set_epic_id = use_state("")
     start_time, set_start_time = use_state("")
     end_time, set_end_time = use_state("")
@@ -51,8 +51,8 @@ def page():
             set_year_month,
             day,
             set_day,
-            user,
-            set_user,
+            user_id,
+            set_user_id,
             epic_id,
             set_epic_id,
             start_time,
@@ -64,7 +64,7 @@ def page():
         ),
         Container(
             Column(
-                Row(timelogs_table(is_true)),
+                Row(timelogs_table(user_id, epic_id, year_month, is_true)),
             ),
             delete_timelog_input(set_deleted_timelog),
         ),
@@ -77,8 +77,8 @@ def create_timelog_form(
     set_year_month,
     day,
     set_day,
-    user,
-    set_user,
+    user_id,
+    set_user_id,
     epic_id,
     set_epic_id,
     start_time,
@@ -116,7 +116,7 @@ def create_timelog_form(
         to_timelog(
             start_time=start_time_post,
             end_time=end_time_post,
-            user_id=user,
+            user_id=user_id,
             epic_id=epic_id,
             count_hours=0,
             count_days=0,
@@ -128,7 +128,7 @@ def create_timelog_form(
         else:
             set_is_true(True)
 
-    selector_user = Selector2(set_value=set_user, data=username())
+    selector_user = Selector2(set_value=set_user_id, data=username())
 
     selector_epic_id = Selector2(
         set_value=set_epic_id,
@@ -153,7 +153,7 @@ def create_timelog_form(
     )
     is_disabled = True
     if (
-        user != ""
+        user_id != ""
         and epic_id != ""
         and year_month != ""
         and day != ""
@@ -184,22 +184,27 @@ def create_timelog_form(
 
 
 @component
-def timelogs_table(is_true):
+def timelogs_table(user_id, epic_id, year_month, is_true):
     api = f"{base_url}/api/timelogs"
     response = requests.get(api)
+    year = year_month[:4]
+    month = year_month[5:7]
 
-    rows = []
-    for item in response.json():
-        d = {
-            "timelog id": item["id"],
-            "username": item["username"],
-            "epic name": item["epic_name"],
-            "start time": (item["start_time"]).replace("T", " "),
-            "end time": (item["end_time"]).replace("T", " "),
-            "count hours": item["count_hours"],
-            "count days": item["count_days"],
-        }
-        rows.append(d)
+    if (user_id and epic_id and year_month) != "":
+        rows = timelog_by_user_epic_year_month(user_id, epic_id, year, month)
+    else:
+        rows = []
+        for item in response.json():
+            d = {
+                "timelog id": item["id"],
+                "username": item["username"],
+                "epic name": item["epic_name"],
+                "start time": (item["start_time"]).replace("T", " "),
+                "end time": (item["end_time"]).replace("T", " "),
+                "count hours": item["count_hours"],
+                "count days": item["count_days"],
+            }
+            rows.append(d)
     return html.div(
         {"class": "w-full"}, YourTimelog(), TableActions(), SimpleTable(rows=rows)
     )
