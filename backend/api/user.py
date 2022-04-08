@@ -58,13 +58,9 @@ async def get_users(
     """
     statement = select(User)
     if is_active != None:
-        statement = select(User).where(User.is_active == is_active)
-        if short_name != None:
-            statement = (
-                select(User)
-                .where(User.is_active == is_active)
-                .where(User.short_name == short_name)
-            )
+        statement = (
+            select(User).where(User.is_active == is_active).order_by(User.start_date)
+        )
     result = session.exec(statement).all()
     return result
 
