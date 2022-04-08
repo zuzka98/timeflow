@@ -11,6 +11,8 @@ def role():
     Return role of logged in user.
     """
     headers = fastapi.use_scope()["headers"]
+    print("Printing headers:")
+    print(headers)
     role = None
     for header in headers:
         if header[0] == "b'authorization'":
@@ -23,3 +25,4 @@ def role():
             role = pattern.match(auth, re.IGNORECASE).group()
             print(role)
             return role
+    return role
