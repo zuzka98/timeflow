@@ -2,9 +2,9 @@ from typing import Any, Callable, List, Dict
 from idom import html, component
 from data.common import Select
 
-class_str = """text-primary-500 placeholder-secondary-400 w-full px-4 py-2.5 mt-2 
+class_str = """text-primary-500 bg-transparent placeholder-secondary-400 w-full px-4 py-2.5 mt-2 
                     text-base transition duration-500 ease-in-out transform 
-                    border-transparent bg-secondary-300 focus:border-blueGray-500 
+                    border-transparent focus:border-blueGray-500 
                     focus:bg-white dark:focus:bg-secondary-400 focus:outline-none 
                     focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 
                     ring-gray-400"""
@@ -26,13 +26,13 @@ def Input(
 ):
 
     return html.div(
-        {'class': f"w-full my-4 md:w-1/2 flex justify-between items-center border-input-border border-[1px] rounded-[3px] py-2 px-4 xl:max-w-{width} xl:w-full"},
+        {'class': f"w-full my-4 md:w-1/2 flex justify-between items-center bg-nav border-input-border border-[1px] rounded-[3px] py-2 px-4 xl:max-w-{width} xl:w-full"},
         html.input(
             {
                 "type": type,
                 "placeholder": f"{placeholder} {label}",
                 "onChange": lambda event: set_value(event["target"]["value"]),
-                "class": _class,
+                "class": _class
             }
         )
     )
