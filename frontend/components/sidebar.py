@@ -142,6 +142,7 @@ def Sidebar(
     isOpen,
     set_isOpen,
     title: str = "",
+    role=None,
 ):
     return html.div(
         {
@@ -154,7 +155,9 @@ def Sidebar(
                 ListPages(
                     current_page, set_current_page, set_isOpen, pages=pages, title=title
                 ),
-                Dropdown(current_page, set_current_page, set_isOpen),
+                Dropdown(current_page, set_current_page, set_isOpen)
+                if (role == "admin" or role == None)
+                else "",
             ),
         ),
     )
