@@ -22,7 +22,7 @@ def Input(
     type: str = "text",
     placeholder: str = "Write here the",
     _class: str = class_str,
-    width: str = '[401px]',
+    width: str = '[401px]'
 ):
 
     return html.div(
@@ -32,7 +32,7 @@ def Input(
                 "type": type,
                 "placeholder": f"{placeholder} {label}",
                 "onChange": lambda event: set_value(event["target"]["value"]),
-                "class": _class,
+                "class": _class
             }
         )
     )
@@ -83,7 +83,7 @@ def Selector(
 def Selector2(
     set_value: Callable,
     data: List[Select],
-    width: str = "14%",
+    width: str = "14%"
 ):
     options = []
     for row in data:
@@ -145,7 +145,7 @@ def SelectPerPage(set_select_per_page, per_page_list):
         {'class': 'block w-[176px] shrink-0 relative md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:border-t-appearance before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute 2xl:mr-0'},
         html.select(
             {
-                'class': selectClass(),
+                'class': selectClass,
                 'onChange': lambda event: set_select_per_page(event["target"]["value"])
             },
             dropdown
