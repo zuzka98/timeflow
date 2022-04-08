@@ -26,22 +26,28 @@ def page():
     _, set_deact_name = use_state("")
     _, set_activ_name = use_state("")
 
-    return Container(
-        create_team_form(
-            name,
-            set_name,
-            short_name,
-            set_short_name,
-            lead_user_id,
-            set_lead_user_id,
-            set_submitted_name,
-            set_submitted_short_name,
+    return html.div(
+        {'class': 'w-full'},
+        Row(
+            create_team_form(
+                name,
+                set_name,
+                short_name,
+                set_short_name,
+                lead_user_id,
+                set_lead_user_id,
+                set_submitted_name,
+                set_submitted_short_name,
+            ),
+            bg='bg-filter-block-bg'
         ),
-        Column(
-            Row(list_teams(submitted_name, submitted_short_name)),
-        ),
-        Row(deactivate_team(set_deact_name)),
-        Row(activate_team(set_activ_name)),
+        Container(
+            Column(
+                Row(list_teams(submitted_name, submitted_short_name)),
+            ),
+            Row(deactivate_team(set_deact_name)),
+            Row(activate_team(set_activ_name)),
+        )
     )
 
 
@@ -80,31 +86,32 @@ def create_team_form(
 
     # Create input field for the name of the team
     inp_name = Input(set_value=set_name,
-                     label="name of the team", width='[32%]', select_bg='select-bg')
+                     label="name of the team", width='[32%]')
 
     # Create input field for the short name of the team
     inp_short_name = Input(set_value=set_short_name,
-                           label="short name of the team", width='[32%]', select_bg='select-bg')
+                           label="short name of the team", width='[32%]')
 
     # Create a dropdown of users which can then be selected
     selector_lead_user_id = Selector2(
         set_value=set_lead_user_id,
         data=users_names(label="select user lead"),
-        width='32%',
-        select_bg='select-bg'
+        width='32%'
     )
 
     # Create submit button
     btn = submit_button(handle_submit, name, short_name, lead_user_id)
 
-    return Column(
-        Row(
-            inp_name,
-            inp_short_name,
-            selector_lead_user_id,
-            justify='justify-between'
-        ),
-        Row(btn),
+    return Container(
+        Column(
+            Row(
+                inp_name,
+                inp_short_name,
+                selector_lead_user_id,
+                justify='justify-between'
+            ),
+            Row(btn),
+        )
     )
 
 

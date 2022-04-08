@@ -49,7 +49,7 @@ def page():
     elif current_page == "Demands":
         current_page_component = demands_page(key="demands_page")
     return html.div(
-        {"class": "md:flex w-full"},
+        {"class": "xl:flex w-full"},
         html.link({"href": "../static/css/styles.css", "rel": "stylesheet"}),
         Header(current_page, set_current_page,
                pages=pages, title="timeflow UI"),

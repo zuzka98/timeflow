@@ -24,7 +24,10 @@ def page():
     return FlexContainer(
         Column(width="3/12"),
         Column(
-            create_client_form(name, set_name, set_submitted_name),
+            Row(
+                create_client_form(name, set_name, set_submitted_name),
+                bg='bg-filter-block-bg'
+            ),
             Column(
                 Row(list_clients(submitted_name)),
             ),
@@ -64,8 +67,7 @@ def create_client_form(name, set_name, set_submitted_name):
         )
         set_submitted_name(name)
 
-    inp_name = Input(set_value=set_name, label="name",
-                     select_bg='select-bg')
+    inp_name = Input(set_value=set_name, label="name")
     is_disabled = True
     if name != "":
         is_disabled = False

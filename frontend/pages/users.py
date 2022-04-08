@@ -1,19 +1,11 @@
-import asyncio
-from cProfile import label
-import json
-from black import click
-from idom import html, run, use_state, component, event, vdom
-import requests
-from sanic import Sanic, response
+from idom import html, use_state, component, event
 from datetime import datetime
 
 from pages.utils import switch_state
 from components.input import Input, Selector2
 from components.layout import Row, Column, Container
-from components.lists import ListSimple
 from components.table import SimpleTable
 from components.controls import Button
-from config import base_url
 
 from data.users import (
     to_user,
@@ -38,7 +30,8 @@ def page():
     team_id, set_team_id = use_state(None)
     # Used for refreshing page on event
     is_event, set_is_event = use_state(True)
-    return Container(
+    return html.div(
+        {'class': 'w-full'},
         Row(
             create_user_form(
                 short_name,
@@ -55,16 +48,19 @@ def page():
                 set_team_id,
                 is_event,
                 set_is_event,
-            )
+            ),
+            bg='bg-filter-block-bg'
         ),
-        Column(list_users(is_event)),
-        Column(
-            Row(update_users(is_event, set_is_event)),
-        ),
-        Row(
-            Column(deactivate_users(is_event, set_is_event)),
-            Column(activate_users(is_event, set_is_event)),
-        ),
+        Container(
+            Column(list_users(is_event)),
+            Column(
+                Row(update_users(is_event, set_is_event)),
+            ),
+            Row(
+                Column(deactivate_users(is_event, set_is_event)),
+                Column(activate_users(is_event, set_is_event)),
+            ),
+        )
     )
 
 
@@ -125,44 +121,46 @@ def create_user_form(
         switch_state(is_event, set_is_event)
 
     inp_short_name = Input(set_value=set_short_name,
-                           label="short name", width='[24%]', select_bg='select-bg')
+                           label="short name", width='[24%]')
     inp_first_name = Input(set_value=set_first_name,
-                           label="first name", width='[24%]', select_bg='select-bg')
+                           label="first name", width='[24%]')
     inp_last_name = Input(set_value=set_last_name,
-                          label="last name", width='[24%]', select_bg='select-bg')
+                          label="last name", width='[24%]')
     inp_email = Input(set_value=set_email, label="email",
-                      width='[24%]', select_bg='select-bg')
+                      width='[24%]')
     selector_role = Selector2(
-        set_role_id, roles_id_name(), width='24%', select_bg='select-bg')
+        set_role_id, roles_id_name(), width='24%')
     selector_team = Selector2(
-        set_team_id, teams_id_name(no_team=True), width='24%', select_bg='select-bg')
+        set_team_id, teams_id_name(no_team=True), width='24%')
     selector_start_month = Selector2(
-        set_year_month, year_month_dict_list(label="select start month"), width='24%', select_bg='select-bg'
+        set_year_month, year_month_dict_list(label="select start month"), width='24%'
     )
     selector_start_day = Selector2(
-        set_day, days_in_month(label="select start day"), width='24%', select_bg='select-bg')
+        set_day, days_in_month(label="select start day"), width='24%')
 
     # is_disabled = True
     # if username != "" and name != "" and surname != "" and email != "":
     is_disabled = False
     btn = Button(is_disabled, handle_submit, label="Submit")
 
-    return Column(
-        Row(
-            inp_short_name,
-            inp_first_name,
-            inp_last_name,
-            inp_email,
-            justify="justify-between",
-        ),
-        Row(
-            selector_role,
-            selector_team,
-            selector_start_month,
-            selector_start_day,
-            justify="justify-between",
-        ),
-        Row(btn),
+    return Container(
+        Column(
+            Row(
+                inp_short_name,
+                inp_first_name,
+                inp_last_name,
+                inp_email,
+                justify="justify-between",
+            ),
+            Row(
+                selector_role,
+                selector_team,
+                selector_start_month,
+                selector_start_day,
+                justify="justify-between",
+            ),
+            Row(btn),
+        )
     )
 
 
@@ -218,7 +216,8 @@ def deactivate_users(is_event, set_is_event):
     is_disabled = True
     if deactiv_user_id != "":
         is_disabled = False
-    btn = Button(is_disabled, handle_submit=handle_deactivation, label="Deactivate")
+    btn = Button(is_disabled, handle_submit=handle_deactivation,
+                 label="Deactivate")
     return Column(Row(selector_user), Row(btn))
 
 
@@ -243,5 +242,6 @@ def activate_users(is_event, set_is_event):
     is_disabled = True
     if activ_user_id != "":
         is_disabled = False
-    btn = Button(is_disabled, handle_submit=handle_activation, label="Activate")
+    btn = Button(is_disabled, handle_submit=handle_activation,
+                 label="Activate")
     return Column(Row(selector_user, justify="justify-end"), Row(btn))
