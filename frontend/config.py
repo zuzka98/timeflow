@@ -15,10 +15,11 @@ def role():
     print(headers)
     role = None
     for header in headers:
+        header = header[0].decode("utf-8")
         print("Printing header:")
         print(header)
         print(type(header))
-        if header[0].decode("utf-8") == "authorization'":
+        if header == "authorization'":
             # Isolate the hash from the rest of the string
             hashed_auth = header[1].replace("'", "").split(" ")[1]
             # Decode the hashed authentication
