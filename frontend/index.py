@@ -16,11 +16,16 @@ from pages.demands import page as demands_page
 from components.layout import FlexContainer
 from components.header import Header
 
+from idom.server import fastapi
+
 
 @component
 def page():
     # Get role of user
+    print(fastapi.use_scope())
     user_role = role()
+    print(user_role)
+    print(type(user_role))
 
     current_page, set_current_page = use_state("Timelogs")
     pages = ["Timelogs", "Forecasts"]
