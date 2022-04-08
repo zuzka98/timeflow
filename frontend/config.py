@@ -19,8 +19,10 @@ def role():
         print(header)
         print(type(header))
         if header[0].decode("utf-8") == "authorization":
+            # Convert byte object to string
+            header_auth_str = header[1].decode("utf-8")
             # Isolate the hash from the rest of the string
-            hashed_auth = header[1].replace("'", "").split(" ")[1]
+            hashed_auth = header_auth_str.split(" ")[1]
             # Decode the hashed authentication
             auth = base64.b64decode(hashed_auth)
             # Pattern to isolate role
