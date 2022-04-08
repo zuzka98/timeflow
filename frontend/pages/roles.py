@@ -81,9 +81,9 @@ def create_role_form(
         set_submitted_name(name)
 
     inp_name = Input(set_value=set_name,
-                     label="name of the role",  width='[48%]')
+                     label="name of the role",  width='[48%]', md_width='[48%]')
     inp_short_name = Input(set_value=set_short_name,
-                           label="short name of the role", width='[48%]')
+                           label="short name of the role", width='[48%]', md_width='[48%]')
 
     is_disabled = True
     if name != "" and short_name != "":
@@ -133,11 +133,12 @@ def update_role(is_updated, set_is_updated):
         elif is_updated == False:
             set_is_updated(True)
 
-    inp_role_id = Input(set_role_id, label="role id to update", width='[32%]')
+    inp_role_id = Input(set_role_id, label="role id to update",
+                        width='[32%]', md_width='[32%]')
     inp_name_update = Input(
-        set_name_to_update, label="full name to update", width='[32%]')
+        set_name_to_update, label="full name to update", width='[32%]', md_width='[32%]')
     inp_short_name_update = Input(
-        set_short_name_to_update, label="short name to update", width='[32%]'
+        set_short_name_to_update, label="short name to update", width='[32%]', md_width='[32%]'
     )
     is_disabled = True
     if role_id != "" and (name_to_update != "" or short_name_to_update != ""):
@@ -163,7 +164,7 @@ def deactivate_role(set_deact_role):
         return True
 
     inp_deact_role = Input(
-        set_value=set_role_to_deact, label="role id to be deactivated", width='96%'
+        set_value=set_role_to_deact, label="role id to be deactivated", width='96%', md_width='[96%]'
     )
     is_disabled = True
     if role_to_deact != "":
@@ -186,7 +187,7 @@ def activate_role(set_activ_role):
         return True
 
     inp_activ_role = Input(set_value=set_role_to_activ,
-                           label="role id to be activated", width='96%')
+                           label="role id to be activated", width='96%', md_width='[96%]')
     is_disabled = True
     if role_to_activ != "":
         is_disabled = False
