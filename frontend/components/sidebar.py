@@ -3,7 +3,7 @@ from typing import List
 from idom import html, run, use_state, component, event, vdom
 from idom.web import module_from_url, export
 from components.layout import Container
-
+from frontend.config import role
 
 from .icons import arrow_down, arrow_up
 
@@ -142,8 +142,8 @@ def Sidebar(
     isOpen,
     set_isOpen,
     title: str = "",
-    role=None,
 ):
+    user_role = role()
     return html.div(
         {
             "class": mainDivClassOpen if isOpen else mainDivClass,
@@ -156,7 +156,7 @@ def Sidebar(
                     current_page, set_current_page, set_isOpen, pages=pages, title=title
                 ),
                 Dropdown(current_page, set_current_page, set_isOpen)
-                if (role == "admin" or role == None)
+                if (user_role == "admin" or user_role == None)
                 else "",
             ),
         ),

@@ -22,6 +22,5 @@ def role():
             auth = base64.b64decode(hashed_auth).decode("utf-8")
             # Isolate role
             role = auth.split(":")[0]
-            print(role)
             return role
     return role
