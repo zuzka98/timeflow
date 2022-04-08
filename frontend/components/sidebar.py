@@ -3,7 +3,7 @@ from typing import List
 from idom import html, run, use_state, component, event, vdom
 from idom.web import module_from_url, export
 from components.layout import Container
-from frontend.config import role
+from ..config import role
 
 from .icons import arrow_down, arrow_up
 
