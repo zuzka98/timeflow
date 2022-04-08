@@ -21,5 +21,5 @@ def role():
             # Pattern to isolate role
             pattern = re.compile(r"[a-zA-Z]+")
             role = pattern.match(auth, re.IGNORECASE).group()
-            break
-    return role
+            print(role)
+            return role
