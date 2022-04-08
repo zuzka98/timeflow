@@ -3,7 +3,6 @@ from cProfile import label
 import json
 from black import click
 from idom import html, run, use_state, component, event, vdom
-from idom.server.sanic import PerClientStateServer
 import requests
 from sanic import Sanic, response
 from datetime import datetime
@@ -25,7 +24,10 @@ def page():
     return FlexContainer(
         Column(width="3/12"),
         Column(
-            create_client_form(name, set_name, set_submitted_name),
+            Row(
+                create_client_form(name, set_name, set_submitted_name),
+                bg='bg-filter-block-bg'
+            ),
             Column(
                 Row(list_clients(submitted_name)),
             ),
@@ -60,7 +62,8 @@ def create_client_form(name, set_name, set_submitted_name):
         response = requests.post(
             f"{base_url}/api/clients",
             data=json.dumps(data),
-            headers={"accept": "application/json", "Content-Type": "application/json"},
+            headers={"accept": "application/json",
+                     "Content-Type": "application/json"},
         )
         set_submitted_name(name)
 
@@ -109,8 +112,10 @@ def delete_client(set_deleted_name):
         set_deleted_name(client_name)
         print(f"state of deleted_name is {deleted_name}")
 
-    inp_client_id = Input(set_value=set_client_id, label="delete client:id input")
-    inp_client_name = Input(set_value=set_client_name, label="delete client:name input")
+    inp_client_id = Input(set_value=set_client_id,
+                          label="delete client:id input")
+    inp_client_name = Input(set_value=set_client_name,
+                            label="delete client:name input")
     btn = html.button(
         {
             "class": "relative w-fit h-fit px-2 py-1 text-lg border text-gray-50  border-secondary-200",

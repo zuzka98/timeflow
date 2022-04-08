@@ -1,26 +1,24 @@
-from idom.server.sanic import PerClientStateServer
-from sanic import Sanic, response
+import uvicorn
+from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
+from idom.server import fastapi
+from idom.server.starlette import Options
 from pathlib import Path
 from index import page as index_page
 
-app = Sanic(__name__)
+app = fastapi.create_development_app()
 HERE = Path(__file__).parent
-app.static("/static", str(HERE))
-PerClientStateServer(
-    index_page,
-    {
-        "redirect_root_to_index": False,
-    },
-    app,
-)
+app.mount("/static", StaticFiles(directory=str(HERE)), name="static")
+fastapi.configure(app, index_page, Options(redirect_root=False))
 
 
 def run():
-    app.run(
+    uvicorn.run(
+        app,
         host="0.0.0.0",
         port=8001,
         workers=1,
-        debug=True,
+        access_log=True,
     )
 
 

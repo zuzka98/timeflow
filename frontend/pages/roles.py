@@ -24,20 +24,26 @@ def page():
     is_updated, set_is_updated = use_state(False)
     deact_role, set_deact_role = use_state("")
     activ_role, set_activ_role = use_state("")
-    return Container(
-        create_role_form(
-            name,
-            set_name,
-            short_name,
-            set_short_name,
-            set_submitted_name,
+    return html.div(
+        {'class': 'w-full'},
+        Row(
+            create_role_form(
+                name,
+                set_name,
+                short_name,
+                set_short_name,
+                set_submitted_name,
+            ),
+            bg='bg-filter-block-bg'
         ),
-        Column(
-            Row(list_roles(submitted_name, submitted_short_name),
-                justify='justify-between'),
-        ),
-        Row(update_role(is_updated, set_is_updated)),
-        Row(deactivate_role(set_deact_role), activate_role(set_activ_role)),
+        Container(
+            Column(
+                Row(list_roles(submitted_name, submitted_short_name),
+                    justify='justify-between'),
+            ),
+            Row(update_role(is_updated, set_is_updated)),
+            Row(deactivate_role(set_deact_role), activate_role(set_activ_role)),
+        )
     )
 
 
@@ -84,9 +90,11 @@ def create_role_form(
         is_disabled = False
     btn = Button(is_disabled, handle_submit, label="Submit")
 
-    return Column(
-        Row(inp_name, inp_short_name, justify='justify-between'),
-        Row(btn),
+    return Container(
+        Column(
+            Row(inp_name, inp_short_name, justify='justify-between'),
+            Row(btn),
+        )
     )
 
 

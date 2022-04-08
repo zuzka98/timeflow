@@ -106,14 +106,16 @@ def create_epic_form(
         # Triggers state change
         set_submitted_name(name)
 
-    inp_short_name = Input(set_short_name, "epics short name", width='[14%]')
-    inp_name = Input(set_name, "epics full name", width='[14%]')
-    selector_team = Selector2(set_team_id, teams_id_name(), width='14%')
+    inp_short_name = Input(set_short_name, "epics short name",
+                           width='[14%]')
+    inp_name = Input(set_name, "epics full name",
+                     width='[14%]')
+    selector_team = Selector2(
+        set_team_id, teams_id_name(), width='14%')
     selector_sponsor = Selector2(
         set_sponsor_id, sponsors_id_name(), width='14%')
     selector_start_month = Selector2(
-        set_year_month, year_month_dict_list(label="select start month"), width='14%'
-    )
+        set_year_month, year_month_dict_list(label="select start month"), width='14%')
     selector_start_day = Selector2(
         set_day, days_in_month(label="select start day"), width='14%')
     is_disabled = True
@@ -128,17 +130,20 @@ def create_epic_form(
         is_disabled = False
     btn = Button(is_disabled, handle_submit, label="Submit")
 
-    return Column(
-        Row(
-            inp_short_name,
-            inp_name,
-            selector_team,
-            selector_sponsor,
-            selector_start_month,
-            selector_start_day,
-            justify='justify-between'
-        ),
-        Row(btn),
+    return html.div(
+        {'class': "bg-filter-block-bg py-4 text-sm"},
+        Column(
+            Row(
+                inp_short_name,
+                inp_name,
+                selector_team,
+                selector_sponsor,
+                selector_start_month,
+                selector_start_day,
+                justify='justify-between'
+            ),
+            Row(btn),
+        )
     )
 
 

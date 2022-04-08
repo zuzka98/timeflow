@@ -78,18 +78,22 @@ def create_epic_area_form(
     )
 
     # Create input field for the name of the epic area
-    inp_name = Input(set_value=set_name, label="name", width='[48%]')
+    inp_name = Input(set_value=set_name, label="name",
+                     width='[48%]')
 
     # Create submit button
     btn = submit_button(handle_submit, epic_id, name)
 
-    return Column(
-        Row(
-            selector_epic_id,
-            inp_name,
-            justify='justify-between'
-        ),
-        Row(btn),
+    return html.div(
+        {'class': "bg-filter-block-bg py-4 text-sm"},
+        Column(
+            Row(
+                selector_epic_id,
+                inp_name,
+                justify='justify-between'
+            ),
+            Row(btn),
+        )
     )
 
 

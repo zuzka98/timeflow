@@ -17,5 +17,5 @@ def Column(*args: html, width: str = "full"):
 
 
 @component
-def Row(*args: html, justify: str = None):
-    return html.div({"class": f"flex flex-col px-2 md:flex-row {justify} space-x-4"}, args)
+def Row(*args: html, justify: str = None, bg: str = None):
+    return html.div({"class": f"flex flex-col px-2 md:flex-row {justify} {bg} space-x-4"}, args)

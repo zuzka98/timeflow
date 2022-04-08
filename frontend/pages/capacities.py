@@ -33,7 +33,8 @@ def page():
     year_month, set_year_month = use_state("")
     days, set_days = use_state("")
     is_event, set_is_event = use_state(False)
-    return Container(
+    return html.div(
+        {'class': 'w-full'},
         Row(
             create_capacity_form(
                 user_id,
@@ -46,12 +47,15 @@ def page():
                 set_days,
                 is_event,
                 set_is_event,
-            )
+            ),
+            bg='bg-filter-block-bg'
         ),
-        Column(
-            Row(capacities_table(user_id, team_id, year_month)),
-        ),
-        Row(delete_capacity(is_event, set_is_event)),
+        Container(
+            Column(
+                Row(capacities_table(user_id, team_id, year_month)),
+            ),
+            Row(delete_capacity(is_event, set_is_event)),
+        )
     )
 
 
@@ -118,15 +122,17 @@ def create_capacity_form(
 
     btn = Button(is_disabled, handle_submit, label="Submit")
 
-    return Column(
-        Row(
-            selector_user_id,
-            selector_team_id,
-            selector_year_month,
-            selector_days,
-            justify='justify-between'
-        ),
-        Row(btn),
+    return Container(
+        Column(
+            Row(
+                selector_user_id,
+                selector_team_id,
+                selector_year_month,
+                selector_days,
+                justify='justify-between'
+            ),
+            Row(btn),
+        )
     )
 
 
