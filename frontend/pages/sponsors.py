@@ -26,22 +26,29 @@ def page():
     _, set_deact_name = use_state("")
     _, set_activ_name = use_state("")
 
-    return Container(
-        create_sponsor_form(
-            name,
-            set_name,
-            short_name,
-            set_short_name,
-            client_id,
-            set_client_id,
-            set_submitted_name,
-            set_submitted_short_name,
+    return html.div(
+        {'class': 'w-full'},
+        Row(
+            create_sponsor_form(
+                name,
+                set_name,
+                short_name,
+                set_short_name,
+                client_id,
+                set_client_id,
+                set_submitted_name,
+                set_submitted_short_name,
+
+            ),
+            bg='bg-filter-block-bg'
         ),
-        Column(
-            Row(list_sponsors(submitted_name, submitted_short_name)),
-        ),
-        Row(deactivate_sponsor(set_deact_name)),
-        Row(activate_sponsor(set_activ_name)),
+        Container(
+            Column(
+                Row(list_sponsors(submitted_name, submitted_short_name)),
+            ),
+            Row(deactivate_sponsor(set_deact_name)),
+            Row(activate_sponsor(set_activ_name)),
+        )
     )
 
 
@@ -94,14 +101,16 @@ def create_sponsor_form(
     # Create submit button
     btn = submit_button(handle_submit, name, short_name, client_id)
 
-    return Column(
-        Row(
-            inp_name,
-            inp_short_name,
-            selector_client_id,
-            justify='justify-between'
-        ),
-        Row(btn),
+    return Container(
+        Column(
+            Row(
+                inp_name,
+                inp_short_name,
+                selector_client_id,
+                justify='justify-between'
+            ),
+            Row(btn),
+        )
     )
 
 

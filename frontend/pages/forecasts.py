@@ -37,25 +37,31 @@ def page():
     epic_id, set_epic_id = use_state("")
     deleted_forecast, set_deleted_forecast = use_state("")
     on_submit, set_on_submit = use_state(True)
-    return Container(
+    return html.div(
+        {'class': 'w-full'},
         Row(
-            create_forecast_form(
-                year_month,
-                set_year_month,
-                days,
-                set_days,
-                user_id,
-                set_user_id,
-                epic_id,
-                set_epic_id,
-                on_submit,
-                set_on_submit,
-            )
+            Container(
+                create_forecast_form(
+                    year_month,
+                    set_year_month,
+                    days,
+                    set_days,
+                    user_id,
+                    set_user_id,
+                    epic_id,
+                    set_epic_id,
+                    on_submit,
+                    set_on_submit,
+                ),
+            ),
+            bg='bg-filter-block-bg'
         ),
-        Column(
+        Container(Column(
             Row(forecasts_table(user_id, epic_id, year_month)),
-        ),
-        Row(delete_forecast(set_deleted_forecast)),
+        )),
+        Container(
+            Row(delete_forecast(set_deleted_forecast)),
+        )
     )
 
 
@@ -127,19 +133,19 @@ def create_forecast_form(
     selector_epic_id = Selector2(
         set_value=set_epic_id,
         data=epics_names(),
-        width="16%"
+        width="16%",
     )
     display_client = display_value(epic_id)
     selector_year_month = Selector2(
         set_value=set_year_month,
         data=year_month_dict_list(),
-        width="16%"
+        width="16%",
     )
 
     selector_days = Selector2(
         set_value=set_days,
         data=forecast_days(),
-        width="16%"
+        width="16%",
     )
 
     is_disabled = True
@@ -158,30 +164,29 @@ def create_forecast_form(
             selector_days,
             btn
         )
+
     )
 
 
-@component
+@ component
 def display_value(epic_id):
     client = client_name_by_epic_id(epic_id)
-    class_h3 = """text-primary-500  w-full px-4 py-2.5 mt-2 
-                        text-base bg-secondary-300"""
     if epic_id == "":
         return html.div(
-            {'class': "py-3 pl-3 border-[1px] border-select-border rounded-[3px] xl:w-[16%]"},
-            html.h3({"class": class_h3, "value": ""}, "client name")
+            {'class': "py-3 pl-3 border-[1px] bg-nav border-select-border rounded-[3px] xl:w-[16%]"},
+            html.h3({"value": ""}, "client name")
         )
     else:
         return html.div(
-            {'class': "py-3 pl-3 border-[1px] rounded-[3px] xl:w-[16%]"},
+            {'class': "py-3 pl-3 border-[1px] bg-nav rounded-[3px] xl:w-[16%]"},
             html.h3(
-                {"class": class_h3, "value": client["value"]},
+                {"value": client["value"]},
                 client["display_value"],
             )
         )
 
 
-@component
+@ component
 def forecasts_table(user_id, epic_id, year_month):
     """Generates a table component with forecast days by year and month
 
@@ -200,7 +205,7 @@ def forecasts_table(user_id, epic_id, year_month):
     return html.div({"class": "flex w-full"}, SimpleTable(rows=rows))
 
 
-@component
+@ component
 def delete_forecast(set_deleted_forecast):
     forecast_to_delete, set_forecast_to_delete = use_state("")
 

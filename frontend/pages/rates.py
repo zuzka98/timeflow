@@ -39,25 +39,31 @@ def page():
     amount, set_amount = use_state("")
     updated_rate, set_updated_rate = use_state("")
     on_submit, set_on_submit = use_state(True)
-    return Container(
+    return html.div(
+        {'class': 'w-full'},
         Row(
-            create_rates_form(
-                user_id,
-                set_user_id,
-                client_id,
-                set_client_id,
-                month_start,
-                set_month_start,
-                amount,
-                set_amount,
-                on_submit,
-                set_on_submit,
-            )
+            Container(
+                create_rates_form(
+                    user_id,
+                    set_user_id,
+                    client_id,
+                    set_client_id,
+                    month_start,
+                    set_month_start,
+                    amount,
+                    set_amount,
+                    on_submit,
+                    set_on_submit,
+                )
+            ),
+            bg='bg-filter-block-bg'
         ),
-        Column(
-            Row(rates_table(user_id, client_id)),
-        ),
-        Row(update_rate(set_updated_rate, user_id, client_id, month_start)),
+        Container(
+            Column(
+                Row(rates_table(user_id, client_id)),
+            ),
+            Row(update_rate(set_updated_rate, user_id, client_id, month_start)),
+        )
     )
 
 
@@ -106,15 +112,20 @@ def create_rates_form(
         else:
             set_on_submit(True)
 
-    selector_user_id = Selector2(set_value=set_user_id, data=username(), width="24%")
+    selector_user_id = Selector2(
+        set_value=set_user_id, data=username(), width='24%')
 
     selector_client_id = Selector2(
-        set_value=set_client_id, data=clients_names(), width="24%"
+        set_value=set_client_id,
+        data=clients_names(),
+        width='24%'
     )
     selector_month_start = Selector2(
-        set_value=set_month_start, data=months_start(), width="24%"
+        set_value=set_month_start,
+        data=months_start(),
+        width='24%'
     )
-    inp_amount = Input(set_amount, label="amount in EUR", width="[24%]")
+    inp_amount = Input(set_amount, label="amount in EUR", width='[24%]')
 
     is_disabled = True
     if user_id != "" and client_id != "" and month_start != "" and amount != "":
@@ -152,7 +163,8 @@ def update_rate(set_updated_rate, user_id, client_id, month_start):
         set_updated_rate(new_amount)
 
     inp_rate_id = Input(set_rate_id, label="rate id", width="full")
-    inp_amount = Input(set_value=set_new_amount, label="new amount", width="full")
+    inp_amount = Input(set_value=set_new_amount,
+                       label="new amount", width="full")
     is_disabled = True
     if rate_id != None and new_amount != "":
         is_disabled = False

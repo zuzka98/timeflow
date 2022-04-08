@@ -3,17 +3,17 @@ from typing import List
 from idom import html, run, use_state, component, event, vdom
 from idom.web import module_from_url, export
 from components.layout import Container
-
+from config import role
 
 from .icons import arrow_down, arrow_up
 
 aClass = ("text-nav py-2 text-left",)
 btnClass = "text-nav py-2 flex"
 mainDivClass = (
-    "hidden absolute w-screen h-full bg-header-bg z-10 md:w-48 md:right-0 md:min-h-0 md:h-auto xl:w-full xl:block xl:static xl:h-auto",
+    "hidden absolute w-screen h-full bg-header-bg z-10 xl:w-full xl:block xl:static xl:h-auto",
 )
 mainDivClassOpen = (
-    "absolute w-screen h-full bg-header-bg z-10 md:w-48 md:right-0 md:min-h-0 md:h-auto xl:w-full xl:block xl:static xl:h-auto",
+    "absolute w-screen h-full bg-header-bg z-10 xl:w-full xl:block xl:static xl:h-auto",
 )
 h1Class = (
     "text-general-heading font-black uppercase text-xl font-black tracking-[2px] my-4",
@@ -91,7 +91,8 @@ def Dropdown(current_page, set_current_page, set_isOpen):
                     {
                         "class": "px-2 py-2 bg-white rounded-md shadow dark-mode:bg-gray-800"
                     },
-                    ListPages(current_page, set_current_page, set_isOpen, pages=pages),
+                    ListPages(current_page, set_current_page,
+                              set_isOpen, pages=pages),
                 ),
             ),
         )
@@ -143,6 +144,7 @@ def Sidebar(
     set_isOpen,
     title: str = "",
 ):
+    user_role = role()
     return html.div(
         {
             "class": mainDivClassOpen if isOpen else mainDivClass,
@@ -154,7 +156,9 @@ def Sidebar(
                 ListPages(
                     current_page, set_current_page, set_isOpen, pages=pages, title=title
                 ),
-                Dropdown(current_page, set_current_page, set_isOpen),
+                Dropdown(current_page, set_current_page, set_isOpen)
+                if (user_role == "admin" or user_role == None)
+                else "",
             ),
         ),
     )
