@@ -19,7 +19,7 @@ def role():
         print("Printing header:")
         print(header)
         print(type(header))
-        if header == "authorization'":
+        if header == "authorization":
             # Isolate the hash from the rest of the string
             hashed_auth = header[1].replace("'", "").split(" ")[1]
             # Decode the hashed authentication
