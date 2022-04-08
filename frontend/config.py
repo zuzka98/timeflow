@@ -24,7 +24,7 @@ def role():
             # Isolate the hash from the rest of the string
             hashed_auth = header_auth_str.split(" ")[1]
             # Decode the hashed authentication
-            auth = base64.b64decode(hashed_auth)
+            auth = base64.b64decode(hashed_auth).decode("utf-8")
             # Pattern to isolate role
             pattern = re.compile(r"[a-zA-Z]+")
             role = pattern.match(auth, re.IGNORECASE).group()
