@@ -65,8 +65,8 @@ def users_active():
             "short name": item["short_name"],
             "first name": item["first_name"],
             "last name": item["last_name"],
-            "role id": item["role_id"],
-            "main team id": item["team_id"],
+            "role": item["role_short_name"],
+            "main team": item["main_team"],
             "start date": item["start_date"],
         }
         rows.append(d)
