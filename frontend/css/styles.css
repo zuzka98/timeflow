@@ -512,12 +512,20 @@ Ensure the default browser behavior of the `hidden` attribute.
   }
 }
 
+.fixed {
+  position: fixed;
+}
+
 .absolute {
   position: absolute;
 }
 
 .relative {
   position: relative;
+}
+
+.top-0 {
+  top: 0px;
 }
 
 .z-10 {
@@ -568,6 +576,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-top: 0.5rem;
 }
 
+.mt-\[74px\] {
+  margin-top: 74px;
+}
+
 .block {
   display: block;
 }
@@ -594,6 +606,16 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .h-8 {
   height: 2rem;
+}
+
+.h-fit {
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
+.h-\[50vh\] {
+  height: 50vh;
 }
 
 .min-h-screen {
@@ -1197,6 +1219,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
   .xl\:ml-60 {
     margin-left: 15rem;
+  }
+
+  .xl\:mt-0 {
+    margin-top: 0px;
   }
 
   .xl\:block {

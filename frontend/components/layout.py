@@ -7,7 +7,7 @@ def Container(*args: html):
 
 
 def FlexContainer(*args: html):
-    return html.div({"class": "flex w-full xl:ml-60 xl:w-auto"}, args)
+    return html.div({"class": "flex w-full mt-[74px] xl:mt-0 xl:ml-60 xl:w-auto"}, args)
 
 
 def Column(*args: html, width: str = "full"):
