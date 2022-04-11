@@ -70,8 +70,8 @@ async def get_users(
                 User.start_date,
             )
             .select_from(User)
-            .join(Role, User.role_id == Role.id)
-            .join(Team, User.team_id == Team.id)
+            .join(Role, User.role_id == Role.id, isouter=True)
+            .join(Team, User.team_id == Team.id, isouter=True)
             .where(User.is_active == is_active)
             .order_by(User.start_date.desc())
         )
