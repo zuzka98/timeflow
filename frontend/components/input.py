@@ -2,9 +2,9 @@ from typing import Any, Callable, List, Dict
 from idom import html, component
 from data.common import Select
 
-class_str = """text-primary-500 placeholder-secondary-400 w-full px-4 py-2.5 mt-2 
+class_str = """text-primary-500 bg-transparent placeholder-secondary-400 w-full px-4 py-2.5 mt-2 
                     text-base transition duration-500 ease-in-out transform 
-                    border-transparent bg-secondary-300 focus:border-blueGray-500 
+                    border-transparent focus:border-blueGray-500 
                     focus:bg-white dark:focus:bg-secondary-400 focus:outline-none 
                     focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 
                     ring-gray-400"""
@@ -22,17 +22,18 @@ def Input(
     type: str = "text",
     placeholder: str = "Write here the",
     _class: str = class_str,
-    width: str = '[401px]'
+    width: str = '[401px]',
+    md_width: str = '1/2'
 ):
 
     return html.div(
-        {'class': f"w-full my-4 md:w-1/2 flex justify-between items-center border-input-border border-[1px] rounded-[3px] py-2 px-4 xl:max-w-{width} xl:w-full"},
+        {'class': f"w-full my-4 md:w-{md_width} flex justify-between items-center bg-nav border-input-border border-[1px] rounded-[3px] py-2 px-4 xl:max-w-{width} xl:w-full"},
         html.input(
             {
                 "type": type,
                 "placeholder": f"{placeholder} {label}",
                 "onChange": lambda event: set_value(event["target"]["value"]),
-                "class": _class,
+                "class": _class
             }
         )
     )
@@ -83,7 +84,8 @@ def Selector(
 def Selector2(
     set_value: Callable,
     data: List[Select],
-    width: str = "14%"
+    width: str = "14%",
+    md_width: str = '121px'
 ):
     options = []
     for row in data:
@@ -91,7 +93,7 @@ def Selector2(
         options.append(option)
 
     return html.div(
-        {'class': f"block relative w-full sm:w-[48%] md:w-[121px] md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:border-t-appearance before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute xl:w-[{width}] 2xl:mr-0"},
+        {'class': f"block relative w-full sm:w-[48%] md:w-[{md_width}] md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:border-t-appearance before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute xl:w-[{width}] 2xl:mr-0"},
         html.select(
             {
                 "class": selectClass,

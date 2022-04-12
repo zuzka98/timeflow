@@ -33,7 +33,8 @@ def page():
     year_month, set_year_month = use_state("")
     days, set_days = use_state("")
     is_event, set_is_event = use_state(False)
-    return Container(
+    return html.div(
+        {'class': 'w-full'},
         Row(
             create_demand_form(
                 team_id,
@@ -46,12 +47,15 @@ def page():
                 set_days,
                 is_event,
                 set_is_event,
-            )
+            ),
+            bg='bg-filter-block-bg'
         ),
-        Column(
-            Row(demands_table(team_id, epic_id, year_month)),
-        ),
-        Row(delete_demand(is_event, set_is_event)),
+        Container(
+            Column(
+                Row(demands_table(team_id, epic_id, year_month)),
+            ),
+            Row(delete_demand(is_event, set_is_event)),
+        )
     )
 
 
@@ -95,20 +99,23 @@ def create_demand_form(
     selector_team_id = Selector2(
         set_value=set_team_id,
         data=teams_id_name(),
-        width='24%'
+        width='24%',
+        md_width='24%'
     )
     selector_epic_id = Selector2(
-        set_value=set_epic_id, data=epics_names(), width='24%')
+        set_value=set_epic_id, data=epics_names(), width='24%', md_width='24%')
     selector_year_month = Selector2(
         set_value=set_year_month,
         data=year_month_dict_list(),
-        width='24%'
+        width='24%',
+        md_width='24%'
     )
 
     selector_days = Selector2(
         set_value=set_days,
         data=demand_days(),
-        width='24%'
+        width='24%',
+        md_width='24%'
     )
 
     is_disabled = True
@@ -117,15 +124,17 @@ def create_demand_form(
 
     btn = Button(is_disabled, handle_submit, label="Submit")
 
-    return Column(
-        Row(
-            selector_team_id,
-            selector_epic_id,
-            selector_year_month,
-            selector_days,
-            justify='justify-between'
-        ),
-        Row(btn),
+    return Container(
+        Column(
+            Row(
+                selector_team_id,
+                selector_epic_id,
+                selector_year_month,
+                selector_days,
+                justify='justify-between'
+            ),
+            Row(btn),
+        )
     )
 
 
@@ -148,7 +157,8 @@ def delete_demand(is_event, set_is_event):
     inp_demand = Input(
         set_value=set_demand_to_del,
         label="demand id to delete",
-        width='full%'
+        width='full',
+        md_width='full'
     )
     btn = html.button(
         {
