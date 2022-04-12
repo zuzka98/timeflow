@@ -12,7 +12,7 @@ def Button(is_disabled: bool, handle_submit: Callable, label: str):
     # if is_disabled is False:
     # button_status = "relative w-fit h-fit px-2 py-1 text-lg border text-gray-50 border-secondary-200 hover:bg-gray-50 hover:text-primary-500"
     return html.div(
-        {'class': "w-full my-2 flex justify-center md:w-auto md:flex-1 md:justify-start 2xl:flex-none 2xl:w-auto"},
+        {'class': "w-full my-2 flex justify-center md:w-auto md:flex-1 md:justify-start lg:flex-none 2xl:w-auto"},
         html.button(
             {
                 "class": "py-3 px-4 border-[1px] text-sm border-button-bg bg-button-bg text-button-text rounded-[3px] w-[145px] flex items-center justify-center font-black tracking-wider",
