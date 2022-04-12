@@ -25,19 +25,27 @@ def page():
     _, set_activ_name = use_state("")
     print(name)
 
-    return Container(
-        create_epic_area_form(
-            epic_id,
-            set_epic_id,
-            name,
-            set_name,
-            set_submitted_name,
+    return html.div(
+        {'class': 'w-full'},
+        Row(
+            Container(
+                create_epic_area_form(
+                    epic_id,
+                    set_epic_id,
+                    name,
+                    set_name,
+                    set_submitted_name,
+                )
+            ),
+            bg='bg-filter-block-bg'
         ),
-        Column(
-            Row(list_epic_areas(submitted_name)),
-        ),
-        Row(deactivate_epic_area(set_deact_name)),
-        Row(activate_epic_area(set_activ_name)),
+        Container(
+            Column(
+                Row(list_epic_areas(submitted_name)),
+            ),
+            Row(deactivate_epic_area(set_deact_name)),
+            Row(activate_epic_area(set_activ_name)),
+        )
     )
 
 
@@ -74,7 +82,8 @@ def create_epic_area_form(
     selector_epic_id = Selector2(
         set_value=set_epic_id,
         data=epics_names(),
-        width='48%'
+        width='48%',
+        md_width='48%'
     )
 
     # Create input field for the name of the epic area

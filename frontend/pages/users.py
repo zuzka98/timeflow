@@ -121,22 +121,22 @@ def create_user_form(
         switch_state(is_event, set_is_event)
 
     inp_short_name = Input(set_value=set_short_name,
-                           label="short name", width='[24%]')
+                           label="short name", width='[24%]', md_width='[24%]')
     inp_first_name = Input(set_value=set_first_name,
-                           label="first name", width='[24%]')
+                           label="first name", width='[24%]', md_width='[24%]')
     inp_last_name = Input(set_value=set_last_name,
-                          label="last name", width='[24%]')
+                          label="last name", width='[24%]', md_width='[24%]')
     inp_email = Input(set_value=set_email, label="email",
-                      width='[24%]')
+                      width='[24%]', md_width='[24%]')
     selector_role = Selector2(
-        set_role_id, roles_id_name(), width='24%')
+        set_role_id, roles_id_name(), width='24%', md_width='24%')
     selector_team = Selector2(
-        set_team_id, teams_id_name(no_team=True), width='24%')
+        set_team_id, teams_id_name(no_team=True), width='24%', md_width='24%')
     selector_start_month = Selector2(
-        set_year_month, year_month_dict_list(label="select start month"), width='24%'
+        set_year_month, year_month_dict_list(label="select start month"), width='24%', md_width='24%'
     )
     selector_start_day = Selector2(
-        set_day, days_in_month(label="select start day"), width='24%')
+        set_day, days_in_month(label="select start day"), width='24%', md_width='24%')
 
     # is_disabled = True
     # if username != "" and name != "" and surname != "" and email != "":
@@ -183,10 +183,10 @@ def update_users(is_event, set_is_event):
         switch_state(value=is_event, set_value=set_is_event)
 
     selector_user = Selector2(
-        set_update_user_id, data=users_names(label="select user to update"), width="48%"
+        set_update_user_id, data=users_names(label="select user to update"), width="48%", md_width='48%'
     )
     selector_team = Selector2(
-        set_new_team_id, data=teams_id_name(label="select new team"), width="48%"
+        set_new_team_id, data=teams_id_name(label="select new team"), width="48%", md_width='48%'
     )
     is_disabled = False
     btn = Button(is_disabled, handle_update, label="Update")
@@ -212,6 +212,7 @@ def deactivate_users(is_event, set_is_event):
         set_deactiv_user_id,
         data=users_names(label="select user to deactivate"),
         width="96%",
+        md_width='96%'
     )
     is_disabled = True
     if deactiv_user_id != "":
@@ -238,6 +239,7 @@ def activate_users(is_event, set_is_event):
         set_activ_user_id,
         data=users_names(label="select user to activate"),
         width="96%",
+        md_width='96%'
     )
     is_disabled = True
     if activ_user_id != "":

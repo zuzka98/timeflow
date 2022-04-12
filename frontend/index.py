@@ -64,7 +64,11 @@ def page():
             current_page_component = demands_page(key="demands_page")
     return html.div(
         {"class": "xl:flex w-full"},
+        html.meta(
+            {"name": "viewport", "content": "width=device-width, initial-scale=1.0"}
+        ),
         html.link({"href": "../static/css/styles.css", "rel": "stylesheet"}),
-        Header(current_page, set_current_page, pages=pages, title="timeflow UI"),
+        Header(current_page, set_current_page,
+               pages=pages, title="timeflow UI"),
         FlexContainer(current_page_component),
     )

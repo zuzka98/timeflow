@@ -10,10 +10,10 @@ from .icons import arrow_down, arrow_up
 aClass = ("text-nav py-2 text-left",)
 btnClass = "text-nav py-2 flex"
 mainDivClass = (
-    "hidden absolute w-screen h-full bg-header-bg z-10 xl:w-full xl:block xl:static xl:h-auto",
+    "hidden absolute w-screen  h-fit bg-header-bg z-10 xl:w-full xl:block xl:static xl:h-auto",
 )
 mainDivClassOpen = (
-    "absolute w-screen h-full bg-header-bg z-10 xl:w-full xl:block xl:static xl:h-auto",
+    "absolute w-screen h-fit min-h-screen bg-header-bg z-10 xl:w-full xl:block xl:static xl:h-auto",
 )
 h1Class = (
     "text-general-heading font-black uppercase text-xl font-black tracking-[2px] my-4",
@@ -85,7 +85,7 @@ def Dropdown(current_page, set_current_page, set_isOpen):
             btn,
             html.div(
                 {
-                    "class": "absolute right-0 w-full mt-2 origin-top-right rounded-md shadow-lg"
+                    "class": "right-0 w-full overflow-auto h-[50vh] mt-2 origin-top-right rounded-md shadow-lg"
                 },
                 html.div(
                     {
