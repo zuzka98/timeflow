@@ -1,4 +1,4 @@
-from config import role
+from config import get_role
 from idom import html, use_state, component
 from pages.users import page as users_page
 from pages.clients import page as clients_page
@@ -22,7 +22,7 @@ from idom.server import fastapi
 @component
 def page():
     # Get role of user
-    user_role = role()
+    user_role = get_role()
 
     current_page, set_current_page = use_state("Timelogs")
     pages = ["Timelogs", "Forecasts"]

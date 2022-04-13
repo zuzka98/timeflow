@@ -3,7 +3,7 @@ from typing import List
 from idom import html, run, use_state, component, event, vdom
 from idom.web import module_from_url, export
 from components.layout import Container
-from config import role
+from config import get_role
 
 from .icons import arrow_down, arrow_up
 
@@ -91,8 +91,7 @@ def Dropdown(current_page, set_current_page, set_isOpen):
                     {
                         "class": "px-2 py-2 bg-white rounded-md shadow dark-mode:bg-gray-800"
                     },
-                    ListPages(current_page, set_current_page,
-                              set_isOpen, pages=pages),
+                    ListPages(current_page, set_current_page, set_isOpen, pages=pages),
                 ),
             ),
         )
@@ -144,7 +143,7 @@ def Sidebar(
     set_isOpen,
     title: str = "",
 ):
-    user_role = role()
+    user_role = get_role()
     return html.div(
         {
             "class": mainDivClassOpen if isOpen else mainDivClass,

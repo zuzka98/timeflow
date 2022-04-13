@@ -1,12 +1,12 @@
 import base64
-import re
+from fastapi import Request
 from idom.server import fastapi
 
 
 base_url = "http://fastapi:8002"
 
 
-def role():
+def get_role():
     """
     Return role of logged in user.
     """
