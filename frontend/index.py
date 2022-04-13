@@ -20,7 +20,6 @@ from components.header import Header
 
 @component
 def page():
-    print(fastapi.use_scope())
 
     current_page, set_current_page = use_state("Timelogs")
     pages = ["Timelogs", "Forecasts"]
