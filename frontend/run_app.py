@@ -1,4 +1,8 @@
+import dominate
+import os
 import uvicorn
+
+from dominate.tags import *
 from fastapi import Depends, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.security import OAuth2PasswordBearer
@@ -8,8 +12,10 @@ from idom.server.starlette import Options
 from pathlib import Path
 from requests_oauthlib import OAuth2Session
 from starlette.middleware.sessions import SessionMiddleware
-
 from index import page as index_page
+
+# to be removed
+os.environ["TIMEFLOW_DEV"] = "True"
 
 app = fastapi.create_development_app()
 
@@ -19,7 +25,7 @@ app.add_middleware(SessionMiddleware, secret_key="123")
 
 fastapi.configure(app, index_page, Options(redirect_root=False, url_prefix="/_idom"))
 
-# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 client_id = "a3dd4c8a1bc07ca5d347"
 client_secret = "d8ce2b6d5d788b816c9ddf5e1fd9801a29e60139"
@@ -88,39 +94,58 @@ async def organizations(request: Request):
 
     # User not dyvenia's core team
     if dyvenia_api.status_code == 404:
-        return request.base_url
+        return str(request.base_url)
     # User in dyvenia's core team
     elif dyvenia_api.status_code == 204:
         # Check if user is in the GitHub TimeFlow Admin Team
         admin_team = github.get(
             f"https://api.github.com/organizations/81221495/team/5925377/members/{username}"
         )
-        print("admin_team", admin_team)
-        if admin_team == 404:
+
+        if admin_team.status_code == 404:
             request.session["role"] = "user"
-            return f"{str(request.url)}home"
-        elif admin_team == 204:
+            return f"{str(request.base_url)}home"
+        elif admin_team.status_code == 204:
             request.session["role"] = "admin"
-            return f"{str(request.url)}home"
+            return f"{str(request.base_url)}home"
 
 
 @app.get("/home", response_class=HTMLResponse)
-def home(request: Request):
-    role = request.session["role"]
-    with open("index.html", "r") as f:
-        html = f.read()
-    return html
+async def home(request: Request):
+    # doc = dominate.document()
+    # with open("index.html", "r") as f:
+    #     html = f.read()
+    _html = html()
+    _head, _body = _html.add(head(meta(charset="UTF-8"), title("TimeFlow")), body())
+    _body.add(div(id="idom-app"))
+    _body.add(script(type="module", src="static/embedding_script.js"))
+    return _html.render()
     # dominate html
 
 
 def run():
-    uvicorn.run(
-        app,
-        host="0.0.0.0",
-        port=8001,
-        workers=1,
-        access_log=True,
-    )
+    """
+    Run the app in production or developer mode.
+    """
+
+    if os.environ["TIMEFLOW_DEV"] == "True":
+        uvicorn.run(
+            app,
+            host="0.0.0.0",
+            port=8001,
+            workers=1,
+            access_log=True,
+            ssl_keyfile="./127.0.0.1-key.pem",
+            ssl_certfile="./127.0.0.1.pem",
+        )
+    else:
+        uvicorn.run(
+            app,
+            host="0.0.0.0",
+            port=8001,
+            workers=1,
+            access_log=True,
+        )
 
 
 run()
