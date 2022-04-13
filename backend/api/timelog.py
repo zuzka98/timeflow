@@ -93,6 +93,7 @@ async def get_timelogs_all(session: Session = Depends(get_session)):
         )
         .join(User)
         .join(Epic)
+        .order_by(TimeLog.end_time.desc())
     )
     results = session.exec(statement).all()
     return results
@@ -116,10 +117,11 @@ async def get_timelog_by_id(timelog_id: int, session: Session = Depends(get_sess
     return result
 
 
-@router.get("/users/{user_id}/months/{month}/years/{year}")
+@router.get("/users/{user_id}/epics/{epic_id}")
 async def get_timelog_user_id(
     *,
-    user_id: str,
+    user_id: int,
+    epic_id: int,
     month: int,
     year: int,
     session: Session = Depends(get_session),
@@ -131,19 +133,29 @@ async def get_timelog_user_id(
     ----------
     user_id : str
         ID of user from which to pull timelogs.
-    month : int
-        Month from which to pull timelog(s).
-    year : int
-        Year from which to pull timelog(s).
+    year_month : int
+        Month and year from which to pull timelog(s).
     session : Session
         SQL session that is to be used to get the timelogs.
         Defaults to creating a dependency on the running SQL model session.
     """
     statement = (
-        select(TimeLog)
+        select(
+            TimeLog.id,
+            User.short_name.label("username"),
+            Epic.short_name.label("epic_name"),
+            TimeLog.start_time,
+            TimeLog.end_time,
+            TimeLog.count_hours,
+            TimeLog.count_days,
+        )
+        .join(User)
+        .join(Epic)
         .where(TimeLog.user_id == user_id)
+        .where(TimeLog.epic_id == epic_id)
         .where(TimeLog.month == month)
         .where(TimeLog.year == year)
+        .order_by(TimeLog.end_time.desc())
     )
     results = session.exec(statement).all()
     return results

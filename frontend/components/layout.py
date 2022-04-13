@@ -7,7 +7,7 @@ def Container(*args: html):
 
 
 def FlexContainer(*args: html):
-    return html.div({"class": "flex w-full xl:ml-60 xl:w-auto"}, args)
+    return html.div({"class": "flex w-full mt-[74px] xl:mt-0 xl:ml-60 xl:w-auto"}, args)
 
 
 def Column(*args: html, width: str = "full"):
@@ -17,5 +17,5 @@ def Column(*args: html, width: str = "full"):
 
 
 @component
-def Row(*args: html, justify: str = None):
-    return html.div({"class": f"flex flex-col px-2 md:flex-row {justify} space-x-4"}, args)
+def Row(*args: html, justify: str = None, bg: str = None, wrap: str = None):
+    return html.div({"class": f"flex flex-col px-2 md:flex-row {justify} {bg} {wrap} space-x-4"}, args)

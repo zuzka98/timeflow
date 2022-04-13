@@ -33,26 +33,34 @@ def page():
     deact_epic, set_deact_epic = use_state("")
     activ_epic, set_activ_epic = use_state("")
 
-    return Container(
-        create_epic_form(
-            short_name,
-            set_short_name,
-            name,
-            set_name,
-            team_id,
-            set_team_id,
-            sponsor_id,
-            set_sponsor_id,
-            year_month,
-            set_year_month,
-            day,
-            set_day,
-            set_submitted_name,
+    return html.div(
+        {'class': 'w-full'},
+        Row(
+            Container(
+                create_epic_form(
+                    short_name,
+                    set_short_name,
+                    name,
+                    set_name,
+                    team_id,
+                    set_team_id,
+                    sponsor_id,
+                    set_sponsor_id,
+                    year_month,
+                    set_year_month,
+                    day,
+                    set_day,
+                    set_submitted_name,
+                ),
+            ),
+            bg='bg-filter-block-bg'
         ),
-        Column(
-            Row(list_epics(team_id, sponsor_id, submitted_name)),
-        ),
-        Row(deactivate_epic(set_deact_epic), activate_epic(set_activ_epic)),
+        Container(
+            Column(
+                Row(list_epics(team_id, sponsor_id, submitted_name)),
+            ),
+            Row(deactivate_epic(set_deact_epic), activate_epic(set_activ_epic)),
+        )
     )
 
 
@@ -106,16 +114,18 @@ def create_epic_form(
         # Triggers state change
         set_submitted_name(name)
 
-    inp_short_name = Input(set_short_name, "epics short name", width='[14%]')
-    inp_name = Input(set_name, "epics full name", width='[14%]')
-    selector_team = Selector2(set_team_id, teams_id_name(), width='14%')
+    inp_short_name = Input(set_short_name, "epics short name",
+                           width='[14%]', md_width='[32%]')
+    inp_name = Input(set_name, "epics full name",
+                     width='[14%]', md_width='[32%]')
+    selector_team = Selector2(
+        set_team_id, teams_id_name(), width='14%', md_width='32%')
     selector_sponsor = Selector2(
-        set_sponsor_id, sponsors_id_name(), width='14%')
+        set_sponsor_id, sponsors_id_name(), width='14%', md_width='32%')
     selector_start_month = Selector2(
-        set_year_month, year_month_dict_list(label="select start month"), width='14%'
-    )
+        set_year_month, year_month_dict_list(label="select start month"), width='14%', md_width='32%')
     selector_start_day = Selector2(
-        set_day, days_in_month(label="select start day"), width='14%')
+        set_day, days_in_month(label="select start day"), width='14%', md_width='32%')
     is_disabled = True
     if (
         short_name != ""
@@ -128,17 +138,21 @@ def create_epic_form(
         is_disabled = False
     btn = Button(is_disabled, handle_submit, label="Submit")
 
-    return Column(
-        Row(
-            inp_short_name,
-            inp_name,
-            selector_team,
-            selector_sponsor,
-            selector_start_month,
-            selector_start_day,
-            justify='justify-between'
-        ),
-        Row(btn),
+    return html.div(
+        {'class': "bg-filter-block-bg py-4 text-sm"},
+        Column(
+            Row(
+                inp_short_name,
+                inp_name,
+                selector_team,
+                selector_sponsor,
+                selector_start_month,
+                selector_start_day,
+                justify='justify-between',
+                wrap='flex-wrap'
+            ),
+            Row(btn),
+        )
     )
 
 
@@ -162,7 +176,7 @@ def deactivate_epic(set_deact_epic):
         return True
 
     inp_deact_epic = Input(
-        set_value=set_epic_to_deact, label="epic id to be deactivated", width='[96%]'
+        set_value=set_epic_to_deact, label="epic id to be deactivated", width='[96%]', md_width='[96%]'
     )
     is_disabled = True
     if epic_to_deact != "":
@@ -185,7 +199,7 @@ def activate_epic(set_activ_epic):
         return True
 
     inp_activ_epic = Input(set_value=set_epic_to_activ,
-                           label="epic id to be activated", width='[96%]')
+                           label="epic id to be activated", width='[96%]', md_width='[96%]')
     is_disabled = True
     if epic_to_activ != "":
         is_disabled = False
