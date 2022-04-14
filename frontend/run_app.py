@@ -112,9 +112,9 @@ async def organizations(request: Request):
 
 @app.get("/home", response_class=HTMLResponse)
 async def home(request: Request):
-    # doc = dominate.document()
-    # with open("index.html", "r") as f:
-    #     html = f.read()
+    """
+    Create home page of TimeFlow.
+    """
     _html = html()
     _head, _body = _html.add(head(meta(charset="UTF-8"), title("TimeFlow")), body())
     _head.add(link(rel="css/styles.css", type="text/css", href="static/css/styles.css"))
