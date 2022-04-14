@@ -3,6 +3,8 @@ from ..utils import engine, get_session
 from sqlmodel import Session, select, SQLModel, or_
 from sqlalchemy.exc import NoResultFound
 from ..models.user import User
+from ..models.role import Role
+from ..models.team import Team
 from typing import Optional
 from datetime import datetime
 
@@ -58,13 +60,21 @@ async def get_users(
     """
     statement = select(User)
     if is_active != None:
-        statement = select(User).where(User.is_active == is_active)
-        if short_name != None:
-            statement = (
-                select(User)
-                .where(User.is_active == is_active)
-                .where(User.short_name == short_name)
+        statement = (
+            select(
+                User.short_name,
+                User.first_name,
+                User.last_name,
+                Role.short_name.label("role_short_name"),
+                Team.short_name.label("main_team"),
+                User.start_date,
             )
+            .select_from(User)
+            .join(Role, User.role_id == Role.id, isouter=True)
+            .join(Team, User.team_id == Team.id, isouter=True)
+            .where(User.is_active == is_active)
+            .order_by(User.start_date.desc())
+        )
     result = session.exec(statement).all()
     return result
 
