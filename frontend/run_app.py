@@ -1,8 +1,8 @@
-import dominate
 import os
 import uvicorn
-
+import dominate
 from dominate.tags import *
+from dotenv import load_dotenv
 from fastapi import Depends, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.security import OAuth2PasswordBearer
@@ -14,25 +14,31 @@ from requests_oauthlib import OAuth2Session
 from starlette.middleware.sessions import SessionMiddleware
 from index import page as index_page
 
+# Load in env variables
+load_dotenv()
+
 # to be removed and replaced with docker-compose-dev
-os.environ["TIMEFLOW_DEV"] = "True"
-
-app = fastapi.create_development_app()
-
-HERE = Path(__file__).parent
-app.mount("/static", StaticFiles(directory=str(HERE)), name="static")
-app.add_middleware(SessionMiddleware, secret_key="123")
-
-fastapi.configure(app, index_page, Options(redirect_root=False, url_prefix="/_idom"))
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-client_id = "a3dd4c8a1bc07ca5d347"
-client_secret = "d8ce2b6d5d788b816c9ddf5e1fd9801a29e60139"
+TIMEFLOW_DEV = os.getenv("TIMEFLOW_DEV")
+GITHUB_CLIENT_ID = os.getenv("GITHUB_CLIENT_ID")
+GITHUB_CLIENT_SECRET = os.getenv("GITHUB_CLIENT_SECRET")
+SESSION_SECRET_KEY = os.getenv("SESSION_SECRET_KEY")
 
 # OAuth endpoints given in the GitHub API documentation
 authorization_base_url = "https://github.com/login/oauth/authorize"
 token_url = "https://github.com/login/oauth/access_token"
+
+# Create the fastapi app
+app = fastapi.create_development_app()
+
+# Specify location of static files
+HERE = Path(__file__).parent
+app.mount("/static", StaticFiles(directory=str(HERE)), name="static")
+app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET_KEY)
+
+# Configure app with idom index page
+fastapi.configure(app, index_page, Options(redirect_root=False, url_prefix="/_idom"))
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 @app.get("/", response_class=RedirectResponse)
@@ -51,7 +57,7 @@ async def login(request: Request):
     Future: Implement button that user clicks to cause the redirection.
     """
 
-    github = OAuth2Session(client_id, scope=["read:org", "read:user"])
+    github = OAuth2Session(GITHUB_CLIENT_ID, scope=["read:org", "read:user"])
 
     # Redirect user to GitHub for authorization
     authorization_url, state = github.authorization_url(authorization_base_url)
@@ -64,9 +70,11 @@ async def callback(request: Request):
     """
     Fetch token of user and redirect to subdirectory /organizations.
     """
-    github = OAuth2Session(client_id, state=request.session["oauth_state"])
+    github = OAuth2Session(GITHUB_CLIENT_ID, state=request.session["oauth_state"])
     token = github.fetch_token(
-        token_url, client_secret=client_secret, authorization_response=str(request.url)
+        token_url,
+        client_secret=GITHUB_CLIENT_SECRET,
+        authorization_response=str(request.url),
     )
     request.session["oauth_token"] = token
     organizations_url = f"{str(request.base_url)}organizations"
@@ -79,7 +87,7 @@ async def organizations(request: Request):
     Fetch organizations of user and determine role.
     """
     github = OAuth2Session(
-        client_id,
+        GITHUB_CLIENT_ID,
         token=request.session["oauth_token"],
         state=request.session["oauth_state"],
     )
@@ -104,10 +112,10 @@ async def organizations(request: Request):
 
         if admin_team.status_code == 404:
             request.session["role"] = "user"
-            return f"{str(request.base_url)}home"
         elif admin_team.status_code == 204:
             request.session["role"] = "admin"
-            return f"{str(request.base_url)}home"
+
+        return f"{str(request.base_url)}home"
 
 
 @app.get("/home", response_class=HTMLResponse)
@@ -115,12 +123,12 @@ async def home(request: Request):
     """
     Create home page of TimeFlow.
     """
-    _html = html()
-    _head, _body = _html.add(head(meta(charset="UTF-8"), title("TimeFlow")), body())
-    _head.add(link(rel="css/styles.css", type="text/css", href="static/css/styles.css"))
-    _head.add(script(type="module", src="static/embedding_script.js"))
-    _body.add(div(id="idom-app"))
-    return _html.render()
+    d = dominate.document(title="TimeFlow", doctype="<!DOCTYPE html>")
+    d.head += meta(charset="UTF-8")
+    d.head += link(rel="css/styles.css", type="text/css", href="static/css/styles.css")
+    d.head += script(type="module", src="static/embedding_script.js")
+    d += div(id="idom-app")
+    return d.render()
 
 
 def run():
@@ -128,7 +136,7 @@ def run():
     Run the app in production or developer mode.
     """
 
-    if os.environ["TIMEFLOW_DEV"] == "True":
+    if os.environ["TIMEFLOW_DEV"] == "true":
         uvicorn.run(
             app,
             host="0.0.0.0",

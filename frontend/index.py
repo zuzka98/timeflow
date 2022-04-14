@@ -16,8 +16,6 @@ from pages.demands import page as demands_page
 from components.layout import FlexContainer
 from components.header import Header
 
-from idom.server import fastapi
-
 
 @component
 def page():
