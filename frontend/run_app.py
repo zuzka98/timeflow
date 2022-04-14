@@ -117,10 +117,10 @@ async def home(request: Request):
     #     html = f.read()
     _html = html()
     _head, _body = _html.add(head(meta(charset="UTF-8"), title("TimeFlow")), body())
+    _head.add(link(rel="css/styles.css", type="text/css", href="static/css/styles.css"))
+    _head.add(script(type="module", src="static/embedding_script.js"))
     _body.add(div(id="idom-app"))
-    _body.add(script(type="module", src="static/embedding_script.js"))
     return _html.render()
-    # dominate html
 
 
 def run():
