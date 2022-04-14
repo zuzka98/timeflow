@@ -29,7 +29,6 @@ async def post_forecast(*, forecast: Forecast, session: Session = Depends(get_se
             Forecast.user_id == forecast.user_id,
             Forecast.year == forecast.year,
             Forecast.month == forecast.month,
-            Forecast.days == forecast.days,
         )
     )
     try:
