@@ -14,7 +14,7 @@ from requests_oauthlib import OAuth2Session
 from starlette.middleware.sessions import SessionMiddleware
 from index import page as index_page
 
-# to be removed
+# to be removed and replaced with docker-compose-dev
 os.environ["TIMEFLOW_DEV"] = "True"
 
 app = fastapi.create_development_app()
