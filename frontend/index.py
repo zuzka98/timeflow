@@ -1,4 +1,4 @@
-from config import get_role
+from config import get_user, fetch_username
 from idom import html, use_state, component
 from pages.users import page as users_page
 from pages.clients import page as clients_page
@@ -20,7 +20,8 @@ from components.header import Header
 @component
 def page():
     # Get role of user
-    user_role = get_role()
+    user_role = get_user()
+    github_username = fetch_username()
 
     current_page, set_current_page = use_state("Timelogs")
     pages = ["Timelogs", "Forecasts"]
@@ -66,6 +67,12 @@ def page():
             {"name": "viewport", "content": "width=device-width, initial-scale=1.0"}
         ),
         html.link({"href": "../static/css/styles.css", "rel": "stylesheet"}),
-        Header(current_page, set_current_page, pages=pages, title="timeflow UI"),
+        Header(
+            current_page,
+            set_current_page,
+            pages=pages,
+            title="timeflow UI",
+            user_welcome=f"Welcome {github_username}!",
+        ),
         FlexContainer(current_page_component),
     )
