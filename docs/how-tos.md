@@ -127,6 +127,8 @@ docker-compose -f docker-compose-dev.yaml up
 docker-compose up -d
 ```
 
+Go to url `https://127.0.0.1:8001/`
+
 ## Docker Setup - Production mode
 
 1) Open a git bash terminal
