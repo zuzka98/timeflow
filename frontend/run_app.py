@@ -100,6 +100,11 @@ async def organizations(request: Request):
         f"https://api.github.com/organizations/81221495/team/4777989/members/{username}"
     )
 
+    # Give admin permissions to user if app is ran in dev mode
+    if TIMEFLOW_DEV == "true":
+        request.session["role"] = "admin"
+        return f"{str(request.base_url)}home"
+
     # User not dyvenia's core team
     if dyvenia_api.status_code == 404:
         return str(request.base_url)
