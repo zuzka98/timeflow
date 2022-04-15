@@ -4,7 +4,7 @@ from components.sidebar import Sidebar
 
 
 @component
-def Header(current_page, set_current_page, pages, title):
+def Header(current_page, set_current_page, pages, title, user_welcome):
 
     isOpen, set_isOpen = use_state(False)
 
@@ -28,6 +28,14 @@ def Header(current_page, set_current_page, pages, title):
                     html.img({"src": "../static/img/svg/Burger.svg", "class": "w-8"}),
                 ),
             ),
-            Sidebar(current_page, set_current_page, pages, isOpen, set_isOpen, title),
+            Sidebar(
+                current_page,
+                set_current_page,
+                pages,
+                isOpen,
+                set_isOpen,
+                title,
+                user_welcome,
+            ),
         )
     )
