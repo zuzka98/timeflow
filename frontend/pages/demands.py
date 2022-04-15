@@ -99,20 +99,23 @@ def create_demand_form(
     selector_team_id = Selector2(
         set_value=set_team_id,
         data=teams_id_name(),
-        width='24%'
+        width='24%',
+        md_width='24%'
     )
     selector_epic_id = Selector2(
-        set_value=set_epic_id, data=epics_names(), width='24%', )
+        set_value=set_epic_id, data=epics_names(), width='24%', md_width='24%')
     selector_year_month = Selector2(
         set_value=set_year_month,
         data=year_month_dict_list(),
-        width='24%'
+        width='24%',
+        md_width='24%'
     )
 
     selector_days = Selector2(
         set_value=set_days,
         data=demand_days(),
-        width='24%'
+        width='24%',
+        md_width='24%'
     )
 
     is_disabled = True
@@ -154,7 +157,8 @@ def delete_demand(is_event, set_is_event):
     inp_demand = Input(
         set_value=set_demand_to_del,
         label="demand id to delete",
-        width='full%'
+        width='full',
+        md_width='full'
     )
     btn = html.button(
         {

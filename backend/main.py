@@ -1,3 +1,4 @@
+import os
 from fastapi import *
 from sqlmodel import Session, select, SQLModel
 from sqlalchemy.exc import OperationalError
@@ -50,7 +51,8 @@ def on_startup():
         results = session.exec(statement)
     except OperationalError:
         create_db()
-        execute_sample_sql(session)
+        if os.getenv("TIMEFLOW_DEV") == "true":
+            execute_sample_sql(session)
 
 
 @app.on_event("startup")

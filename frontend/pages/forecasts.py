@@ -156,7 +156,7 @@ def create_forecast_form(
 
     return Column(
         html.div(
-            {'class': 'flex flex-wrap justify-between items-center md:justify-start 2xl:justify-between'},
+            {'class': 'flex flex-wrap w-full justify-between items-center 2xl:justify-between'},
             selector_user_id,
             selector_epic_id,
             display_client,
@@ -173,12 +173,12 @@ def display_value(epic_id):
     client = client_name_by_epic_id(epic_id)
     if epic_id == "":
         return html.div(
-            {'class': "py-3 pl-3 border-[1px] bg-nav border-select-border rounded-[3px] xl:w-[16%]"},
+            {'class': "py-3 pl-3 w-full border-[1px] sm:w-[48%] md:w-[121px] bg-nav border-select-border rounded-[3px] xl:w-[16%]"},
             html.h3({"value": ""}, "client name")
         )
     else:
         return html.div(
-            {'class': "py-3 pl-3 border-[1px] bg-nav rounded-[3px] xl:w-[16%]"},
+            {'class': "py-3 pl-3 w-full border-[1px] sm:w-[48%] md:w-[121px] bg-nav rounded-[3px] xl:w-[16%]"},
             html.h3(
                 {"value": client["value"]},
                 client["display_value"],
@@ -205,7 +205,7 @@ def forecasts_table(user_id, epic_id, year_month):
     return html.div({"class": "flex w-full"}, SimpleTable(rows=rows))
 
 
-@ component
+@component
 def delete_forecast(set_deleted_forecast):
     forecast_to_delete, set_forecast_to_delete = use_state("")
 

@@ -1,4 +1,4 @@
-from config import role
+from config import get_role
 from idom import html, use_state, component
 from pages.users import page as users_page
 from pages.clients import page as clients_page
@@ -16,13 +16,11 @@ from pages.demands import page as demands_page
 from components.layout import FlexContainer
 from components.header import Header
 
-from idom.server import fastapi
-
 
 @component
 def page():
     # Get role of user
-    user_role = role()
+    user_role = get_role()
 
     current_page, set_current_page = use_state("Timelogs")
     pages = ["Timelogs", "Forecasts"]
@@ -64,6 +62,9 @@ def page():
             current_page_component = demands_page(key="demands_page")
     return html.div(
         {"class": "xl:flex w-full"},
+        html.meta(
+            {"name": "viewport", "content": "width=device-width, initial-scale=1.0"}
+        ),
         html.link({"href": "../static/css/styles.css", "rel": "stylesheet"}),
         Header(current_page, set_current_page, pages=pages, title="timeflow UI"),
         FlexContainer(current_page_component),
