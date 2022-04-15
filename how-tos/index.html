@@ -63,7 +63,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#first-time-installation-and-configuration" class="md-skip">
+        <a href="#local-setup" class="md-skip">
           Skip to content
         </a>
       
@@ -292,13 +292,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#first-time-installation-and-configuration" class="md-nav__link">
-    First Time Installation and Configuration
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#local-setup" class="md-nav__link">
     Local Setup
   </a>
@@ -306,15 +299,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#docker-setup-developer-mode" class="md-nav__link">
-    Docker Setup - Developer mode
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#docker-setup-production-mode" class="md-nav__link">
-    Docker Setup - Production mode
+  <a href="#docker-setup" class="md-nav__link">
+    Docker Setup
   </a>
   
 </li>
@@ -429,13 +415,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#first-time-installation-and-configuration" class="md-nav__link">
-    First Time Installation and Configuration
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#local-setup" class="md-nav__link">
     Local Setup
   </a>
@@ -443,15 +422,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#docker-setup-developer-mode" class="md-nav__link">
-    Docker Setup - Developer mode
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#docker-setup-production-mode" class="md-nav__link">
-    Docker Setup - Production mode
+  <a href="#docker-setup" class="md-nav__link">
+    Docker Setup
   </a>
   
 </li>
@@ -487,32 +459,6 @@
   <h1>How-tos</h1>
 
 <hr />
-<h2 id="first-time-installation-and-configuration">First Time Installation and Configuration</h2>
-<p>1) Clone the <a href="https://github.com/dyvenia/timeflow" target="_blank">timeflow repository</a> into a directory chosen by you.
-<div class="highlight"><pre><span></span><code>git clone &quot;https://github.com/dyvenia/timeflow&quot;
-</code></pre></div></p>
-<p>2) Create <code>.env</code> file in the respository's <code>frontend</code> directory.</p>
-<div class="highlight"><pre><span></span><code>touch frontend/.env
-</code></pre></div>
-<p>Within the <code>.env</code> file, store the following environment variables:
-<div class="highlight"><pre><span></span><code>GITHUB_CLIENT_ID = &quot;##############&quot;
-GITHUB_CLIENT_SECRET = &quot;##############&quot;
-SESSION_SECRET_KEY = &quot;############&quot;
-</code></pre></div></p>
-<p><strong>Note:</strong> <em>You will need to request these details from whoever has access to the authenticating GitHub account. This will likely need to be personally requested from your organization's GitHub account.</em></p>
-<p><strong>Note 2:</strong> <em><code>GITHUB_CLIENT_ID</code> and <code>GITHUB_CLIENT_SECRET</code> will differ depending on whether or not you are planning to use the app in developer mode or in production mode. Make sure to enter in the appropriate details for whichever mode you plan on spinning up.</em></p>
-<p><strong>Note 3:</strong> <em>If you are an organization owner, you will likely need to create two <a href="https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app" target="_blank">GitHub OAuth apps</a> on your organization's GitHub in order to support both developer and production modes. If this is the case, proceed to step 2.1)</em></p>
-<p>2.1) Ignore this step if <strong>Note 3</strong> from step 2) does not apply to you.</p>
-<p>Use the following guide to create the <a href="https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app" target="_blank">GitHub OAuth apps</a>.</p>
-<p>Set the first application's application name to "timeflow_dev". Set the homepage url to "https://127.0.0.1/". Set the callback url to "https://127.0.0.1:8001/callback".</p>
-<p>Set the second application's application name to "timeflow". Set the homepage url to your deployed website's home url "https://my-domain.com/". Set the callback url to "https://my-domain.com/callback".</p>
-<p>3) Create the certifications necessary for HTTPS.</p>
-<p>Install <a href="https://github.com/FiloSottile/mkcert" target="_blank">mkcert</a> by following the installation instructions on their GitHub.
-Using mkcert, create the certificates for 127.0.0.1, which is localhost. You will want to cd to the directory where mkcert is downloaded, and then the code to generate the certificates will look something like this:
-<div class="highlight"><pre><span></span><code>mkcert <span class="m">127</span>.0.0.1
-</code></pre></div></p>
-<p><strong>Note:</strong> <em>The name of your mkcert file will likely be longer/different from what was given in the example, in that case, use the entire name of the file on your system.</em></p>
-<p>This will generate two certificates. Move these certificates now into <code>timeflow/frontend/</code>. This can be done either by "dragging and dropping" or by using the terminal.</p>
 <h2 id="local-setup">Local Setup</h2>
 <p>1) Install <a href="https://nodejs.org/en/download/" target="_blank">npm</a></p>
 <div class="highlight"><pre><span></span><code>npm install -g npm
@@ -531,35 +477,18 @@ npx tailwindcss init
 <div class="highlight"><pre><span></span><code>pip install FastAPI
 </code></pre></div>
 <p>6) Spin up the backend Fastapi dev server</p>
-<div class="highlight"><pre><span></span><code><span class="nb">cd</span> timeflow
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span> timesheets
 uvicorn backend.main:app --reload
 </code></pre></div>
 <p>7) Spin up the frontend IDOM dev server
-<div class="highlight"><pre><span></span><code>python3 -m frontend/run_reload.py
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span> timesheets/idom_frontend
+python3 -m run_reload.py
 </code></pre></div>
 8) Compile the tailwind css file</p>
 <div class="highlight"><pre><span></span><code><span class="nb">cd</span> idom_frontend/tailwind
 npm run build
 </code></pre></div>
-<h2 id="docker-setup-developer-mode">Docker Setup - Developer mode</h2>
-<p><strong>Note:</strong> <strong><em>Do not under any circumstances run this on your production server (the place where you are deploying the app). Developer mode triggers the deletion of the app's database and loads in a new one with sample data.</em></strong></p>
-<p>1) Open a git bash terminal</p>
-<p>2) Ensure you are in the root directory of the project</p>
-<p>3) Navigate to <code>frontend/tailwind</code> and run <code>npm run build</code></p>
-<div class="highlight"><pre><span></span><code><span class="nb">cd</span> frontend/tailwind
-npm run build
-</code></pre></div>
-<p>4) Run sh build.sh in home directory
-<div class="highlight"><pre><span></span><code><span class="nb">cd</span> ../..
-sh build.sh
-</code></pre></div></p>
-<p>5) Run docker-compose -f docker-compose-dev.yaml up
-<div class="highlight"><pre><span></span><code>docker-compose -f docker-compose-dev.yaml up
-</code></pre></div>
-<em>If you don't wish to look at the docker logs, run the command <code>docker-compose up</code> with the flag <code>-d</code> instead of <code>docker-compose up</code></em>
-<div class="highlight"><pre><span></span><code>docker-compose up -d
-</code></pre></div></p>
-<h2 id="docker-setup-production-mode">Docker Setup - Production mode</h2>
+<h2 id="docker-setup">Docker Setup</h2>
 <p>1) Open a git bash terminal</p>
 <p>2) Ensure you are in the root directory of the project</p>
 <p>3) Navigate to <code>frontend/tailwind</code> and run <code>npm run build</code></p>

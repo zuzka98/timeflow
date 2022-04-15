@@ -1202,15 +1202,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#backend.api.rate.rates_by_user_client" class="md-nav__link">
-    rates_by_user_client()
+  <a href="#backend.api.rate.rates_by_user_client_date" class="md-nav__link">
+    rates_by_user_client_date()
   </a>
   
-    <nav class="md-nav" aria-label="rates_by_user_client()">
+    <nav class="md-nav" aria-label="rates_by_user_client_date()">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#backend.api.rate.rates_by_user_client--parameters" class="md-nav__link">
+  <a href="#backend.api.rate.rates_by_user_client_date--parameters" class="md-nav__link">
     Parameters
   </a>
   
@@ -1222,15 +1222,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#backend.api.rate.rates_by_user_client_date" class="md-nav__link">
-    rates_by_user_client_date()
+  <a href="#backend.api.rate.read_active_rate" class="md-nav__link">
+    read_active_rate()
   </a>
   
-    <nav class="md-nav" aria-label="rates_by_user_client_date()">
+    <nav class="md-nav" aria-label="read_active_rate()">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#backend.api.rate.rates_by_user_client_date--parameters" class="md-nav__link">
+  <a href="#backend.api.rate.read_active_rate--parameters" class="md-nav__link">
     Parameters
   </a>
   
@@ -2846,15 +2846,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#backend.api.rate.rates_by_user_client" class="md-nav__link">
-    rates_by_user_client()
+  <a href="#backend.api.rate.rates_by_user_client_date" class="md-nav__link">
+    rates_by_user_client_date()
   </a>
   
-    <nav class="md-nav" aria-label="rates_by_user_client()">
+    <nav class="md-nav" aria-label="rates_by_user_client_date()">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#backend.api.rate.rates_by_user_client--parameters" class="md-nav__link">
+  <a href="#backend.api.rate.rates_by_user_client_date--parameters" class="md-nav__link">
     Parameters
   </a>
   
@@ -2866,15 +2866,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#backend.api.rate.rates_by_user_client_date" class="md-nav__link">
-    rates_by_user_client_date()
+  <a href="#backend.api.rate.read_active_rate" class="md-nav__link">
+    read_active_rate()
   </a>
   
-    <nav class="md-nav" aria-label="rates_by_user_client_date()">
+    <nav class="md-nav" aria-label="read_active_rate()">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#backend.api.rate.rates_by_user_client_date--parameters" class="md-nav__link">
+  <a href="#backend.api.rate.read_active_rate--parameters" class="md-nav__link">
     Parameters
   </a>
   
@@ -5600,7 +5600,6 @@ session : Session
 <span class="sd">        Defaults to creating a dependency on the running SQL model session.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">statement</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">EpicArea</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">or_</span><span class="p">(</span><span class="n">EpicArea</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">,</span> <span class="n">EpicArea</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="nb">id</span><span class="p">))</span>
-
     <span class="n">epic_area_to_update</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
     <span class="n">epic_area_to_update</span><span class="o">.</span><span class="n">epic_id</span> <span class="o">=</span> <span class="n">epic_id</span>
     <span class="n">epic_area_to_update</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
@@ -5935,6 +5934,7 @@ session : Session
             <span class="n">Forecast</span><span class="o">.</span><span class="n">user_id</span> <span class="o">==</span> <span class="n">forecast</span><span class="o">.</span><span class="n">user_id</span><span class="p">,</span>
             <span class="n">Forecast</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="n">forecast</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
             <span class="n">Forecast</span><span class="o">.</span><span class="n">month</span> <span class="o">==</span> <span class="n">forecast</span><span class="o">.</span><span class="n">month</span><span class="p">,</span>
+            <span class="n">Forecast</span><span class="o">.</span><span class="n">days</span> <span class="o">==</span> <span class="n">forecast</span><span class="o">.</span><span class="n">days</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
@@ -6247,6 +6247,7 @@ session : Session
             <span class="n">rate_to_close</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">statement2</span><span class="p">)</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
             <span class="n">rate_to_close</span><span class="o">.</span><span class="n">valid_to</span> <span class="o">=</span> <span class="n">close_date</span>
             <span class="n">rate_to_close</span><span class="o">.</span><span class="n">updated_at</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="n">rate_to_close</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">rate_to_close</span><span class="p">)</span>
             <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span>
             <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
@@ -6255,65 +6256,6 @@ session : Session
             <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span>
             <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
             <span class="k">return</span> <span class="kc">True</span>
-</code></pre></div>
-        </details>
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-function">
-
-
-
-<h4 id="backend.api.rate.rates_by_user_client" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">rates_by_user_client</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">client_id</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">get_session</span><span class="p">))</span></code>
-
-  <span class="doc doc-properties">
-      <small class="doc doc-property doc-property-async"><code>async</code></small>
-  </span>
-
-</h4>
-
-    <div class="doc doc-contents ">
-
-      <p>Get list of rates using given user ids and clients ids as keys.</p>
-<h6 id="backend.api.rate.rates_by_user_client--parameters">Parameters</h6>
-<p>user_id : int
-    User id that is used to get list of rates.
-client_id : int
-    Client id that is used to get the list of rates.
-session : Session
-    SQL session that is to be used to read a certain rates.
-    Defaults to creating a dependency on the running SQL model session.</p>
-
-        <details class="quote">
-          <summary>Source code in <code>backend\api\rate.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/users/</span><span class="si">{user_id}</span><span class="s2">/clients/</span><span class="si">{client_id}</span><span class="s2">/&quot;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">rates_by_user_client</span><span class="p">(</span>
-    <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">client_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">session</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_session</span><span class="p">),</span>
-<span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get list of rates using given user ids and clients ids as keys.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    user_id : int</span>
-<span class="sd">        User id that is used to get list of rates.</span>
-<span class="sd">    client_id : int</span>
-<span class="sd">        Client id that is used to get the list of rates.</span>
-<span class="sd">    session : Session</span>
-<span class="sd">        SQL session that is to be used to read a certain rates.</span>
-<span class="sd">        Defaults to creating a dependency on the running SQL model session.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">statement</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">select</span><span class="p">(</span><span class="n">Rate</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Rate</span><span class="o">.</span><span class="n">user_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Rate</span><span class="o">.</span><span class="n">client_id</span> <span class="o">==</span> <span class="n">client_id</span><span class="p">)</span>
-    <span class="p">)</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">result</span>
 </code></pre></div>
         </details>
     </div>
@@ -6395,6 +6337,68 @@ session : Session
 
 
 
+<h4 id="backend.api.rate.read_active_rate" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">read_active_rate</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">client_id</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">get_session</span><span class="p">))</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-async"><code>async</code></small>
+  </span>
+
+</h4>
+
+    <div class="doc doc-contents ">
+
+      <p>Get a single active rate using given user ids and clients ids as keys.</p>
+<h6 id="backend.api.rate.read_active_rate--parameters">Parameters</h6>
+<p>user_id : int
+    User id that is used to get the active rate.
+client_id : int
+    Client id that is used to get the active rate.
+session : Session
+    SQL session that is to be used to read a certain active rate.
+    Defaults to creating a dependency on the running SQL model session.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>backend\api\rate.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/users/</span><span class="si">{user_id}</span><span class="s2">/clients/</span><span class="si">{client_id}</span><span class="s2">/active&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">read_active_rate</span><span class="p">(</span>
+    <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">client_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_session</span><span class="p">),</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a single active rate using given user ids and clients ids as keys.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    user_id : int</span>
+<span class="sd">        User id that is used to get the active rate.</span>
+<span class="sd">    client_id : int</span>
+<span class="sd">        Client id that is used to get the active rate.</span>
+<span class="sd">    session : Session</span>
+<span class="sd">        SQL session that is to be used to read a certain active rate.</span>
+<span class="sd">        Defaults to creating a dependency on the running SQL model session.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">statement</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">select</span><span class="p">(</span><span class="n">Rate</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Rate</span><span class="o">.</span><span class="n">user_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Rate</span><span class="o">.</span><span class="n">client_id</span> <span class="o">==</span> <span class="n">client_id</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Rate</span><span class="o">.</span><span class="n">is_active</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
 <h4 id="backend.api.rate.read_rates" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">read_rates</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">get_session</span><span class="p">))</span></code>
 
@@ -6443,7 +6447,7 @@ session : Session
 
 
 <h4 id="backend.api.rate.update_rates" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">update_rates</span><span class="p">(</span><span class="n">rate_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">new_amount</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">get_session</span><span class="p">))</span></code>
+<code class="highlight language-python"><span class="n">update_rates</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">client_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">new_amount</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">get_session</span><span class="p">))</span></code>
 
   <span class="doc doc-properties">
       <small class="doc doc-property doc-property-async"><code>async</code></small>
@@ -6469,7 +6473,8 @@ session : Session
           <summary>Source code in <code>backend\api\rate.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="nd">@router</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">update_rates</span><span class="p">(</span>
-    <span class="n">rate_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">client_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">new_amount</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">session</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_session</span><span class="p">),</span>
 <span class="p">):</span>
@@ -6488,7 +6493,12 @@ session : Session
 <span class="sd">        SQL session that is to be used to update the rate.</span>
 <span class="sd">        Defaults to creating a dependency on the running SQL model session.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">statement</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">Rate</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Rate</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">rate_id</span><span class="p">)</span>
+    <span class="n">statement</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">select</span><span class="p">(</span><span class="n">Rate</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Rate</span><span class="o">.</span><span class="n">user_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Rate</span><span class="o">.</span><span class="n">client_id</span> <span class="o">==</span> <span class="n">client_id</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Rate</span><span class="o">.</span><span class="n">is_active</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="p">)</span>
     <span class="n">rate_to_update</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
     <span class="n">rate_to_update</span><span class="o">.</span><span class="n">amount</span> <span class="o">=</span> <span class="n">new_amount</span>
     <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">rate_to_update</span><span class="p">)</span>
@@ -7980,7 +7990,7 @@ session : Session
 
 
 <h4 id="backend.api.timelog.get_timelog_user_id" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">get_timelog_user_id</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">epic_id</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">get_session</span><span class="p">))</span></code>
+<code class="highlight language-python"><span class="n">get_timelog_user_id</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">get_session</span><span class="p">))</span></code>
 
   <span class="doc doc-properties">
       <small class="doc doc-property doc-property-async"><code>async</code></small>
@@ -7994,19 +8004,20 @@ session : Session
 <h6 id="backend.api.timelog.get_timelog_user_id--parameters">Parameters</h6>
 <p>user_id : str
     ID of user from which to pull timelogs.
-year_month : int
-    Month and year from which to pull timelog(s).
+month : int
+    Month from which to pull timelog(s).
+year : int
+    Year from which to pull timelog(s).
 session : Session
     SQL session that is to be used to get the timelogs.
     Defaults to creating a dependency on the running SQL model session.</p>
 
         <details class="quote">
           <summary>Source code in <code>backend\api\timelog.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/users/</span><span class="si">{user_id}</span><span class="s2">/epics/</span><span class="si">{epic_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+          <div class="highlight"><pre><span></span><code><span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/users/</span><span class="si">{user_id}</span><span class="s2">/months/</span><span class="si">{month}</span><span class="s2">/years/</span><span class="si">{year}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_timelog_user_id</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">epic_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">month</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">session</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_session</span><span class="p">),</span>
@@ -8018,29 +8029,19 @@ session : Session
 <span class="sd">    ----------</span>
 <span class="sd">    user_id : str</span>
 <span class="sd">        ID of user from which to pull timelogs.</span>
-<span class="sd">    year_month : int</span>
-<span class="sd">        Month and year from which to pull timelog(s).</span>
+<span class="sd">    month : int</span>
+<span class="sd">        Month from which to pull timelog(s).</span>
+<span class="sd">    year : int</span>
+<span class="sd">        Year from which to pull timelog(s).</span>
 <span class="sd">    session : Session</span>
 <span class="sd">        SQL session that is to be used to get the timelogs.</span>
 <span class="sd">        Defaults to creating a dependency on the running SQL model session.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">statement</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">select</span><span class="p">(</span>
-            <span class="n">TimeLog</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
-            <span class="n">User</span><span class="o">.</span><span class="n">short_name</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s2">&quot;username&quot;</span><span class="p">),</span>
-            <span class="n">Epic</span><span class="o">.</span><span class="n">short_name</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s2">&quot;epic_name&quot;</span><span class="p">),</span>
-            <span class="n">TimeLog</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span>
-            <span class="n">TimeLog</span><span class="o">.</span><span class="n">end_time</span><span class="p">,</span>
-            <span class="n">TimeLog</span><span class="o">.</span><span class="n">count_hours</span><span class="p">,</span>
-            <span class="n">TimeLog</span><span class="o">.</span><span class="n">count_days</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">Epic</span><span class="p">)</span>
+        <span class="n">select</span><span class="p">(</span><span class="n">TimeLog</span><span class="p">)</span>
         <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">TimeLog</span><span class="o">.</span><span class="n">user_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">TimeLog</span><span class="o">.</span><span class="n">epic_id</span> <span class="o">==</span> <span class="n">epic_id</span><span class="p">)</span>
         <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">TimeLog</span><span class="o">.</span><span class="n">month</span> <span class="o">==</span> <span class="n">month</span><span class="p">)</span>
         <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">TimeLog</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="n">year</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">TimeLog</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
     <span class="p">)</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">results</span>
@@ -8086,20 +8087,7 @@ session : Session
 <span class="sd">        SQL session that is to be used to get the timelogs.</span>
 <span class="sd">        Defaults to creating a dependency on the running SQL model session.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">statement</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">select</span><span class="p">(</span>
-            <span class="n">TimeLog</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
-            <span class="n">User</span><span class="o">.</span><span class="n">short_name</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s2">&quot;username&quot;</span><span class="p">),</span>
-            <span class="n">Epic</span><span class="o">.</span><span class="n">short_name</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s2">&quot;epic_name&quot;</span><span class="p">),</span>
-            <span class="n">TimeLog</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span>
-            <span class="n">TimeLog</span><span class="o">.</span><span class="n">end_time</span><span class="p">,</span>
-            <span class="n">TimeLog</span><span class="o">.</span><span class="n">count_hours</span><span class="p">,</span>
-            <span class="n">TimeLog</span><span class="o">.</span><span class="n">count_days</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">Epic</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">TimeLog</span><span class="o">.</span><span class="n">end_time</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
-    <span class="p">)</span>
+    <span class="n">statement</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">TimeLog</span><span class="p">)</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">results</span>
 </code></pre></div>
@@ -8184,13 +8172,6 @@ session : Session
     <span class="k">if</span> <span class="n">results1</span> <span class="ow">or</span> <span class="n">results2</span> <span class="ow">or</span> <span class="n">results3</span> <span class="ow">or</span> <span class="n">results4</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;currently posted timelog overlaps another timelog&quot;</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">time_delta</span> <span class="o">=</span> <span class="n">timelog</span><span class="o">.</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">timelog</span><span class="o">.</span><span class="n">start_time</span>
-        <span class="n">work_delta_hours</span> <span class="o">=</span> <span class="n">time_delta</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">/</span> <span class="mi">3600</span>
-        <span class="n">work_hours</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">work_delta_hours</span><span class="p">)</span>
-        <span class="n">work_delta_days</span> <span class="o">=</span> <span class="n">time_delta</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">/</span> <span class="mi">3600</span> <span class="o">/</span> <span class="mi">8</span>
-        <span class="n">work_days</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">work_delta_days</span><span class="p">)</span>
-        <span class="n">timelog</span><span class="o">.</span><span class="n">count_hours</span> <span class="o">=</span> <span class="n">work_hours</span>
-        <span class="n">timelog</span><span class="o">.</span><span class="n">count_days</span> <span class="o">=</span> <span class="n">work_days</span>
         <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">timelog</span><span class="p">)</span>
         <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
         <span class="n">session</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">timelog</span><span class="p">)</span>
@@ -8351,21 +8332,13 @@ short_name : str
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">statement</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">is_active</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">statement</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">select</span><span class="p">(</span>
-                <span class="n">User</span><span class="o">.</span><span class="n">short_name</span><span class="p">,</span>
-                <span class="n">User</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span>
-                <span class="n">User</span><span class="o">.</span><span class="n">last_name</span><span class="p">,</span>
-                <span class="n">Role</span><span class="o">.</span><span class="n">short_name</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s2">&quot;role_short_name&quot;</span><span class="p">),</span>
-                <span class="n">Team</span><span class="o">.</span><span class="n">short_name</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s2">&quot;main_team&quot;</span><span class="p">),</span>
-                <span class="n">User</span><span class="o">.</span><span class="n">start_date</span><span class="p">,</span>
+        <span class="n">statement</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">User</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">is_active</span> <span class="o">==</span> <span class="n">is_active</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">short_name</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">statement</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">select</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">is_active</span> <span class="o">==</span> <span class="n">is_active</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">short_name</span> <span class="o">==</span> <span class="n">short_name</span><span class="p">)</span>
             <span class="p">)</span>
-            <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">Role</span><span class="p">,</span> <span class="n">User</span><span class="o">.</span><span class="n">role_id</span> <span class="o">==</span> <span class="n">Role</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">isouter</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">Team</span><span class="p">,</span> <span class="n">User</span><span class="o">.</span><span class="n">team_id</span> <span class="o">==</span> <span class="n">Team</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">isouter</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">is_active</span> <span class="o">==</span> <span class="n">is_active</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">start_date</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
-        <span class="p">)</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">exec</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">result</span>
 </code></pre></div>
