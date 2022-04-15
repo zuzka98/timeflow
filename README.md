@@ -1,3 +1,6 @@
+# Official documentation
+<a href="https://dyvenia.github.io/timeflow/" target="_blank">https://dyvenia.github.io/timeflow/</a>
+
 # Local Setup instructions
 
 1) Install [npm](https://nodejs.org/en/download/)
