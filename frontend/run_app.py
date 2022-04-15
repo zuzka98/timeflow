@@ -71,10 +71,15 @@ async def callback(request: Request):
     Fetch token of user and redirect to subdirectory /organizations.
     """
     github = OAuth2Session(GITHUB_CLIENT_ID, state=request.session["oauth_state"])
+    authorization_response = str(request.url)
+
+    # Convert authorization_reponse url to return with https
+    if TIMEFLOW_DEV != "true":
+        authorization_response = str(request.url)[:4] + "s" + str(request.url)[4:]
     token = github.fetch_token(
         token_url,
         client_secret=GITHUB_CLIENT_SECRET,
-        authorization_response=str(request.url),
+        authorization_response=authorization_response,
     )
     request.session["oauth_token"] = token
     organizations_url = f"{str(request.base_url)}organizations"
