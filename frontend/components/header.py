@@ -17,9 +17,7 @@ def Header(current_page, set_current_page, pages, title, user_welcome):
                 "class": "bg-header-bg fixed z-10 top-0 w-full xl:w-60 xl:h-screen xl:px-6 xl:fixed"
             },
             html.div(
-                {
-                    "class": "w-full px-4 flex justify-between items-center py-4 xl:px-0 xl:py-6"
-                },
+                {"class": "w-full px-4 flex justify-between items-center py-4 xl:py-6"},
                 html.img({"src": "../static/img/svg/logo.svg"}),
                 html.a(
                     {
