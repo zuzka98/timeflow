@@ -3,7 +3,7 @@ from typing import List
 from idom import html, run, use_state, component, event, vdom
 from idom.web import module_from_url, export
 from components.layout import Container
-from config import get_role
+from config import get_user
 
 from .icons import arrow_down, arrow_up
 
@@ -142,14 +142,17 @@ def Sidebar(
     isOpen,
     set_isOpen,
     title: str = "",
+    user_welcome: str = "",
 ):
-    user_role = get_role()
+    user_role = get_user()
+    btn_class = f"""text-nav text-left px-4 py-2 mt-2 text-nav rounded-lg focus:text-gray-900 focus:bg-active-sidebarfocus:outline-none focus:shadow-outline"""
     return html.div(
         {
             "class": mainDivClassOpen if isOpen else mainDivClass,
         },
         Container(
             html.h1({"class": h1Class}, title),
+            html.h3({"class": btn_class}, user_welcome),
             html.nav(
                 {"class": navClass},
                 ListPages(

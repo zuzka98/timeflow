@@ -99,6 +99,7 @@ async def organizations(request: Request):
 
     github_api = github.get("https://api.github.com/user").json()
     username = github_api["login"]
+    request.session["username"] = username
 
     # Use dyvenia api with user's username to check if user is in team
     dyvenia_api = github.get(
