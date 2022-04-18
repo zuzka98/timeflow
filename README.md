@@ -11,11 +11,16 @@
 
 # Docker instructions for DEV 
 
-1) Run docker-compose up
+1) Generate the cert files and put them in the `/certs` folder, you can use `mkcert` for generating local cert files for `https`
+
+2) Run docker-compose up
+
 ```bash
 docker-compose -f docker-compose-dev.yaml
 ```
-*If you don't wish to look at the docker logs, run the command `docker-compose up` with the flag `-d` instead of `docker-compose up`*
+
+If you don't wish to look at the docker logs, run the command `docker-compose up` with the flag `-d` instead of `docker-compose up`
+
 ```bash
 docker-compose up -d
 ```
