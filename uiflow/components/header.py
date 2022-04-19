@@ -34,9 +34,10 @@ def Header(current_page, set_current_page, pages, user_role, title, user_welcome
                 pages,
                 isOpen,
                 set_isOpen,
+                user_role,
+                html.a({"href": "/logout"}, "Log Out"),
                 title,
                 user_welcome,
-                html.a({"href": "/logout"}, "Log Out"),
             ),
         )
     )
