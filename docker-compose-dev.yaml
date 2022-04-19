@@ -22,7 +22,7 @@ services:
         ipv4_address: 172.28.1.2
   applications:
     #python3 /applications/main2.py && ls
-    image: appflow_apps:v1
+    image: idom:v1
     volumes:
       - ./:/applications
     command: >

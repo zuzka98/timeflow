@@ -141,18 +141,23 @@ def Sidebar(
     isOpen,
     set_isOpen,
     user_role: str,
+    logout,
     title: str = "",
     user_welcome: str = "",
 ):
     # user_role = get_user()
-    btn_class = f"""text-nav text-left px-4 py-2 mt-2 text-nav rounded-lg focus:text-gray-900 focus:bg-active-sidebarfocus:outline-none focus:shadow-outline"""
+    h3Class = f"""text-nav text-left px-4 py-2 mt-2 text-nav rounded-lg focus:text-gray-900 focus:bg-active-sidebarfocus:outline-none focus:shadow-outline"""
+    btn_class = f"""text-nav text-left px-4 py-2 mt-2 text-nav bg-transparent rounded-lg 
+                focus:text-gray-900 hover:bg-active-sidebar focus:bg-active-sidebar
+                focus:outline-none focus:shadow-outline
+                """
     return html.div(
         {
             "class": mainDivClassOpen if isOpen else mainDivClass,
         },
         Container(
             html.h1({"class": h1Class}, title),
-            html.h3({"class": btn_class}, user_welcome),
+            html.h3({"class": h3Class}, user_welcome),
             html.nav(
                 {"class": navClass},
                 ListPages(
@@ -162,5 +167,6 @@ def Sidebar(
                 if (user_role == "admin" or user_role == None)
                 else "",
             ),
+            html.h3({"class": btn_class}, logout),
         ),
     )
