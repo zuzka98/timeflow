@@ -20,16 +20,16 @@ services:
     networks:
       static-network:
         ipv4_address: 172.28.1.2
-
-  idom:
-    image: idom:v1
+  applications:
+    #python3 /applications/main2.py && ls
+    image: appflow_apps:v1
     volumes:
-      - ./frontend/:/frontend/
+      - ./:/applications
     command: >
-      bash -c "cd frontend  && export TIMEFLOW_DEV=true  && python3 -m run_reload.py"
+      bash -c "export TIMEFLOW_DEV=true  && cd /applications && uvicorn main:app --workers 1 --host 0.0.0.0 --port 8001 --reload --ssl-keyfile certs/127.0.0.1-key.pem  --ssl-certfile certs/127.0.0.1.pem  --access-log"
     ports:
       - 8001:8001
-    container_name: idom
+    container_name: applications
     networks:
       static-network:
         ipv4_address: 172.28.1.1
