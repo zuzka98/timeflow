@@ -11,9 +11,11 @@
 
 # Docker instructions for DEV 
 
-1) Generate the cert files and put them in the `/certs` folder, you can use `mkcert` for generating local cert files for `https`
+1) run `build.sh` to build the docker images used in this repo
 
-2) Run docker-compose up
+2) Generate the cert files and put them in the `/certs` folder, you can use `mkcert` for generating local cert files for `https`
+
+3) Run docker-compose up
 
 ```bash
 docker-compose -f docker-compose-dev.yaml
