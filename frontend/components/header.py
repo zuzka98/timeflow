@@ -4,7 +4,7 @@ from components.sidebar import Sidebar
 
 
 @component
-def Header(current_page, set_current_page, pages, title, user_welcome):
+def Header(current_page, set_current_page, pages, title, user_welcome, menu_items):
 
     isOpen, set_isOpen = use_state(False)
 
@@ -34,8 +34,8 @@ def Header(current_page, set_current_page, pages, title, user_welcome):
                 pages,
                 isOpen,
                 set_isOpen,
-                title,
                 user_welcome,
+                menu_items
             ),
         )
     )
