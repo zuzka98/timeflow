@@ -1,9 +1,17 @@
+import os
 from datetime import datetime
 from sqlmodel import Session, SQLModel, create_engine, text
 import sqlite3
 
 database_loc = "backend/database.sqlite"
 con_str = f"sqlite:///{database_loc}"
+
+if os.getenv("TIMEFLOW_DEV") == "true":
+    con_str = f"postgresql://user:password@localhost:5432/timeflow_db"
+elif os.getenv("TIMEFLOW_DEV") == "false":
+    POSTGRE_USER = os.getenv("POSTGRE_USER")
+    POSTGRE_PASS = os.getenv("POSTGRE_PASS")
+    con_str = f"postgresql://{POSTGRE_USER}:{POSTGRE_PASS}@localhost:5432/timeflow"
 
 engine = create_engine(con_str, echo=True)
 sqlite3_engine = sqlite3.connect(f"{database_loc}")

@@ -6,10 +6,12 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: timeflow_db
 
   adminer:
     image: adminer
     restart: always
     ports:
-      - 8004:8004
+      - 5432:5432
