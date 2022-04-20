@@ -7,7 +7,7 @@ from sqlmodel.pool import StaticPool
 from ..api.epic_area import get_session
 
 
-@pytest.mark.order(1)
+# @pytest.mark.order(1)
 def test_post_epic_area(client):
     response = client.post(
         "/api/epic_areas/",

@@ -2,16 +2,16 @@ import os
 from fastapi import *
 from sqlmodel import Session, select, SQLModel
 from sqlalchemy.exc import OperationalError
-from backend.models.timelog import TimeLog
-from backend.models.calendar import Calendar
-from backend.utils import (
+from .models.timelog import TimeLog
+from .models.calendar import Calendar
+from .utils import (
     engine,
     sqlite3_engine,
     create_db,
     tags_metadata,
     execute_sample_sql,
 )
-from backend.api import (
+from .api import (
     user,
     timelog,
     forecast,

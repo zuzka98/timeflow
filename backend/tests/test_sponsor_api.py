@@ -2,7 +2,7 @@ import pytest
 from ..main import app, session
 
 
-@pytest.mark.order(1)
+# @pytest.mark.order(1)
 def test_post_sponsor(client):
     response = client.post(
         "/api/sponsors",
