@@ -4,7 +4,7 @@ black==21.10b0
 dominate==2.6.0
 uvicorn==0.17.4
 fastapi==0.73.0
-idom==0.38.0-a1
+idom==0.38.1
 numpy==1.17.4
 pandas==0.25.3
 pydantic==1.8.2
