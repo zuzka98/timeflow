@@ -20,6 +20,7 @@ h1Class = (
     "text-general-heading font-black uppercase text-xl font-black tracking-[2px] my-4",
 )
 navClass = "flex flex-col pb-4"
+collapse_class = " w-full flex align-center text-nav py-2 text-left rounded-lg px-4 hover:bg-active-sidebar"
 
 
 @component
@@ -97,7 +98,7 @@ def Sidebar(
                 ListPages(
                     current_page, set_current_page, set_isOpen, pages=pages, title=title
                 ),
-                Collapse(heading, collapse, set_collapse)
+                Collapse(heading, collapse_class, collapse, set_collapse)
                 if (user_role == "admin" or user_role == None)
                 else "",
                 '' if collapse else ListPages(current_page, set_current_page, set_isOpen, pages=pages_dropdown) ,
