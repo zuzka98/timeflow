@@ -16,6 +16,19 @@ from .pages.demands import page as demands_page
 from uiflow.components.layout import FlexContainer
 from uiflow.components.header import Header
 
+menu_items = {
+    # 'title': 'page',
+    "Users": "Users",
+    "Roles": "Roles",
+    "Epics": "Epics",
+    "Epic Areas": "Epic Areas",
+    "Teams": "Teams",
+    "Sponsors": "Sponsors",
+    "Clients": "Clients",
+    "Rates": "Rates",
+    "Capacities": "Capacities",
+    "Demands": "Demands",
+}
 
 @component
 def timeflow():
@@ -74,6 +87,7 @@ def timeflow():
             user_role=user_role,
             title="timeflow UI",
             user_welcome=f"Welcome {github_username}!",
+            menu_items=menu_items,
         ),
         FlexContainer(current_page_component),
         html.button("Test"),

@@ -4,7 +4,7 @@ from .sidebar import Sidebar
 
 
 @component
-def Header(current_page, set_current_page, pages, user_role, title, user_welcome):
+def Header(current_page, set_current_page, pages, user_role, title, user_welcome, menu_items):
 
     isOpen, set_isOpen = use_state(False)
 
@@ -38,6 +38,7 @@ def Header(current_page, set_current_page, pages, user_role, title, user_welcome
                 html.a({"href": "/logout"}, "Log Out"),
                 title,
                 user_welcome,
+                menu_items
             ),
         )
     )
