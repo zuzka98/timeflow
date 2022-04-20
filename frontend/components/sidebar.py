@@ -5,7 +5,8 @@ from idom import html, run, use_state, component, event, vdom
 from idom.web import module_from_url, export
 from components.layout import Container
 from config import get_user
-from components.collapse import Collapse, ListPages
+from components.collapse import Collapse
+from components.list_pages import ListPages
 
 
 from .icons import arrow_down, arrow_up
@@ -31,11 +32,15 @@ def Sidebar(
     isOpen,
     set_isOpen,
     user_welcome: str = "",
-    menu_items: array = []
+    menu_items: object = {}
 ):
+    collapse, set_collapse = use_state(True)
     user_role = get_user()
     heading = 'Admin'
     btn_class = f"""text-nav text-left px-4 py-2 mt-2 text-nav rounded-lg focus:text-gray-900 focus:bg-active-sidebarfocus:outline-none focus:shadow-outline"""
+    pages_dropdown = []
+    for key, value in menu_items.items():
+        pages_dropdown.append(value)
     return html.div(
         {
             "class": mainDivClassOpen if isOpen else mainDivClass,
@@ -46,12 +51,12 @@ def Sidebar(
             html.nav(
                 {"class": navClass},
                 ListPages(
-                    current_page, set_current_page, set_isOpen, pages=pages,
+                    current_page, set_current_page, set_isOpen, pages=pages
                 ),
-                Collapse(current_page, set_current_page,
-                         set_isOpen, heading, menu_items)
+                Collapse(heading, collapse, set_collapse)
                 if (user_role == "admin" or user_role == None)
                 else "",
+                '' if collapse else ListPages(current_page, set_current_page, set_isOpen, pages=pages_dropdown) ,
             ),
         ),
     )
