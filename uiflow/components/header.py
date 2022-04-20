@@ -4,11 +4,7 @@ from .sidebar import Sidebar
 
 
 @component
-<<<<<<< HEAD:frontend/components/header.py
-def Header(current_page, set_current_page, pages, title, user_welcome, menu_items):
-=======
-def Header(current_page, set_current_page, pages, user_role, title, user_welcome):
->>>>>>> 436e9ff2b7745329386c30122c2e7d501bd54f64:uiflow/components/header.py
+def Header(current_page, set_current_page, pages, user_role, title, user_welcome, menu_items):
 
     isOpen, set_isOpen = use_state(False)
 
@@ -38,12 +34,9 @@ def Header(current_page, set_current_page, pages, user_role, title, user_welcome
                 pages,
                 isOpen,
                 set_isOpen,
-<<<<<<< HEAD:frontend/components/header.py
-=======
                 user_role,
                 html.a({"href": "/logout"}, "Log Out"),
                 title,
->>>>>>> 436e9ff2b7745329386c30122c2e7d501bd54f64:uiflow/components/header.py
                 user_welcome,
                 menu_items
             ),
