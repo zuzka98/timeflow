@@ -8,7 +8,7 @@ from ..utils import get_session
 from datetime import datetime
 
 
-# @pytest.mark.order(1)
+@pytest.mark.order(5)
 def test_post_rate(client):
     response1 = client.post(
         "/api/rates/",

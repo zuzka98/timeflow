@@ -2,7 +2,7 @@ import pytest
 from ..main import app, session
 
 
-# @pytest.mark.order(1)
+@pytest.mark.order(8)
 def test_post_team(client):
     response = client.post(
         "/api/teams/",

@@ -7,7 +7,7 @@ from sqlmodel.pool import StaticPool
 from ..api.epic import get_session
 
 
-# @pytest.mark.order(1)
+@pytest.mark.order(6)
 def test_post_epic(client):
     response = client.post(
         "/api/epics/",
@@ -76,11 +76,11 @@ def test_get_active_epics_list(client):
     ]
 
 
-# def test_get_client_name_by_epic_id(client):
-#     response = client.get("api/epics/1/client-name")
-#     data = response.json()
-#     assert response.status_code == 200
-#     assert data == {"client_name": "dyvenia", "client_id": 1}
+def test_get_client_name_by_epic_id(client):
+    response = client.get("api/epics/1/client-name")
+    data = response.json()
+    assert response.status_code == 200
+    assert data == {"client_name": "dyvenia", "client_id": 1}
 
 
 def test_deactivate_epic(client):

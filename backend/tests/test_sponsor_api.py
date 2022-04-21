@@ -3,7 +3,7 @@ from fastapi.testclient import TestClient
 from ..main import app, session
 
 
-# # @pytest.mark.order(1)
+@pytest.mark.order(2)
 def test_post_sponsor(client):
     response = client.post(
         "/api/sponsors/",
@@ -68,7 +68,6 @@ def test_update_sponsor(client):
 
 
 
-# @pytest.mark.order(-1)
 def test_deactivate_sponsors(client):
     response = client.put("/api/sponsors/1/deactivate")
     assert response.status_code == 200

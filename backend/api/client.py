@@ -135,24 +135,24 @@ async def read_clients_epics(
     return results
 
 
-# @router.put("/{client_id}/deactivate-client")
-# async def update_clients(
-#     *,
-#     client_id: int,
-#     session: Session = Depends(get_session),
-# ):
-#     """Deactivate a client"""
-#     statement = select(Client).where(Client.id == client_id)
-#     client_to_update = session.exec(statement).one()
-#     client_to_update.active = False
-#     statement2 = select(Epic).join(Clinet)
-#     client_to_update = session.exec(statement).one()
-#     client_to_update.active = False
+@router.put("/{client_id}/deactivate-client")
+async def update_clients(
+    *,
+    client_id: int,
+    session: Session = Depends(get_session),
+):
+    """Deactivate a client"""
+    statement = select(Client).where(Client.id == client_id)
+    client_to_update = session.exec(statement).one()
+    client_to_update.active = False
+    statement2 = select(Epic).join(Client)
+    client_to_update = session.exec(statement).one()
+    client_to_update.active = False
 
-#     session.add(client_to_update)
-#     session.commit()
-#     session.refresh(client_to_update)
-#     return client_to_update
+    session.add(client_to_update)
+    session.commit()
+    session.refresh(client_to_update)
+    return client_to_update
 
 
 @router.put("/{client_id}/activate")

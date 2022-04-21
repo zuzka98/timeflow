@@ -7,7 +7,7 @@ from sqlmodel.pool import StaticPool
 from ..api.epic_area import get_session
 
 
-# @pytest.mark.order(1)
+@pytest.mark.order(3)
 def test_post_epic_area(client):
     response = client.post(
         "/api/epic_areas/",
@@ -45,7 +45,6 @@ def test_get_epic_areas_list(client):
         }
     ]
 
-# @pytest.mark.order(-1)
 def test_deactivate_epic_area(client):
     response = client.put("/api/epic_areas/graphics/deactivate")
     assert response.status_code == 200
