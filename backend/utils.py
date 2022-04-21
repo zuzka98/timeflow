@@ -1,20 +1,31 @@
 import os
 from datetime import datetime
 from sqlmodel import Session, SQLModel, create_engine, text
-import sqlite3
+from sqlalchemy.schema import CreateSchema
 
-database_loc = "backend/database.sqlite"
-con_str = f"sqlite:///{database_loc}"
 
-if os.getenv("TIMEFLOW_DEV") == "true":
-    con_str = f"postgresql://user:password@localhost:5432/timeflow_db"
-elif os.getenv("TIMEFLOW_DEV") == "false":
-    POSTGRE_USER = os.getenv("POSTGRE_USER")
-    POSTGRE_PASS = os.getenv("POSTGRE_PASS")
-    con_str = f"postgresql://{POSTGRE_USER}:{POSTGRE_PASS}@localhost:5432/timeflow"
+def create_connection_str():
+    """
+    Create connection string to be used to connect to database.
+    If app is ran in developer mode, test database is used.
+    If app is ran in production mode, given database is used.
+    """
+    if os.getenv("TIMEFLOW_DEV") == "true":
+        return f"postgresql://pguser:password@db:5432/test_db"
+    elif os.getenv("TIMEFLOW_DEV") == "false":
+        POSTGRE_USER = os.getenv("POSTGRE_USER")
+        POSTGRE_PASS = os.getenv("POSTGRE_PASS")
+        TIMEFLOW_DB = os.getenv("TIMEFLOW_DB")
+        return (
+            f"postgresql://{POSTGRE_USER}:{POSTGRE_PASS}@127.0.0.1:5432/{TIMEFLOW_DB}"
+        )
 
+
+# Create the connection string
+con_str = create_connection_str()
+
+# Create the engine to be used to enter data into the database
 engine = create_engine(con_str, echo=True)
-sqlite3_engine = sqlite3.connect(f"{database_loc}")
 
 
 def get_session():
@@ -23,6 +34,11 @@ def get_session():
 
 
 def create_db():
+    with engine.connect() as conn:
+        with conn.begin():
+            if not conn.dialect.has_schema(conn, "app_db"):
+                conn.execute(CreateSchema("app_db"))
+                conn.commit()
     SQLModel.metadata.create_all(engine)
 
 
