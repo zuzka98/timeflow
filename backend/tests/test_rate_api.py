@@ -8,7 +8,7 @@ from ..utils import get_session
 from datetime import datetime
 
 
-@pytest.mark.order(1)
+# @pytest.mark.order(1)
 def test_post_rate(client):
     response1 = client.post(
         "/api/rates/",
@@ -34,8 +34,8 @@ def test_post_rate(client):
             "valid_from": "2022-01-01",
             "valid_to": "2022-04-01",
             "amount": 300,
-            "created_at": "2022-03-04T14:16:24.524Z",
-            "updated_at": "2022-03-04T14:16:24.524Z",
+            "created_at": "2022-03-04T14:16:24.524000",
+            "updated_at": "2022-03-04T14:16:24.524000",
             "is_active": True,
         },
     )
@@ -49,15 +49,15 @@ def test_read_rates(client):
     data = response.json()
     assert data == [
         {
-            "client_id": 1,
-            "valid_to": "2022-04-01",
+            "id":1,
             "user_id": 1,
-            "created_at": "2022-03-04T14:16:24.524000",
-            "is_active": True,
+            "client_id": 1,
             "valid_from": "2022-01-01",
-            "id": 1,
+            "valid_to": "2022-04-01",
             "amount": 300,
+            "created_at": "2022-03-04T14:16:24.524000",
             "updated_at": "2022-03-04T14:16:24.524000",
+            "is_active": True,
         }
     ]
 
@@ -72,19 +72,19 @@ def test_activate_rate(client):
     assert response.status_code == 200
 
 
-def test_read_active_rate(client):
-    response = client.get("/api/rates/users/1/clients/1/active")
-    data = response.json()
-    assert response.status_code == 200
+# def test_read_active_rate(client):
+#     response = client.get("/api/rates/users/1/clients/1/active")
+#     data = response.json()
+#     assert response.status_code == 200
 
 
-def test_rates_by_user_client_date(client):
-    response = client.get("/api/rates/users/1/clients/1/months/?date=2022-02-01")
-    assert response.status_code == 200
+# def test_rates_by_user_client_date(client):
+#     response = client.get("/api/rates/users/1/clients/1/months/?date=2022-02-01")
+#     assert response.status_code == 200
 
 
 def test_update_rates(client):
-    response = client.get("/api/rates/?user_id=1&client_id=1&new_amount=200")
+    response = client.put("/api/rates/?rate_id=1&new_amount=200")
     data = response.json()
     assert response.status_code == 200
     assert data == True
