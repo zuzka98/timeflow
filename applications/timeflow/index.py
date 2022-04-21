@@ -30,6 +30,7 @@ menu_items = {
     "Demands": "Demands",
 }
 
+
 @component
 def timeflow():
     # Get role of user
@@ -37,7 +38,7 @@ def timeflow():
     github_username = fetch_username()
 
     current_page, set_current_page = use_state("Timelogs")
-    pages = ["Timelogs", "Forecasts"]
+    pages = ["Timelogs", "Forecasts", "Users"]
 
     print("here", current_page)
     if current_page == "Users":
