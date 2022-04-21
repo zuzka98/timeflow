@@ -97,7 +97,7 @@ async def read_teams(sponsor_name: str = None, session: Session = Depends(get_se
     """
     statement = select(Sponsor).where(Sponsor.name == sponsor_name)
     try:
-        result = session.exec(statement).ones()
+        result = session.exec(statement).one()
         return result
     except NoResultFound:
         msg = f"""There is no sponsor named {sponsor_name}"""
@@ -154,9 +154,9 @@ async def activate_sponsor(
     return sponsor_to_activate
 
 
-@router.put("/{sponsor_name}/deactivate")
+@router.put("/{sponsor_id}/deactivate")
 async def deactivate_sponsor(
-    sponsor_name: str = None,
+    sponsor_id: str,
     session: Session = Depends(get_session),
 ):
     """
@@ -170,7 +170,7 @@ async def deactivate_sponsor(
         SQL session that is to be used to deactivate the sponsor.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(Sponsor).where(Sponsor.name == sponsor_name)
+    statement = select(Sponsor).where(Sponsor.id == sponsor_id)
     sponsor_to_deactivate = session.exec(statement).one()
     sponsor_to_deactivate.is_active = False
     sponsor_to_deactivate.updated_at = datetime.now()
@@ -182,10 +182,10 @@ async def deactivate_sponsor(
 
 @router.put("/")
 async def update_sponsor(
-    id: int = None,
-    client_id: int = None,
-    name: str = None,
-    short_name: str = None,
+    id: int,
+    new_client_id: int = None,
+    new_name: str = None,
+    new_short_name: str = None,
     is_active: bool = None,
     session: Session = Depends(get_session),
 ):
@@ -208,12 +208,14 @@ async def update_sponsor(
         SQL session that is to be used to update the sponsor.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(Sponsor).where(or_(Sponsor.name == name, Sponsor.id == id))
+    statement = select(Sponsor).where(Sponsor.id == id)
     sponsor_to_update = session.exec(statement).one()
-    sponsor_to_update.client_id = client_id
-    sponsor_to_update.name = name
-    sponsor_to_update.short_name = short_name
-    sponsor_to_update.is_active = is_active
+    if new_name != None:
+        sponsor_to_update.name = new_name
+    if new_short_name != None:
+        sponsor_to_update.short_name = new_short_name
+    if new_client_id != None:
+        sponsor_to_update.client_id = new_client_id
     session.add(sponsor_to_update)
     sponsor_to_update.updated_at = datetime.now()
     session.commit()

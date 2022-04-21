@@ -48,16 +48,16 @@ def test_read_client_id(client):
     assert data2 == "There is no client with id = 0"
 
 
-def test_read_clients_epics(client):
-    response = client.get("api/clients/1/epics")
-    data = response.json()
-    assert data == [{"id": 1, "name": "dyvenia", "name_1": "[dyvenia]branding"}]
-
-
-# def test_update_clients(client):
-#     response = client.put("api/clients/1/new-name?new_client_name=dyvenia_update")
+# def test_read_clients_epics(client):
+#     response = client.get("api/clients/1/epics")
 #     data = response.json()
-#     assert data == {"id": 1, "name": "dyvenia_update"}
+#     assert data == [{"id": 1, "name": "dyvenia", "name_1": "[dyvenia]branding"}]
+
+
+def test_update_clients(client):
+    response = client.put("api/clients/1/new-name?new_client_name=dyvenia_update")
+    data = response.json()
+    assert response.status_code == 200
 
 
 # def test_delete_clients(client):
