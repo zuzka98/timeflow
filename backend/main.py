@@ -79,3 +79,4 @@ def implement_calendar_table():
             with engine.connect() as con:
                 con.execute(text(values_sql))
                 con.commit()
+                con.close()

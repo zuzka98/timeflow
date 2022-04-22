@@ -25,7 +25,7 @@ def create_connection_str():
 con_str = create_connection_str()
 
 # Create the engine to be used to enter data into the database
-engine = create_engine(con_str, echo=True)
+engine = create_engine(con_str, echo=True, pool_size=10)
 
 
 def get_session():
@@ -39,6 +39,7 @@ def create_db():
             if not conn.dialect.has_schema(conn, "app_db"):
                 conn.execute(CreateSchema("app_db"))
                 conn.commit()
+                conn.close()
     SQLModel.metadata.create_all(engine)
 
 
