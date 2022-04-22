@@ -3,7 +3,6 @@ from ..utils import engine, get_session
 from ..models.demand import Demand
 from sqlmodel import Session, select, SQLModel, and_
 from sqlalchemy.exc import NoResultFound
-from ..models.user import User
 from ..models.team import Team
 from ..models.epic import Epic
 

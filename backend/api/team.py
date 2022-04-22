@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
 from sqlmodel import Session, select, or_
 from ..models.team import Team
-from ..models.user import User
+from ..models.user import AppUser
 from sqlalchemy.exc import NoResultFound
 from datetime import datetime
 
@@ -71,10 +71,10 @@ async def get_active_team_list(session: Session = Depends(get_session)):
             Team.lead_user_id,
             Team.name.label("team_name"),
             Team.short_name.label("team_short_name"),
-            User.id,
-            User.short_name.label("user_name"),
+            AppUser.id,
+            AppUser.short_name.label("user_name"),
         )
-        .join(User)
+        .join(AppUser)
         .where(Team.is_active == True)
     )
     results = session.exec(statement).all()
@@ -119,10 +119,10 @@ async def get_user_name_by_team_id(
         Defaults to creating a dependency on the running SQL model session.
     """
     statement = (
-        select(Team.id, User.id, User.name)
-        .join(User)
+        select(Team.id, AppUser.id, AppUser.name)
+        .join(AppUser)
         .where(Team.id == team_id)
-        .where(User.active == True)
+        .where(AppUser.active == True)
     )
     result = session.exec(statement).one()
     return result

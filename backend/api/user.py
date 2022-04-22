@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
 from sqlmodel import Session, select, SQLModel, or_
 from sqlalchemy.exc import NoResultFound
-from ..models.user import User
+from ..models.user import AppUser
 from ..models.role import Role
 from ..models.team import Team
 from typing import Optional
@@ -14,7 +14,7 @@ session = Session(engine)
 
 @router.post("/")
 async def post_user(
-    user: User,
+    user: AppUser,
     session: Session = Depends(get_session),
 ):
     """
@@ -28,7 +28,7 @@ async def post_user(
         SQL session that is to be used to add the user.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(User).where(User.short_name == user.short_name)
+    statement = select(AppUser).where(AppUser.short_name == user.short_name)
     try:
         result = session.exec(statement).one()
         return False
@@ -58,22 +58,22 @@ async def get_users(
     short_name : str
         Short name of user to be pulled.
     """
-    statement = select(User)
+    statement = select(AppUser)
     if is_active != None:
         statement = (
             select(
-                User.short_name,
-                User.first_name,
-                User.last_name,
+                AppUser.short_name,
+                AppUser.first_name,
+                AppUser.last_name,
                 Role.short_name.label("role_short_name"),
                 Team.short_name.label("main_team"),
-                User.start_date,
+                AppUser.start_date,
             )
-            .select_from(User)
-            .join(Role, User.role_id == Role.id, isouter=True)
-            .join(Team, User.team_id == Team.id, isouter=True)
-            .where(User.is_active == is_active)
-            .order_by(User.start_date.desc())
+            .select_from(AppUser)
+            .join(Role, AppUser.role_id == Role.id, isouter=True)
+            .join(Team, AppUser.team_id == Team.id, isouter=True)
+            .where(AppUser.is_active == is_active)
+            .order_by(AppUser.start_date.desc())
         )
     result = session.exec(statement).all()
     return result
@@ -113,7 +113,7 @@ async def update_user(
         SQL session that is to be used to update the user.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(User).where(User.id == user_id)
+    statement = select(AppUser).where(AppUser.id == user_id)
     user_to_update = session.exec(statement).one()
     if is_active != None:
         user_to_update.is_active = is_active
