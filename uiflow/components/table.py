@@ -127,16 +127,6 @@ def HiddenButton(is_hidden, set_is_hidden):
 
     return btn
 
-data_thead = [
-    'Client',
-    'Epic',
-    'Username',
-    'Forecasted Days',
-    'Billings',
-    'Timelogs Days',
-    'Billings'
-]
-
 data = {
     "Client": ["client_a", "client_a", "client_a", "client_a", "client_a", "client_a"],
     "Epic":["epic_a", "epic_a", "epic_a", "epic_a", "epic_b", "epic_b"],
