@@ -12,6 +12,7 @@ from .pages.sponsors import page as sponsors_page
 from .pages.roles import page as roles_page
 from .pages.capacities import page as capacities_page
 from .pages.demands import page as demands_page
+from .pages.billing import page as billing_page
 
 from uiflow.components.layout import FlexContainer
 from uiflow.components.header import Header
@@ -28,6 +29,7 @@ menu_items = {
     "Rates": "Rates",
     "Capacities": "Capacities",
     "Demands": "Demands",
+    "Billing": "Billing"
 }
 
 @component
@@ -74,6 +76,9 @@ def timeflow():
     elif current_page == "Demands":
         if user_role == "admin" or user_role == None:
             current_page_component = demands_page(key="demands_page")
+    elif current_page == "Billing":
+        if user_role == "admin" or user_role == None:
+            current_page_component = billing_page(key="billing_page")
     return html.div(
         {"class": "xl:flex w-full"},
         html.meta(
@@ -90,5 +95,4 @@ def timeflow():
             menu_items=menu_items,
         ),
         FlexContainer(current_page_component),
-        html.button("Test"),
     )
