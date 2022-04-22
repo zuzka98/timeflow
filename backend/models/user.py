@@ -1,11 +1,9 @@
 from typing import Optional
-from sqlmodel import Field, SQLModel, Field, MetaData, create_engine
+from sqlmodel import Field, SQLModel, Field
 from pydantic import validator
 from datetime import datetime, date
 from fastapi import HTTPException
 import re
-
-engine = create_engine("postgresql://pguser:password@db:5432/test_db", echo=True)
 
 
 class AppUser(SQLModel, table=True):
