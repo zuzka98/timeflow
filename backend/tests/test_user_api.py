@@ -6,7 +6,7 @@ from sqlmodel import SQLModel, Session, create_engine
 from sqlmodel.pool import StaticPool
 from ..api.epic import get_session
 
-
+@pytest.mark.order(7)
 def test_post_user(client):
     response = client.post(
         "/api/users/",

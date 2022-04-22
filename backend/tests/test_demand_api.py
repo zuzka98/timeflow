@@ -5,7 +5,7 @@ from sqlmodel import SQLModel, Session, create_engine
 from sqlmodel.pool import StaticPool
 from ..api.client import get_session
 
-
+@pytest.mark.order(11)
 def test_post_demand(client):
     response = client.post(
         "/api/demands/",
