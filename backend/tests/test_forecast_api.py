@@ -7,14 +7,13 @@ from sqlmodel.pool import StaticPool
 from ..utils import get_session
 
 
-@pytest.mark.order(3)
+@pytest.mark.order(9)
 def test_post_forecast(client):
     response = client.post(
         "/api/forecasts/",
         json={
             "user_id": 1,
             "epic_id": 1,
-            "client_id": 1,
             "days": 10,
             "month": 5,
             "year": 2022,
@@ -25,7 +24,6 @@ def test_post_forecast(client):
         "id": 1,
         "user_id": 1,
         "epic_id": 1,
-        "client_id": 1,
         "days": 10,
         "month": 5,
         "year": 2022,
@@ -39,27 +37,12 @@ def test_get_forecasts(client):
             "id": 1,
             "user_id": 1,
             "epic_id": 1,
-            "client_id": 1,
             "days": 10,
             "month": 5,
             "year": 2022,
         }
     ]
 
-
-def test_get_forecasts_clients(client):
-    response = client.get("/api/forecasts/?client_id=1")
-    assert response.json() == [
-        {
-            "id": 1,
-            "user_id": 1,
-            "epic_id": 1,
-            "client_id": 1,
-            "days": 10,
-            "month": 5,
-            "year": 2022,
-        }
-    ]
 
 
 def test_get_forecasts_users(client):
@@ -69,7 +52,6 @@ def test_get_forecasts_users(client):
             "id": 1,
             "user_id": 1,
             "epic_id": 1,
-            "client_id": 1,
             "days": 10,
             "month": 5,
             "year": 2022,
@@ -77,21 +59,6 @@ def test_get_forecasts_users(client):
     ]
 
 
-def test_update_forecasts(client):
-    response = client.put(
-        "api/forecasts/new-days?user_id=1&epic_id=1&month=5&year=2022&days=1"
-    )
-    assert response.json() == {
-        "id": 1,
-        "user_id": 1,
-        "epic_id": 1,
-        "client_id": 1,
-        "days": 1,
-        "month": 5,
-        "year": 2022,
-    }
-
-
 def test_delete_forecasts(client):
-    response = client.delete("/api/forecasts/?user_id=1&epic_id=1&month=5&year=2022")
+    response = client.delete("/api/forecasts/?forecast_id=1")
     assert response.status_code == 200

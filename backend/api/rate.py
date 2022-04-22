@@ -10,7 +10,7 @@ session = Session(engine)
 
 
 @router.post("/")
-async def rate(
+async def post_rate(
     rate: Rate,
     session: Session = Depends(get_session),
 ):
@@ -212,7 +212,8 @@ async def update_rates(
     """
     statement = select(Rate).where(Rate.id == rate_id)
     rate_to_update = session.exec(statement).one()
-    rate_to_update.amount = new_amount
+    if rate_id != None:
+        rate_to_update.amount = new_amount
     session.add(rate_to_update)
     session.commit()
     session.refresh(rate_to_update)

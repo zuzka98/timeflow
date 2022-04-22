@@ -161,35 +161,6 @@ async def get_timelog_user_id(
     return results
 
 
-@router.put("/{timelog_id}/new-start-time")
-async def update_timelogs(
-    *,
-    timelog_id: int = None,
-    timelog_new_start_time: str = None,
-    session: Session = Depends(get_session),
-):
-    """
-    Update a timelog.
-
-    Parameters
-    ----------
-    timelog_id : int
-        ID of timelog to be updated.
-    timelog_new_start_time : str
-        Updated start time of timelog.
-    session : Session
-        SQL session that is to be used to updated the timelog.
-        Defaults to creating a dependency on the running SQL model session.
-    """
-    statement = select(TimeLog).where(TimeLog.id == timelog_id)
-    timelog_to_update = session.exec(statement).one()
-    timelog_to_update.start_time = timelog_new_start_time
-    session.add(timelog_to_update)
-    session.commit()
-    session.refresh(timelog_to_update)
-    return timelog_to_update
-
-
 @router.delete("/{timelog_id}")
 async def delete_timelogs(
     *,
