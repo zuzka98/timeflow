@@ -35,7 +35,9 @@ async def login(request: Request):
     Future: Implement button that user clicks to cause the redirection.
     """
 
-    github = OAuth2Session(GITHUB_CLIENT_ID, scope=["read:org", "read:user"])
+    github = OAuth2Session(
+        GITHUB_CLIENT_ID, scope=["read:org", "read:user", "user:email"]
+    )
 
     # Redirect user to GitHub for authorization
     authorization_url, state = github.authorization_url(authorization_base_url)
@@ -75,9 +77,17 @@ async def organizations(request: Request):
         state=request.session["oauth_state"],
     )
 
-    github_api = github.get("https://api.github.com/user").json()
-    username = github_api["login"]
-    request.session["username"] = username
+    # Get user's GitHub username
+    request.session["username"] = get_github_username(github)
+
+    # Get user's primary email
+    github_emails_api = github.get("https://api.github.com/user/emails").json()
+    email = ""
+    for github_email in github_emails_api:
+        if github_email["primary"] == True:
+            email = github_email["email"]
+            break
+    request.session["email"] = email
 
     # Use dyvenia api with user's username to check if user is in team
     dyvenia_api = github.get(
@@ -105,3 +115,17 @@ async def organizations(request: Request):
             request.session["role"] = "admin"
 
         return f"{str(request.base_url)}home"
+
+
+def get_github_username(github: OAuth2Session):
+    """
+    Get user's GitHub username.
+
+    Parameters
+    ----------
+    github : OAuth2Session
+        GitHub session from which to pull the username from.
+    """
+    github_api = github.get("https://api.github.com/user").json()
+    username = github_api["login"]
+    return username

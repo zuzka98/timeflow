@@ -1,5 +1,6 @@
-from .config import get_user, fetch_username
 from idom import html, use_state, component
+from .config import get_user, fetch_username
+from .data.users import to_user
 from .pages.users import page as users_page
 from .pages.clients import page as clients_page
 from .pages.epics import page as epics_page
@@ -18,7 +19,6 @@ from uiflow.components.header import Header
 
 menu_items = {
     # 'title': 'page',
-    "Users": "Users",
     "Roles": "Roles",
     "Epics": "Epics",
     "Epic Areas": "Epic Areas",
@@ -35,15 +35,20 @@ menu_items = {
 def timeflow():
     # Get role of user
     user_role = get_user()
+
+    # Get user's github username
     github_username = fetch_username()
+
+    # Get user's email
+
+    # to_user(short_name=github_username, first_name="", last_name="")
 
     current_page, set_current_page = use_state("Timelogs")
     pages = ["Timelogs", "Forecasts", "Users"]
 
     print("here", current_page)
     if current_page == "Users":
-        if user_role == "admin" or user_role == None:
-            current_page_component = users_page(key="users_page")
+        current_page_component = users_page(key="users_page")
     elif current_page == "Roles":
         if user_role == "admin" or user_role == None:
             current_page_component = roles_page(key="roles_page")
@@ -91,5 +96,4 @@ def timeflow():
             menu_items=menu_items,
         ),
         FlexContainer(current_page_component),
-        html.button("Test"),
     )
