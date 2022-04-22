@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
-from sqlmodel import Session, select, SQLModel, or_
+from sqlmodel import Session, select
 from sqlalchemy.exc import NoResultFound
 from ..models.user import User
 from ..models.role import Role

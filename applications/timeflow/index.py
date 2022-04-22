@@ -19,6 +19,7 @@ from uiflow.components.header import Header
 
 menu_items = {
     # 'title': 'page',
+    "Users": "Users",
     "Roles": "Roles",
     "Epics": "Epics",
     "Epic Areas": "Epic Areas",
@@ -44,11 +45,12 @@ def timeflow():
     # to_user(short_name=github_username, first_name="", last_name="")
 
     current_page, set_current_page = use_state("Timelogs")
-    pages = ["Timelogs", "Forecasts", "Users"]
+    pages = ["Timelogs", "Forecasts"]
 
     print("here", current_page)
     if current_page == "Users":
-        current_page_component = users_page(key="users_page")
+        if user_role == "admin" or user_role == None:
+            current_page_component = users_page(key="users_page")
     elif current_page == "Roles":
         if user_role == "admin" or user_role == None:
             current_page_component = roles_page(key="roles_page")
