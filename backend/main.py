@@ -1,17 +1,16 @@
 import os
 from fastapi import *
-from sqlmodel import Session, select, SQLModel
+from sqlmodel import Session, select, SQLModel, text
 from sqlalchemy.exc import OperationalError
-from backend.models.timelog import TimeLog
-from backend.models.calendar import Calendar
-from backend.utils import (
+from .models.timelog import TimeLog
+from .models.calendar import Calendar
+from .utils import (
     engine,
-    sqlite3_engine,
     create_db,
     tags_metadata,
     execute_sample_sql,
 )
-from backend.api import (
+from .api import (
     user,
     timelog,
     forecast,
@@ -46,13 +45,15 @@ app.include_router(demand.router)
 
 @app.on_event("startup")
 def on_startup():
-    try:
-        statement = select(TimeLog)
-        results = session.exec(statement)
-    except OperationalError:
+    if os.getenv("TIMEFLOW_DEV") == "true":
         create_db()
-        if os.getenv("TIMEFLOW_DEV") == "true":
-            execute_sample_sql(session)
+        execute_sample_sql(session)
+    elif os.getenv("TIMEFLOW_DEV") == "false":
+        try:
+            statement = select(TimeLog)
+            results = session.exec(statement)
+        except OperationalError:
+            create_db()
 
 
 @app.on_event("startup")
@@ -62,7 +63,7 @@ def implement_calendar_table():
         result = session.exec(statement).one()
     except Exception as e:
         print(e)
-        values_sql = f"""INSERT INTO calendar (date, year_number, year_name, quarter_number, quarter_name
+        values_sql = f"""INSERT INTO app_db.calendar (date, year_number, year_name, quarter_number, quarter_name
                     , month_number, month_name, week_number, week_name, week_day_number, week_day_name)
                     VALUES """
         with open("backend/calendar.csv") as csvfile:
@@ -75,7 +76,7 @@ def implement_calendar_table():
                     values = f"({row_sql}),"
                     values_sql += values
             values_sql += f"({row_sql});"
-            cur = sqlite3_engine.cursor()
-            cur.execute(values_sql)
-            sqlite3_engine.commit()
-            sqlite3_engine.close()
+            with engine.connect() as con:
+                con.execute(text(values_sql))
+                con.commit()
+                con.close()

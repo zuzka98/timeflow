@@ -70,9 +70,9 @@ def SimpleTable(rows: List[Any]):
             ),
         )
     except TypeError:
-        return False
+        return html.div()
     except IndexError:
-        return False
+        return html.div()
 
 
 @component

@@ -1,11 +1,38 @@
 version: '3'
+
 networks:
   static-network:
     ipam:
       driver: default
       config:
         - subnet: 172.28.0.0/16
+
 services:
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: test_db
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: password
+    networks:
+      static-network:
+        ipv4_address: 172.28.1.3
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - 5433:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pguser@postgres.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    networks:
+      static-network:
+        ipv4_address: 172.28.1.4
+
   fastapi:
     image: fastapi:v1
     volumes:
@@ -20,6 +47,7 @@ services:
     networks:
       static-network:
         ipv4_address: 172.28.1.2
+
   applications:
     #python3 /applications/main2.py && ls
     image: idom:v1

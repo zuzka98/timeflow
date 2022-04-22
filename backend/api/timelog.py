@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from ..utils import engine, string_to_datetime, get_session
 from sqlmodel import Session, select, SQLModel, or_
 from ..utils import engine
-from ..models.user import User
+from ..models.user import AppUser
 from ..models.timelog import TimeLog
 from ..models.epic import Epic
 
@@ -84,14 +84,14 @@ async def get_timelogs_all(session: Session = Depends(get_session)):
     statement = (
         select(
             TimeLog.id,
-            User.short_name.label("username"),
+            AppUser.short_name.label("username"),
             Epic.short_name.label("epic_name"),
             TimeLog.start_time,
             TimeLog.end_time,
             TimeLog.count_hours,
             TimeLog.count_days,
         )
-        .join(User)
+        .join(AppUser)
         .join(Epic)
         .order_by(TimeLog.end_time.desc())
     )
@@ -142,14 +142,14 @@ async def get_timelog_user_id(
     statement = (
         select(
             TimeLog.id,
-            User.short_name.label("username"),
+            AppUser.short_name.label("username"),
             Epic.short_name.label("epic_name"),
             TimeLog.start_time,
             TimeLog.end_time,
             TimeLog.count_hours,
             TimeLog.count_days,
         )
-        .join(User)
+        .join(AppUser)
         .join(Epic)
         .where(TimeLog.user_id == user_id)
         .where(TimeLog.epic_id == epic_id)
@@ -159,35 +159,6 @@ async def get_timelog_user_id(
     )
     results = session.exec(statement).all()
     return results
-
-
-@router.put("/{timelog_id}/new-start-time")
-async def update_timelogs(
-    *,
-    timelog_id: int = None,
-    timelog_new_start_time: str = None,
-    session: Session = Depends(get_session),
-):
-    """
-    Update a timelog.
-
-    Parameters
-    ----------
-    timelog_id : int
-        ID of timelog to be updated.
-    timelog_new_start_time : str
-        Updated start time of timelog.
-    session : Session
-        SQL session that is to be used to updated the timelog.
-        Defaults to creating a dependency on the running SQL model session.
-    """
-    statement = select(TimeLog).where(TimeLog.id == timelog_id)
-    timelog_to_update = session.exec(statement).one()
-    timelog_to_update.start_time = timelog_new_start_time
-    session.add(timelog_to_update)
-    session.commit()
-    session.refresh(timelog_to_update)
-    return timelog_to_update
 
 
 @router.delete("/{timelog_id}")

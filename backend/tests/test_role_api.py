@@ -8,7 +8,7 @@ from ..utils import get_session
 from datetime import datetime
 
 
-@pytest.mark.order(1)
+@pytest.mark.order(4)
 def test_post_role(client):
     response = client.post(
         "/api/roles/",

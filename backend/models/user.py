@@ -1,4 +1,3 @@
-from sqlite3.dbapi2 import Timestamp, adapt
 from typing import Optional
 from sqlmodel import Field, SQLModel, Field
 from pydantic import validator
@@ -7,7 +6,9 @@ from fastapi import HTTPException
 import re
 
 
-class User(SQLModel, table=True):
+class AppUser(SQLModel, table=True):
+    """Create an SQLModel for users"""
+
     id: Optional[int] = Field(default=None, primary_key=True)
     short_name: str
     first_name: str
@@ -19,6 +20,8 @@ class User(SQLModel, table=True):
     created_at: datetime
     updated_at: datetime
     is_active: bool
+
+    __table_args__ = {"schema": "app_db"}
 
     @validator("short_name", always=True)
     def valid_short_name(cls, sn_input):
