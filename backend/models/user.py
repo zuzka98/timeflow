@@ -25,7 +25,6 @@ class AppUser(SQLModel, table=True):
 
     @validator("short_name", always=True)
     def valid_short_name(cls, sn_input):
-        assert sn_input.isalpha(), "only alphabet letters allowed in short name"
         assert sn_input.islower(), "short name contains small letters only"
         return sn_input
 
