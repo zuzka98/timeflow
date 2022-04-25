@@ -12,7 +12,7 @@ def test_post_user(client):
     response = client.post(
         "/api/users/",
         json={
-            "github_username": "jsmith",
+            "username": "jsmith",
             "first_name": "John",
             "last_name": "Smith",
             "email": "jsmith@dyvenia.com",
@@ -27,7 +27,7 @@ def test_post_user(client):
     data = response.json()
     assert response.status_code == 200
     assert data == {
-        "github_username": "jsmith",
+        "username": "jsmith",
         "last_name": "Smith",
         "role_id": 1,
         "team_id": 1,
@@ -46,7 +46,7 @@ def test_get_users(client):
     data = response.json()
     assert data == [
         {
-            "github_username": "jsmith",
+            "username": "jsmith",
             "last_name": "Smith",
             "role_id": 1,
             "team_id": 1,

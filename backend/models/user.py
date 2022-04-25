@@ -10,7 +10,7 @@ class AppUser(SQLModel, table=True):
     """Create an SQLModel for users"""
 
     id: Optional[int] = Field(default=None, primary_key=True)
-    github_username: str
+    username: str
     first_name: str
     last_name: str
     email: str
@@ -23,9 +23,9 @@ class AppUser(SQLModel, table=True):
 
     __table_args__ = {"schema": "app_db"}
 
-    @validator("github_username", always=True)
-    def valid_github_username(cls, sn_input):
-        assert sn_input.islower(), "github username contains small letters only"
+    @validator("username", always=True)
+    def valid_username(cls, sn_input):
+        assert sn_input.islower(), "username contains small letters only"
         return sn_input
 
     @validator("first_name", always=True)

@@ -90,7 +90,7 @@ async def organizations(request: Request):
     # Post to AppUser model if GitHub username is not currently in the database.
     if redirect_info["is_authorized"] == True:
         to_user(
-            github_username=username,
+            username=username,
             first_name="John",
             last_name="Doe",
             email=email,

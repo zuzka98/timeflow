@@ -75,7 +75,7 @@ async def get_capacities(
         statement = (
             select(
                 Capacity.id.label("capacity_id"),
-                AppUser.github_username.label("user_github_username"),
+                AppUser.username.label("user_username"),
                 Team.short_name.label("team_short_name"),
                 Capacity.year,
                 Capacity.month,

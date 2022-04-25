@@ -52,7 +52,7 @@ def timelog_by_user_epic_year_month(user_id, epic_id, year, month) -> List[Dict]
         for item in response.json():
             d = {
                 "timelog id": item["id"],
-                "github_username": item["github_username"],
+                "username": item["username"],
                 "epic name": item["epic_name"],
                 "start time": (item["start_time"]).replace("T", " "),
                 "end time": (item["end_time"]).replace("T", " "),

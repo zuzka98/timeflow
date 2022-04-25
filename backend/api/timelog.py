@@ -83,7 +83,7 @@ async def get_timelogs_all(session: Session = Depends(get_session)):
     statement = (
         select(
             TimeLog.id,
-            AppUser.github_username.label("github_username"),
+            AppUser.username.label("username"),
             Epic.short_name.label("epic_name"),
             TimeLog.start_time,
             TimeLog.end_time,
@@ -141,7 +141,7 @@ async def get_timelog_user_id(
     statement = (
         select(
             TimeLog.id,
-            AppUser.github_username.label("github_username"),
+            AppUser.username.label("username"),
             Epic.short_name.label("epic_name"),
             TimeLog.start_time,
             TimeLog.end_time,
