@@ -1,5 +1,4 @@
 from idom import html, use_state, component, event
-from datetime import datetime
 
 from .utils import switch_state
 from uiflow.components.input import Input, Selector2
@@ -8,7 +7,6 @@ from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
 
 from ..data.users import (
-    to_user,
     users_active,
     update_user,
     users_names,

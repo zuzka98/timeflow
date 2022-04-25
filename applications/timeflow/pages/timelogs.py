@@ -1,19 +1,10 @@
-import asyncio
-from cProfile import label
-import json
-from idom import html, run, use_state, component, event, vdom
+from idom import html, use_state, component, event, vdom
 import requests
-from sanic import Sanic, response
-from black import click
 from uiflow.components.input import (
     Input,
-    Selector,
-    SelectorDropdownList,
-    SelectorDropdownKeyValue,
     Selector2,
 )
 from uiflow.components.layout import Row, Column, Container
-from uiflow.components.lists import ListSimple
 from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
 from uiflow.components.heading import H3
@@ -25,7 +16,7 @@ from ..data.common import (
     days_in_month,
 )
 
-from ..data.timelogs import Timelog, to_timelog, timelog_by_user_epic_year_month
+from ..data.timelogs import to_timelog, timelog_by_user_epic_year_month
 from ..data.epics import epics_names
 
 from ..config import base_url

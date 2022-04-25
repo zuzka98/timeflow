@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
 from ..models.capacity import Capacity
-from sqlmodel import Session, select, SQLModel, and_
+from sqlmodel import Session, select, and_
 from sqlalchemy.exc import NoResultFound
 from ..models.user import AppUser
 from ..models.team import Team

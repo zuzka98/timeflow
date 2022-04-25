@@ -1,14 +1,7 @@
-import asyncio
-from cProfile import label
-import json
-from idom import html, run, use_state, component, event, vdom
-import requests
-from sanic import Sanic, response
-from black import click
+from idom import html, use_state, component, event
 
-from uiflow.components.input import Input, Selector, Selector2
+from uiflow.components.input import Input, Selector2
 from uiflow.components.layout import Row, Column, Container
-from uiflow.components.lists import ListSimple
 from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
 from ..data.common import (

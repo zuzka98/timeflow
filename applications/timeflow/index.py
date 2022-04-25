@@ -1,6 +1,5 @@
 from idom import html, use_state, component
 from .config import get_user, fetch_username
-from .data.users import to_user
 from .pages.users import page as users_page
 from .pages.clients import page as clients_page
 from .pages.epics import page as epics_page

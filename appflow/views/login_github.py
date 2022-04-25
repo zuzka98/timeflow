@@ -1,16 +1,11 @@
 from datetime import datetime
 import os
-import requests
-import json
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi import Depends, Request
+from fastapi import Request
 from dotenv import load_dotenv
 from requests_oauthlib import OAuth2Session
-from dominate import tags as tg
 from applications.timeflow.data.users import to_user
-from applications.timeflow.config import base_url
-from backend.api import user
 
 router = APIRouter()
 
@@ -86,7 +81,6 @@ async def organizations(request: Request):
     # Get user's GitHub username and primary email
     username = get_github_username(github)
     email = get_github_email(github)
-    print("EMAIL", email)
     # Add username and email values to session
     request.session["username"] = username
     request.session["email"] = email
@@ -95,9 +89,6 @@ async def organizations(request: Request):
 
     # Post to AppUser model if GitHub username is not currently in the database.
     if redirect_info["is_authorized"] == True:
-        print("user_type", type(username), username)
-        print("email_type", type(email), email)
-        print("date_type", type(datetime.now()), datetime.now())
         to_user(
             github_username=username,
             first_name="John",
@@ -110,7 +101,6 @@ async def organizations(request: Request):
             updated_at=datetime.now(),
             team_id="0",
         )
-        print("SUCCESSSSSSSS")
 
     return redirect_info["url"]
 

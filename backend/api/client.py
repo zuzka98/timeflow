@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
-from sqlmodel import Session, select, SQLModel
+from sqlmodel import Session, select
 from sqlalchemy.exc import NoResultFound
 from ..models.client import Client
 from ..models.epic import Epic

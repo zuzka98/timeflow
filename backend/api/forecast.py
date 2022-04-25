@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
 from ..models.forecast import Forecast
-from ..models.client import Client
 from ..models.epic import Epic
-from sqlmodel import Session, select, SQLModel, or_, and_
+from sqlmodel import Session, select, and_
 from sqlalchemy.exc import NoResultFound
 
 router = APIRouter(prefix="/api/forecasts", tags=["forecast"])
@@ -176,8 +175,6 @@ async def get_forecasts_by_user_year_epic(
     )
     results = session.exec(statement).all()
     return results
-
-
 
 
 @router.delete("/")

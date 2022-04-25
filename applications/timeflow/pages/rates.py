@@ -1,16 +1,8 @@
-import asyncio
-from cProfile import label
-import json
-from turtle import width
-from idom import html, run, use_state, component, event, vdom
-import requests
-from sanic import Sanic, response
-from black import click
+from idom import html, use_state, component, event
 from datetime import datetime
 
-from uiflow.components.input import Input, Selector, Selector2
+from uiflow.components.input import Input, Selector2
 from uiflow.components.layout import Row, Column, Container
-from uiflow.components.lists import ListSimple
 from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
 from ..data.common import (
@@ -19,7 +11,6 @@ from ..data.common import (
 )
 
 from ..data.rates import (
-    rates_by_user_client_date,
     rate_active_by_user_client,
     rate_update,
     to_rate,
@@ -28,7 +19,6 @@ from ..data.rates import (
 from ..data.clients import clients_names
 
 from .utils import month_start_to_str, far_date, date_str_to_date
-from ..config import base_url
 
 
 @component

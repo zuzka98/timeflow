@@ -1,6 +1,4 @@
 from idom import html, use_state, component, event
-from sanic import response
-from black import click
 
 from uiflow.components.controls import (
     activation_button,

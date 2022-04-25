@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends
-from ..utils import engine, string_to_datetime, get_session
-from sqlmodel import Session, select, SQLModel, or_
-from ..utils import engine
+from ..utils import get_session
+from sqlmodel import Session, select
 from ..models.user import AppUser
 from ..models.timelog import TimeLog
 from ..models.epic import Epic
