@@ -40,114 +40,6 @@ def page():
 
 
 @component
-def create_user_form(
-    short_name,
-    set_short_name,
-    first_name,
-    set_first_name,
-    last_name,
-    set_last_name,
-    email,
-    set_email,
-    role_id,
-    set_role_id,
-    team_id,
-    set_team_id,
-    is_event,
-    set_is_event,
-):
-    """
-        endpoint: /api/users
-        schema: {
-      "short_name": "string",
-      "first_name": "string",
-      "last_name": "string",
-      "email": "string",
-      "role_id": 0,
-      "team_id": 0,
-      "start_date": "2022-03-10",
-      "created_at": "2022-03-10T13:11:49.625Z",
-      "updated_at": "2022-03-10T13:11:49.625Z",
-      "is_active": true
-    }"""
-    # Initializes day state, should be in parent(?), here due to a bug
-    day, set_day = use_state("")
-    year_month, set_year_month = use_state("")
-
-    @event(prevent_default=True)
-    async def handle_submit(event):
-        print("post select team is", team_id)
-        # Bypass of a bug, selector not able to set a value=None
-        if team_id is "":
-            set_team_id(None)
-        to_user(
-            short_name=short_name,
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            role_id=role_id,
-            team_id=team_id,
-            year_month=year_month,
-            day=day,
-            created_at=datetime.now(),
-            updated_at=datetime.now(),
-        )
-        # switches state triggering page refresh
-        switch_state(is_event, set_is_event)
-
-    inp_short_name = Input(
-        set_value=set_short_name, label="short name", width="[24%]", md_width="[24%]"
-    )
-    inp_first_name = Input(
-        set_value=set_first_name, label="first name", width="[24%]", md_width="[24%]"
-    )
-    inp_last_name = Input(
-        set_value=set_last_name, label="last name", width="[24%]", md_width="[24%]"
-    )
-    inp_email = Input(
-        set_value=set_email, label="email", width="[24%]", md_width="[24%]"
-    )
-    selector_role = Selector2(set_role_id, roles_id_name(), width="24%", md_width="24%")
-    selector_team = Selector2(
-        set_team_id, teams_id_name(no_team=True), width="24%", md_width="24%"
-    )
-    selector_start_month = Selector2(
-        set_year_month,
-        year_month_dict_list(label="select start month"),
-        width="24%",
-        md_width="24%",
-    )
-    selector_start_day = Selector2(
-        set_day, days_in_month(label="select start day"), width="24%", md_width="24%"
-    )
-
-    # is_disabled = True
-    # if username != "" and name != "" and surname != "" and email != "":
-    is_disabled = False
-    btn = Button(is_disabled, handle_submit, label="Submit")
-
-    return Container(
-        Column(
-            Row(
-                inp_short_name,
-                inp_first_name,
-                inp_last_name,
-                inp_email,
-                justify="justify-between",
-            ),
-            Row(
-                selector_role,
-                selector_team,
-                selector_start_month,
-                selector_start_day,
-                justify="justify-between",
-            ),
-            Row(btn),
-        )
-    )
-
-
-@component
 def list_users(is_event):
     """Calls a list of active users"""
     rows = users_active()
@@ -162,6 +54,15 @@ def update_users(is_event, set_is_event):
     new_team_id, set_new_team_id = use_state("")
     update_user_id, set_update_user_id = use_state("")
 
+    # Initializes day state, should be in parent(?), here due to a bug
+    day, set_day = use_state("")
+    year_month, set_year_month = use_state("")
+
+    ym = year_month
+    year = ym[:4]
+    month = ym[5:7]
+    new_start_date = year + "-" + month + "-" + day
+
     @event(prevent_default=True)
     def handle_update(event):
         update_user(
@@ -170,6 +71,7 @@ def update_users(is_event, set_is_event):
             new_role_id=new_role_id,
             new_first_name=new_first_name,
             new_last_name=new_last_name,
+            new_start_date=new_start_date,
         )
         # Changes state triggering refresh on update event
         switch_state(value=is_event, set_value=set_is_event)
@@ -202,12 +104,22 @@ def update_users(is_event, set_is_event):
         width="48%",
         md_width="48%",
     )
+    selector_start_month = Selector2(
+        set_year_month,
+        year_month_dict_list(label="select start month"),
+        width="48%",
+        md_width="48%",
+    )
+    selector_start_day = Selector2(
+        set_day, days_in_month(label="select start day"), width="48%", md_width="48%"
+    )
     is_disabled = False
     btn = Button(is_disabled, handle_update, label="Update")
     return Column(
         Row(selector_user),
         Row(inp_first_name, inp_last_name, justify="justify-between"),
         Row(selector_role, selector_team, justify="justify-between"),
+        Row(selector_start_month, selector_start_day, justify="justify-between"),
         Row(btn),
     )
 

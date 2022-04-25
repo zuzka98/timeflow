@@ -197,7 +197,7 @@ def timelogs_table(user_id, epic_id, year_month, is_true):
         for item in response.json():
             d = {
                 "timelog id": item["id"],
-                "username": item["username"],
+                "github_username": item["github_username"],
                 "epic name": item["epic_name"],
                 "start time": (item["start_time"]).replace("T", " "),
                 "end time": (item["end_time"]).replace("T", " "),

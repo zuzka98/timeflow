@@ -28,7 +28,7 @@ async def post_user(
         SQL session that is to be used to add the user.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(AppUser).where(AppUser.short_name == user.short_name)
+    statement = select(AppUser).where(AppUser.github_username == user.github_username)
     try:
         result = session.exec(statement).one()
         return False
@@ -43,7 +43,7 @@ async def post_user(
 async def get_users(
     session: Session = Depends(get_session),
     is_active: bool = None,
-    short_name: str = None,
+    github_username: str = None,
 ):
     """
     Get list of user(s).
@@ -55,14 +55,14 @@ async def get_users(
         Defaults to creating a dependency on the running SQL model session.
     is_active : bool
         Status of users to be pulled.
-    short_name : str
+    github_username : str
         Short name of user to be pulled.
     """
     statement = select(AppUser)
     if is_active != None:
         statement = (
             select(
-                AppUser.short_name,
+                AppUser.github_username,
                 AppUser.first_name,
                 AppUser.last_name,
                 Role.short_name.label("role_short_name"),
@@ -83,7 +83,7 @@ async def get_users(
 async def update_user(
     user_id: int,
     is_active: Optional[bool] = None,
-    new_short_name: Optional[str] = None,
+    new_github_username: Optional[str] = None,
     new_first_name: Optional[str] = None,
     new_last_name: Optional[str] = None,
     new_email: Optional[str] = None,
@@ -101,7 +101,7 @@ async def update_user(
         ID of user to be updated.
     is_active : Optional[bool]
         Updated status of user.
-    new_short_name : Optional[str]
+    new_github_username : Optional[str]
         Updated short name of user.
     new_first_name : Optional[str]
         Updated first name of user.
@@ -123,8 +123,8 @@ async def update_user(
     user_to_update = session.exec(statement).one()
     if is_active != None:
         user_to_update.is_active = is_active
-    if new_short_name != None:
-        user_to_update.short_name = new_short_name
+    if new_github_username != None:
+        user_to_update.github_username = new_github_username
     if new_first_name != None:
         user_to_update.first_name = new_first_name
     if new_last_name != None:

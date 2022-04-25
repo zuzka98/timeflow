@@ -53,7 +53,7 @@ def capacities_by_user_team_year_month(user_id, team_id, year_month) -> List[Dic
         for item in response.json():
             d = {
                 "capacity id": item["capacity_id"],
-                "user": item["user_short_name"],
+                "user": item["user_github_username"],
                 "team": item["team_short_name"],
                 "year": item["year"],
                 "month": item["month"],

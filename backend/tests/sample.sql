@@ -1,4 +1,4 @@
-INSERT INTO app_db.appuser (short_name, first_name, last_name, email, role_id, team_id, start_date, created_at, updated_at, is_active)
+INSERT INTO app_db.appuser (github_username, first_name, last_name, email, role_id, team_id, start_date, created_at, updated_at, is_active)
 VALUES
     ('bmoore', 'Brian', 'Moore', 'BrianFMoore@dayrep.com', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE),
     ('thyatt', 'Tammy', 'Hyatt', 'TammyDHyatt@rhyta.com', 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE),

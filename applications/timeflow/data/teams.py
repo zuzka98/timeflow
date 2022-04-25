@@ -34,7 +34,7 @@ def get_active_team_rows():
         d = {
             "Team name": item["team_name"],
             "Team short name": item["team_short_name"],
-            "User lead": item["user_name"],
+            "User lead": item["github_username"],
         }
         rows.append(d)
     return rows

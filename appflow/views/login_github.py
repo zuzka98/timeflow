@@ -99,7 +99,7 @@ async def organizations(request: Request):
         print("email_type", type(email), email)
         print("date_type", type(datetime.now()), datetime.now())
         to_user(
-            short_name=username,
+            github_username=username,
             first_name="John",
             last_name="Doe",
             email=email,

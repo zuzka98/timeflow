@@ -7,7 +7,7 @@ from .common import Select
 
 
 class User(TypedDict):
-    short_name: str
+    github_username: str
     first_name: str
     last_name: str
     email: str
@@ -20,7 +20,7 @@ class User(TypedDict):
 
 
 def to_user(
-    short_name: str,
+    github_username: str,
     first_name: str,
     last_name: str,
     email: str,
@@ -37,7 +37,7 @@ def to_user(
     start_date = year + "-" + month + "-" + day
 
     data = User(
-        short_name=short_name,
+        github_username=github_username,
         first_name=first_name,
         last_name=last_name,
         email=email,
@@ -62,7 +62,7 @@ def users_active():
     rows = []
     for item in response.json():
         d = {
-            "short name": item["short_name"],
+            "short name": item["github_username"],
             "first name": item["first_name"],
             "last name": item["last_name"],
             "role": item["role_short_name"],
@@ -117,10 +117,10 @@ def deactivate_user(user_id: int):
 
 def users_names(label="select user") -> List[Select]:
     # Connect to users list endpoint
-    api_user_name = f"{base_url}/api/users"
-    response_user_name = requests.get(api_user_name)
-    user_name_rows = [Select(value="", display_value=label)]
-    for item in response_user_name.json():
-        d = Select(value=item["id"], display_value=item["short_name"])
-        user_name_rows.append(d)
-    return user_name_rows
+    api_github_username = f"{base_url}/api/users"
+    response_github_username = requests.get(api_github_username)
+    github_username_rows = [Select(value="", display_value=label)]
+    for item in response_github_username.json():
+        d = Select(value=item["id"], display_value=item["github_username"])
+        github_username_rows.append(d)
+    return github_username_rows

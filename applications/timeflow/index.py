@@ -40,10 +40,6 @@ def timeflow():
     # Get user's github username
     github_username = fetch_username()
 
-    # Get user's email
-
-    # to_user(short_name=github_username, first_name="", last_name="")
-
     current_page, set_current_page = use_state("Timelogs")
     pages = ["Timelogs", "Forecasts"]
 
