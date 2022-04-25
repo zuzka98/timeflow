@@ -6,7 +6,7 @@ from ..models.user import AppUser
 from ..models.role import Role
 from ..models.team import Team
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, date
 
 router = APIRouter(prefix="/api/users", tags=["user"])
 session = Session(engine)
@@ -87,7 +87,9 @@ async def update_user(
     new_first_name: Optional[str] = None,
     new_last_name: Optional[str] = None,
     new_email: Optional[str] = None,
-    new_team_id: Optional[str] = None,
+    new_team_id: Optional[int] = None,
+    new_role_id: Optional[int] = None,
+    new_start_date: Optional[date] = None,
     session: Session = Depends(get_session),
 ):
     """
@@ -99,16 +101,20 @@ async def update_user(
         ID of user to be updated.
     is_active : Optional[bool]
         Updated status of user.
-    new_short_name : Optional[bool]
+    new_short_name : Optional[str]
         Updated short name of user.
-    new_first_name : Optional[bool]
+    new_first_name : Optional[str]
         Updated first name of user.
-    new_last_name : Optional[bool]
+    new_last_name : Optional[str]
         Updated last name of user.
-    new_email : Optional[bool]
+    new_email : Optional[str]
         Updated email of user
-    new_team_id : Optional[bool]
+    new_team_id : Optional[int]
         Updated team id.
+    new_role_id : Optional[int]
+        Updated role id.
+    new_start_date : Optional[date]
+        Updated start date.
     session : Session
         SQL session that is to be used to update the user.
         Defaults to creating a dependency on the running SQL model session.
@@ -127,6 +133,10 @@ async def update_user(
         user_to_update.email = new_email
     if new_team_id != None:
         user_to_update.team_id = new_team_id
+    if new_role_id != None:
+        user_to_update.role_id = new_role_id
+    if new_start_date != None:
+        user_to_update.start_date = new_start_date
     user_to_update.updated_at = datetime.now()
     session.add(user_to_update)
     session.commit()
