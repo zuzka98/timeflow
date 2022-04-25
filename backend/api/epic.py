@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
-from sqlmodel import Session, select, SQLModel, or_
+from sqlmodel import Session, select
 from ..models.epic import Epic
 from ..models.client import Client
 from ..models.sponsor import Sponsor

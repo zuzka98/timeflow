@@ -1,6 +1,6 @@
 import os
 from fastapi import *
-from sqlmodel import Session, select, SQLModel, text
+from sqlmodel import Session, select, text
 from sqlalchemy.exc import OperationalError
 from .models.timelog import TimeLog
 from .models.calendar import Calendar

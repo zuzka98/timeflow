@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends
-from ..utils import engine, string_to_datetime, get_session
-from sqlmodel import Session, select, SQLModel, or_
-from ..utils import engine
+from ..utils import get_session
+from sqlmodel import Session, select
 from ..models.user import AppUser
 from ..models.timelog import TimeLog
 from ..models.epic import Epic
@@ -84,7 +83,7 @@ async def get_timelogs_all(session: Session = Depends(get_session)):
     statement = (
         select(
             TimeLog.id,
-            AppUser.short_name.label("username"),
+            AppUser.username.label("username"),
             Epic.short_name.label("epic_name"),
             TimeLog.start_time,
             TimeLog.end_time,
@@ -142,7 +141,7 @@ async def get_timelog_user_id(
     statement = (
         select(
             TimeLog.id,
-            AppUser.short_name.label("username"),
+            AppUser.username.label("username"),
             Epic.short_name.label("epic_name"),
             TimeLog.start_time,
             TimeLog.end_time,

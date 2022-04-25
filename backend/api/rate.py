@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session, far_date, date_str_to_date
-from sqlmodel import Session, select, SQLModel
+from sqlmodel import Session, select
 from sqlalchemy.exc import NoResultFound
 from ..models.rate import Rate
 from datetime import datetime, timedelta

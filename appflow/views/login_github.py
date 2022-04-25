@@ -1,10 +1,11 @@
+from datetime import datetime
 import os
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi import Depends, Request
+from fastapi import Request
 from dotenv import load_dotenv
 from requests_oauthlib import OAuth2Session
-from dominate import tags as tg
+from applications.timeflow.data.users import to_user
 
 router = APIRouter()
 
@@ -35,7 +36,9 @@ async def login(request: Request):
     Future: Implement button that user clicks to cause the redirection.
     """
 
-    github = OAuth2Session(GITHUB_CLIENT_ID, scope=["read:org", "read:user"])
+    github = OAuth2Session(
+        GITHUB_CLIENT_ID, scope=["read:org", "read:user", "user:email"]
+    )
 
     # Redirect user to GitHub for authorization
     authorization_url, state = github.authorization_url(authorization_base_url)
@@ -75,9 +78,78 @@ async def organizations(request: Request):
         state=request.session["oauth_state"],
     )
 
+    # Get user's GitHub username and primary email
+    username = get_github_username(github)
+    email = get_github_email(github)
+    # Add username and email values to session
+    request.session["username"] = username
+    request.session["email"] = email
+
+    redirect_info = authorize_user(github, username, request)
+
+    # Post to AppUser model if GitHub username is not currently in the database.
+    if redirect_info["is_authorized"] == True:
+        to_user(
+            username=username,
+            first_name="John",
+            last_name="Doe",
+            email=email,
+            role_id="0",
+            year_month="2022_01",
+            day="1",
+            created_at=datetime.now(),
+            updated_at=datetime.now(),
+            team_id="0",
+        )
+
+    return redirect_info["url"]
+
+
+def get_github_username(github: OAuth2Session):
+    """
+    Get user's GitHub username.
+
+    Parameters
+    ----------
+    github : OAuth2Session
+        GitHub session from which to pull the username from.
+    """
     github_api = github.get("https://api.github.com/user").json()
     username = github_api["login"]
-    request.session["username"] = username
+    return username
+
+
+def get_github_email(github: OAuth2Session):
+    """
+    Get user's primary GitHub email.
+
+    Parameters
+    ----------
+    github : OAuth2Session
+        GitHub session from which to pull the username from.
+    """
+    github_emails_api = github.get("https://api.github.com/user/emails").json()
+    email = ""
+    for github_email in github_emails_api:
+        if github_email["primary"] == True:
+            email = github_email["email"]
+            break
+    return email
+
+
+def authorize_user(github: OAuth2Session, username: str, request: Request):
+    """
+    Authorize the user and return a dictionary containing a redirect URL and a boolean specifying whether the user is authorized.
+
+    Parameters
+    ----------
+    github : OAuth2Session
+        GitHub session from which to pull the username from.
+    username : str
+        GitHub username to authenticate.
+    request : Request
+        FastAPI request.
+    """
 
     # Use dyvenia api with user's username to check if user is in team
     dyvenia_api = github.get(
@@ -87,11 +159,11 @@ async def organizations(request: Request):
     # Give admin permissions to user if app is ran in dev mode
     if TIMEFLOW_DEV == "true":
         request.session["role"] = "admin"
-        return f"{str(request.base_url)}timeflow"
+        return {"url": f"{str(request.base_url)}timeflow", "is_authorized": True}
 
     # User not dyvenia's core team
     if dyvenia_api.status_code == 404:
-        return str(request.base_url)
+        return {"url": str(request.base_url), "is_authorized": False}
     # User in dyvenia's core team
     elif dyvenia_api.status_code == 204:
         # Check if user is in the GitHub TimeFlow Admin Team
@@ -104,4 +176,4 @@ async def organizations(request: Request):
         elif admin_team.status_code == 204:
             request.session["role"] = "admin"
 
-        return f"{str(request.base_url)}home"
+        return {"url": f"{str(request.base_url)}timeflow", "is_authorized": True}

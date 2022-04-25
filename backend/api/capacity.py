@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
 from ..models.capacity import Capacity
-from sqlmodel import Session, select, SQLModel, and_
+from sqlmodel import Session, select, and_
 from sqlalchemy.exc import NoResultFound
 from ..models.user import AppUser
 from ..models.team import Team
@@ -75,7 +75,7 @@ async def get_capacities(
         statement = (
             select(
                 Capacity.id.label("capacity_id"),
-                AppUser.short_name.label("user_short_name"),
+                AppUser.username.label("user_username"),
                 Team.short_name.label("team_short_name"),
                 Capacity.year,
                 Capacity.month,

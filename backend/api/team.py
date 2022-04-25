@@ -72,7 +72,7 @@ async def get_active_team_list(session: Session = Depends(get_session)):
             Team.name.label("team_name"),
             Team.short_name.label("team_short_name"),
             AppUser.id,
-            AppUser.short_name.label("user_name"),
+            AppUser.username.label("username"),
         )
         .join(AppUser)
         .where(Team.is_active == True)
@@ -104,7 +104,7 @@ async def read_teams(team_name: str = None, session: Session = Depends(get_sessi
 
 
 @router.get("/{team_id}/user-name")
-async def get_user_name_by_team_id(
+async def get_username_by_team_id(
     team_id: int, session: Session = Depends(get_session)
 ):
     """

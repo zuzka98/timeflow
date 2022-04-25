@@ -1,13 +1,13 @@
 import requests
 import json
 from typing import TypedDict, List
-from datetime import datetime
+from datetime import date, datetime
 from ..config import base_url
 from .common import Select
 
 
 class User(TypedDict):
-    short_name: str
+    username: str
     first_name: str
     last_name: str
     email: str
@@ -20,7 +20,7 @@ class User(TypedDict):
 
 
 def to_user(
-    short_name: str,
+    username: str,
     first_name: str,
     last_name: str,
     email: str,
@@ -37,7 +37,7 @@ def to_user(
     start_date = year + "-" + month + "-" + day
 
     data = User(
-        short_name=short_name,
+        username=username,
         first_name=first_name,
         last_name=last_name,
         email=email,
@@ -62,7 +62,7 @@ def users_active():
     rows = []
     for item in response.json():
         d = {
-            "short name": item["short_name"],
+            "username": item["username"],
             "first name": item["first_name"],
             "last name": item["last_name"],
             "role": item["role_short_name"],
@@ -73,10 +73,31 @@ def users_active():
     return rows
 
 
-def update_user(user_id: int, new_team_id: int):
+def update_user(
+    user_id: int,
+    new_team_id: int = None,
+    new_role_id: int = None,
+    new_first_name: str = None,
+    new_last_name: str = None,
+    new_start_date: date = None,
+):
     api = f"{base_url}/api/users/{user_id}/"
-    params = {"new_team_id": new_team_id}
-    response = requests.put(api, params=params)
+    func_params = {
+        "new_team_id": new_team_id,
+        "new_role_id": new_role_id,
+        "new_first_name": new_first_name,
+        "new_last_name": new_last_name,
+        "new_start_date": new_start_date,
+    }
+
+    api_params = func_params.copy()
+
+    # Pop all keys with value of None
+    for param in func_params.keys():
+        if api_params[param] == None:
+            api_params.pop(param)
+
+    response = requests.put(api, params=api_params)
     return True
 
 
@@ -96,10 +117,10 @@ def deactivate_user(user_id: int):
 
 def users_names(label="select user") -> List[Select]:
     # Connect to users list endpoint
-    api_user_name = f"{base_url}/api/users"
-    response_user_name = requests.get(api_user_name)
-    user_name_rows = [Select(value="", display_value=label)]
-    for item in response_user_name.json():
-        d = Select(value=item["id"], display_value=item["short_name"])
-        user_name_rows.append(d)
-    return user_name_rows
+    api_username = f"{base_url}/api/users"
+    response_username = requests.get(api_username)
+    username_rows = [Select(value="", display_value=label)]
+    for item in response_username.json():
+        d = Select(value=item["id"], display_value=item["username"])
+        username_rows.append(d)
+    return username_rows

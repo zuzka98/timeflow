@@ -1,10 +1,4 @@
-import asyncio
-from cProfile import label
-import json
-from idom import html, run, use_state, component, event
-import requests
-from sanic import Sanic, response
-from black import click
+from idom import html, use_state, component, event
 
 from .utils import switch_state
 

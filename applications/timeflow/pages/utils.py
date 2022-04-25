@@ -1,10 +1,7 @@
 # pages shared logic goes here
 
-import requests
-from ..config import base_url
 from typing import TypedDict, Callable, List
 from datetime import datetime
-from idom import component
 
 
 class Select(TypedDict):

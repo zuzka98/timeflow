@@ -1,7 +1,7 @@
 import requests
 import json
 from ..config import base_url
-from typing import List, Dict, TypedDict
+from typing import List, TypedDict
 from datetime import datetime
 from .common import Select
 

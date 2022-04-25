@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
-from sqlmodel import Session, select, SQLModel, or_
+from sqlmodel import Session, select, or_
 from ..models.epic_area import EpicArea
 from ..models.epic import Epic
 from sqlalchemy.exc import NoResultFound
@@ -83,7 +83,6 @@ async def get_active_epic_area_list(session: Session = Depends(get_session)):
     return results
 
 
-
 @router.put("/{epic_area_name}/deactivate")
 async def deactivate_epic_area(
     epic_area_name: str = None,
@@ -108,6 +107,7 @@ async def deactivate_epic_area(
     session.commit()
     session.refresh(epic_area_to_deactivate)
     return epic_area_to_deactivate
+
 
 @router.put("/{epic_area_name}/activate")
 async def activate_epic_area(
@@ -161,7 +161,7 @@ async def update_epic_area(
         Defaults to creating a dependency on the running SQL model session.
     """
     statement = select(EpicArea).where(EpicArea.id == id)
-    
+
     epic_area_to_update = session.exec(statement).one()
     if new_epic_id != None:
         epic_area_to_update.epic_id = new_epic_id

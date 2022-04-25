@@ -6,12 +6,13 @@ from sqlmodel import SQLModel, Session, create_engine
 from sqlmodel.pool import StaticPool
 from ..api.epic import get_session
 
+
 @pytest.mark.order(7)
 def test_post_user(client):
     response = client.post(
         "/api/users/",
         json={
-            "short_name": "jsmith",
+            "username": "jsmith",
             "first_name": "John",
             "last_name": "Smith",
             "email": "jsmith@dyvenia.com",
@@ -26,7 +27,7 @@ def test_post_user(client):
     data = response.json()
     assert response.status_code == 200
     assert data == {
-        "short_name": "jsmith",
+        "username": "jsmith",
         "last_name": "Smith",
         "role_id": 1,
         "team_id": 1,
@@ -45,7 +46,7 @@ def test_get_users(client):
     data = response.json()
     assert data == [
         {
-            "short_name": "jsmith",
+            "username": "jsmith",
             "last_name": "Smith",
             "role_id": 1,
             "team_id": 1,

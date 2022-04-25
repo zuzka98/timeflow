@@ -1,12 +1,6 @@
-import asyncio
-from cProfile import label
-import json
-from idom import html, run, use_state, component, event
-import requests
-from sanic import Sanic, response
-from black import click
+from idom import html, use_state, component, event
 
-from .utils import switch_state, capacity_days_list
+from .utils import switch_state
 
 from uiflow.components.input import Input, Selector2
 from uiflow.components.layout import Row, Column, Container

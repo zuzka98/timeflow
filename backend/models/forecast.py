@@ -1,5 +1,5 @@
 from typing import Optional
-from sqlmodel import Field, SQLModel, MetaData
+from sqlmodel import Field, SQLModel
 from pydantic import validator
 from datetime import datetime
 import numpy as np
