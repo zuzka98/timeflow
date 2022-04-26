@@ -25,7 +25,7 @@ def create_connection_str():
 con_str = create_connection_str()
 
 # Create the engine to be used to enter data into the database
-engine = create_engine(con_str, echo=True, pool_size=10)
+engine = create_engine(con_str, echo=True, pool_size=20)
 
 
 def get_session():
