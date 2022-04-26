@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
 from sqlmodel import Session, select, or_
 from ..models.team import Team
-from ..models.user import User
+from ..models.user import AppUser
 from sqlalchemy.exc import NoResultFound
 from datetime import datetime
 
@@ -39,7 +39,7 @@ async def post_team(
 
 
 @router.get("/")
-async def get_team_list(session: Session = Depends(get_session)):
+async def get_teams_list(session: Session = Depends(get_session)):
     """
     Get list of all teams.
 
@@ -71,10 +71,10 @@ async def get_active_team_list(session: Session = Depends(get_session)):
             Team.lead_user_id,
             Team.name.label("team_name"),
             Team.short_name.label("team_short_name"),
-            User.id,
-            User.short_name.label("user_name"),
+            AppUser.id,
+            AppUser.username.label("username"),
         )
-        .join(User)
+        .join(AppUser)
         .where(Team.is_active == True)
     )
     results = session.exec(statement).all()
@@ -104,7 +104,7 @@ async def read_teams(team_name: str = None, session: Session = Depends(get_sessi
 
 
 @router.get("/{team_id}/user-name")
-async def get_user_name_by_team_id(
+async def get_username_by_team_id(
     team_id: int, session: Session = Depends(get_session)
 ):
     """
@@ -119,10 +119,10 @@ async def get_user_name_by_team_id(
         Defaults to creating a dependency on the running SQL model session.
     """
     statement = (
-        select(Team.id, User.id, User.name)
-        .join(User)
+        select(Team.id, AppUser.id, AppUser.name)
+        .join(AppUser)
         .where(Team.id == team_id)
-        .where(User.active == True)
+        .where(AppUser.active == True)
     )
     result = session.exec(statement).one()
     return result
@@ -182,9 +182,9 @@ async def deactivate_team(
 
 @router.put("/")
 async def update_team(
-    id: str = None,
-    lead_user_id: str = None,
-    name: str = None,
+    id: str,
+    new_lead_user_id: str = None,
+    new_name: str = None,
     is_active: bool = None,
     session: Session = Depends(get_session),
 ):
@@ -205,13 +205,16 @@ async def update_team(
         SQL session that is to be used to update the team.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(Team).where(or_(Team.name == name, Team.id == id))
+    statement = select(Team).where(Team.id == id)
     team_to_update = session.exec(statement).one()
-    team_to_update.lead_user_id = lead_user_id
-    team_to_update.name = name
-    team_to_update.is_active = is_active
+    if new_lead_user_id != None:
+        team_to_update.lead_user_id = new_lead_user_id
+    if new_name != None:
+        team_to_update.name = new_name
+    if is_active != None:
+        team_to_update.is_active = is_active
     session.add(team_to_update)
     team_to_update.updated_at = datetime.now()
     session.commit()
     session.refresh(team_to_update)
-    return team_to_update
+    return True

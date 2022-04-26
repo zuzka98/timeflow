@@ -1,9 +1,7 @@
-from sqlite3.dbapi2 import Timestamp, adapt
 from typing import Optional
 from sqlmodel import Field, SQLModel, Field
-from pydantic import validator, root_validator, ValidationError
-from datetime import datetime, timedelta
-from ..utils import string_to_datetime
+from pydantic import root_validator
+from datetime import datetime
 
 
 # {
@@ -20,15 +18,19 @@ from ..utils import string_to_datetime
 
 
 class TimeLog(SQLModel, table=True):
+    """Create an SQLModel for timelogs"""
+
     id: Optional[int] = Field(default=None, primary_key=True)
-    user_id: int = Field(foreign_key="user.id")
+    user_id: int = Field(foreign_key="app_db.appuser.id")
     start_time: datetime
     end_time: datetime
-    epic_id: int = Field(foreign_key="epic.id")
+    epic_id: int = Field(foreign_key="app_db.epic.id")
     count_hours: float
     count_days: float
     month: int
     year: int
+
+    __table_args__ = {"schema": "app_db"}
 
     @root_validator(pre=True)
     def check_time_delta(cls, values):

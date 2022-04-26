@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
-from sqlmodel import Session, select, SQLModel, or_
+from sqlmodel import Session, select
 from sqlalchemy.exc import NoResultFound
-from ..models.user import User
+from ..models.user import AppUser
 from ..models.role import Role
 from ..models.team import Team
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, date
 
 router = APIRouter(prefix="/api/users", tags=["user"])
 session = Session(engine)
@@ -14,7 +14,7 @@ session = Session(engine)
 
 @router.post("/")
 async def post_user(
-    user: User,
+    user: AppUser,
     session: Session = Depends(get_session),
 ):
     """
@@ -28,7 +28,7 @@ async def post_user(
         SQL session that is to be used to add the user.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(User).where(User.short_name == user.short_name)
+    statement = select(AppUser).where(AppUser.username == user.username)
     try:
         result = session.exec(statement).one()
         return False
@@ -43,7 +43,7 @@ async def post_user(
 async def get_users(
     session: Session = Depends(get_session),
     is_active: bool = None,
-    short_name: str = None,
+    username: str = None,
 ):
     """
     Get list of user(s).
@@ -55,25 +55,25 @@ async def get_users(
         Defaults to creating a dependency on the running SQL model session.
     is_active : bool
         Status of users to be pulled.
-    short_name : str
+    username : str
         Short name of user to be pulled.
     """
-    statement = select(User)
+    statement = select(AppUser)
     if is_active != None:
         statement = (
             select(
-                User.short_name,
-                User.first_name,
-                User.last_name,
+                AppUser.username,
+                AppUser.first_name,
+                AppUser.last_name,
                 Role.short_name.label("role_short_name"),
                 Team.short_name.label("main_team"),
-                User.start_date,
+                AppUser.start_date,
             )
-            .select_from(User)
-            .join(Role, User.role_id == Role.id, isouter=True)
-            .join(Team, User.team_id == Team.id, isouter=True)
-            .where(User.is_active == is_active)
-            .order_by(User.start_date.desc())
+            .select_from(AppUser)
+            .join(Role, AppUser.role_id == Role.id, isouter=True)
+            .join(Team, AppUser.team_id == Team.id, isouter=True)
+            .where(AppUser.is_active == is_active)
+            .order_by(AppUser.start_date.desc())
         )
     result = session.exec(statement).all()
     return result
@@ -83,11 +83,13 @@ async def get_users(
 async def update_user(
     user_id: int,
     is_active: Optional[bool] = None,
-    new_short_name: Optional[str] = None,
+    new_username: Optional[str] = None,
     new_first_name: Optional[str] = None,
     new_last_name: Optional[str] = None,
     new_email: Optional[str] = None,
-    new_team_id: Optional[str] = None,
+    new_team_id: Optional[int] = None,
+    new_role_id: Optional[int] = None,
+    new_start_date: Optional[date] = None,
     session: Session = Depends(get_session),
 ):
     """
@@ -99,26 +101,30 @@ async def update_user(
         ID of user to be updated.
     is_active : Optional[bool]
         Updated status of user.
-    new_short_name : Optional[bool]
+    new_username : Optional[str]
         Updated short name of user.
-    new_first_name : Optional[bool]
+    new_first_name : Optional[str]
         Updated first name of user.
-    new_last_name : Optional[bool]
+    new_last_name : Optional[str]
         Updated last name of user.
-    new_email : Optional[bool]
+    new_email : Optional[str]
         Updated email of user
-    new_team_id : Optional[bool]
+    new_team_id : Optional[int]
         Updated team id.
+    new_role_id : Optional[int]
+        Updated role id.
+    new_start_date : Optional[date]
+        Updated start date.
     session : Session
         SQL session that is to be used to update the user.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(User).where(User.id == user_id)
+    statement = select(AppUser).where(AppUser.id == user_id)
     user_to_update = session.exec(statement).one()
     if is_active != None:
         user_to_update.is_active = is_active
-    if new_short_name != None:
-        user_to_update.short_name = new_short_name
+    if new_username != None:
+        user_to_update.username = new_username
     if new_first_name != None:
         user_to_update.first_name = new_first_name
     if new_last_name != None:
@@ -127,6 +133,10 @@ async def update_user(
         user_to_update.email = new_email
     if new_team_id != None:
         user_to_update.team_id = new_team_id
+    if new_role_id != None:
+        user_to_update.role_id = new_role_id
+    if new_start_date != None:
+        user_to_update.start_date = new_start_date
     user_to_update.updated_at = datetime.now()
     session.add(user_to_update)
     session.commit()

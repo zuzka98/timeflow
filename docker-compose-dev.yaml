@@ -1,11 +1,38 @@
 version: '3'
+
 networks:
   static-network:
     ipam:
       driver: default
       config:
         - subnet: 172.28.0.0/16
+
 services:
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: test_db
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: password
+    networks:
+      static-network:
+        ipv4_address: 172.28.1.3
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - 5433:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pguser@postgres.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    networks:
+      static-network:
+        ipv4_address: 172.28.1.4
+
   fastapi:
     image: fastapi:v1
     volumes:
@@ -14,6 +41,8 @@ services:
       bash -c "rm -f backend/database.sqlite  && export TIMEFLOW_DEV=true  && uvicorn backend.main:app --reload --port 8002 --host 0.0.0.0"
     ports:
       - 8002:8002
+    env_file:
+      - .env
     container_name: fastapi
     stdin_open: true # docker run -i
     tty: true # docker run -t
@@ -21,15 +50,18 @@ services:
       static-network:
         ipv4_address: 172.28.1.2
 
-  idom:
+  applications:
+    #python3 /applications/main2.py && ls
     image: idom:v1
     volumes:
-      - ./frontend/:/frontend/
+      - ./:/applications
     command: >
-      bash -c "cd frontend  && export TIMEFLOW_DEV=true  && python3 -m run_reload.py"
+      bash -c "export TIMEFLOW_DEV=true  && cd /applications && uvicorn main:app --workers 1 --host 0.0.0.0 --port 8001 --reload --ssl-keyfile certs/127.0.0.1-key.pem  --ssl-certfile certs/127.0.0.1.pem  --access-log"
     ports:
       - 8001:8001
-    container_name: idom
+    env_file:
+      - .env
+    container_name: applications
     networks:
       static-network:
         ipv4_address: 172.28.1.1

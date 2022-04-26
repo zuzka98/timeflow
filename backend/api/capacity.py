@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
 from ..models.capacity import Capacity
-from sqlmodel import Session, select, SQLModel, and_
+from sqlmodel import Session, select, and_
 from sqlalchemy.exc import NoResultFound
-from ..models.user import User
+from ..models.user import AppUser
 from ..models.team import Team
 
 router = APIRouter(prefix="/api/capacities", tags=["capacity"])
@@ -75,14 +75,14 @@ async def get_capacities(
         statement = (
             select(
                 Capacity.id.label("capacity_id"),
-                User.short_name.label("user_short_name"),
+                AppUser.username.label("user_username"),
                 Team.short_name.label("team_short_name"),
                 Capacity.year,
                 Capacity.month,
                 Capacity.days,
             )
             .select_from(Capacity)
-            .join(User, Capacity.user_id == User.id)
+            .join(AppUser, Capacity.user_id == AppUser.id)
             .join(Team, Capacity.team_id == Team.id)
             .where(Capacity.user_id == user_id)
             .where(Capacity.team_id == team_id)
