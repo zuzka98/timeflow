@@ -6,13 +6,46 @@ networks:
       config:
         - subnet: 172.28.0.0/16
 services:
+  db:
+    image: postgres:14
+    env_file:
+      - .env
+    ports:
+      - ${POSTGRE_PORT}:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRE_PASS}
+      POSTGRES_USER: ${POSTGRE_USER}
+      POSTGRES_DB: ${POSTGRE_DB}
+    networks:
+      static-network:
+        ipv4_address: 172.28.1.3
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - 5433:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    networks:
+      static-network:
+        ipv4_address: 172.28.1.4
+
   fastapi:
     image: fastapi:v1
     volumes:
       - ./backend/:/backend/
-    command: bash -c "uvicorn backend.main:app --reload --port 8002 --host 0.0.0.0"
+    command: bash -c "export TIMEFLOW_DEV=false  && uvicorn backend.main:app --reload --port 8002 --host 0.0.0.0"
     ports:
       - 8002:8002
+    depends_on:
+      - "db"
+    env_file:
+      - .env
     container_name: fastapi
     stdin_open: true # docker run -i
     tty: true # docker run -t
@@ -20,15 +53,22 @@ services:
       static-network:
         ipv4_address: 172.28.1.2
 
-  idom:
+  applications:
     image: idom:v1
     volumes:
-      - ./frontend/:/frontend/
+      - ./:/applications
     command: >
-      bash -c "cd frontend  && export TIMEFLOW_DEV=false && python3 -m run_reload.py"
+      bash -c "export TIMEFLOW_DEV=false  && cd /applications && uvicorn main:app --workers 1 --host 0.0.0.0 --port 8001 --reload --access-log"
     ports:
       - 8001:8001
-    container_name: idom
+    depends_on:
+      - "db"
+    env_file:
+      - .env
+    container_name: applicationscd
     networks:
       static-network:
         ipv4_address: 172.28.1.1
+
+volumes:
+  db-data:
