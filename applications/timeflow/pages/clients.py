@@ -10,13 +10,15 @@ from uiflow.components.table import SimpleTable, SubmitTable
 from uiflow.components.controls import Button
 
 from ..config import base_url
+from ..data.clients import client_deactivation
 
-
+from .utils import switch_state
 @component
 def page():
     name, set_name = use_state("")
     submitted_name, set_submitted_name = use_state("")
     deleted_name, set_deleted_name = use_state("")
+    is_event, set_is_event = use_state(True)
     return FlexContainer(
         Column(width="3/12"),
         Column(
@@ -27,6 +29,7 @@ def page():
             Column(
                 Row(list_clients(submitted_name)),
             ),
+            Row(deactivate_client(is_event, set_is_event)),
             Row(delete_client(set_deleted_name)),
             width="6/12",
         ),
@@ -117,3 +120,14 @@ def delete_client(set_deleted_name):
         "Submit",
     )
     return Column(Row(inp_client_id, inp_client_name), Row(btn))
+
+@component
+def deactivate_client(is_event, set_is_event):
+    del_client_id, set_del_client_id = use_state("")    
+    def deactivate_client(event):
+        client_deactivation(del_client_id, is_active=False)
+        switch_state(is_event, set_is_event)
+
+    inp_deactivate_client = Input(set_del_client_id, "Client id to be deactivated")
+    btn = Button(False, deactivate_client, "Deactivate")
+    return Column(inp_deactivate_client, btn)

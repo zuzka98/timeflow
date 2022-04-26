@@ -242,12 +242,14 @@ async def update_clients_and_epics(
     return True
 
 
-@router.put("/{client_id}/new-name")
+@router.put("/{client_id}")
 async def update_clients(
     *,
     client_id: int = None,
     new_client_name: str = None,
+    is_active: bool = None,
     session: Session = Depends(get_session),
+
 ):
     """
     Update a client from a client_id.
@@ -264,7 +266,10 @@ async def update_clients(
     """
     statement = select(Client).where(Client.id == client_id)
     client_to_update = session.exec(statement).one()
-    client_to_update.name = new_client_name
+    if new_client_name != None:
+        client_to_update.name = new_client_name
+    if is_active != None:
+        client_to_update.is_active = is_active
     client_to_update.updated_at = datetime.now()
     session.add(client_to_update)
     session.commit()

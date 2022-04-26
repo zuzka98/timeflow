@@ -12,3 +12,9 @@ def clients_names() -> List[Select]:
         d = Select(value=item["id"], display_value=item["name"])
         client_name_rows.append(d)
     return client_name_rows
+
+def client_deactivation(client_id, is_active) -> bool:
+    api = f"{base_url}/api/clients/"
+    params = {"is_active": is_active}
+    response= requests.get(api, params)
+    return True
