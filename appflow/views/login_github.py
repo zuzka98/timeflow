@@ -3,14 +3,11 @@ import os
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi import Request
-from dotenv import load_dotenv
 from requests_oauthlib import OAuth2Session
 from applications.timeflow.data.users import to_user
 
 router = APIRouter()
 
-# Load in env variables
-load_dotenv()
 
 # to be removed and replaced with docker-compose-dev
 TIMEFLOW_DEV = os.getenv("TIMEFLOW_DEV")
