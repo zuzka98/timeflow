@@ -1,3 +1,5 @@
+import os
+
 from pathlib import Path
 from os import path
 
@@ -12,15 +14,13 @@ from idom.backend.starlette import Options
 from appflow.views.index import router as index_router
 from appflow.views.site import router as site_router
 from appflow.views.timeflow import router as timeflow_router
-from appflow.views.login_github import router as gh_login_router
+from appflow.views.login_github import SESSION_SECRET_KEY, router as gh_login_router
 
 # Applications
 from applications.site.index import site_index
 from applications.timeflow.index import timeflow
 
-
-# Env Variables
-SESSION_SECRET_KEY = 123
+SESSION_SECRET_KEY = os.getenv("SESSION_SECRET_KEY")
 
 # Create the fastapi app
 app = fastapi.create_development_app()

@@ -1,7 +1,8 @@
 import os
 from fastapi import *
+from psycopg2.errors import UndefinedTable
 from sqlmodel import Session, select, text
-from sqlalchemy.exc import OperationalError
+from sqlalchemy.exc import ProgrammingError
 from .models.timelog import TimeLog
 from .models.calendar import Calendar
 from .utils import (
@@ -52,7 +53,7 @@ def on_startup():
         try:
             statement = select(TimeLog)
             results = session.exec(statement)
-        except OperationalError:
+        except ProgrammingError:
             create_db()
 
 
