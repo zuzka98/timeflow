@@ -60,7 +60,7 @@ async def read_clients(session: Session = Depends(get_session)):
         SQL session that is to be used to get a list of all of the active clients.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(Client).where(Client.is_active == True)
+    statement = select(Client).where(Client.is_active == True).order_by(Client.id.asc())
     results = session.exec(statement).all()
     return results
 

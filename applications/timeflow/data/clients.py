@@ -4,6 +4,18 @@ from typing import List
 from .common import Select
 
 
+def clients_active() -> List[Select]:
+    api = f"{base_url}/api/clients/active"
+    response = requests.get(api)
+    rows = []
+    for item in response.json():
+        d = {
+            "id": item["id"],
+            "name": item["name"],
+        }
+        rows.append(d)
+    return rows
+
 def clients_names() -> List[Select]:
     api_client_name = f"{base_url}/api/clients/active"
     response_client_name = requests.get(api_client_name)
@@ -12,6 +24,7 @@ def clients_names() -> List[Select]:
         d = Select(value=item["id"], display_value=item["name"])
         client_name_rows.append(d)
     return client_name_rows
+
 
 def client_is_active(client_id, is_active) -> bool:
     api = f"{base_url}/api/clients/{client_id}"
