@@ -10,7 +10,7 @@ from uiflow.components.table import SimpleTable, SubmitTable
 from uiflow.components.controls import Button
 
 from ..config import base_url
-from ..data.clients import clients_active, client_is_active
+from ..data.clients import to_client, clients_active, client_is_active
 
 from .utils import switch_state
 @component
@@ -51,17 +51,7 @@ def create_client_form(name, set_name, set_submitted_name):
 
     @event(prevent_default=True)
     async def handle_submit(event):
-        data = {
-            "name": name,
-            "is_active": True,
-            "created_at": str(datetime.now()),
-            "updated_at": str(datetime.now()),
-        }
-        response = requests.post(
-            f"{base_url}/api/clients",
-            data=json.dumps(data),
-            headers={"accept": "application/json", "Content-Type": "application/json"},
-        )
+        to_client(name)
         set_submitted_name(name)
 
     inp_name = Input(set_value=set_name, label="name")
