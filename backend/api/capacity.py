@@ -7,7 +7,6 @@ from ..models.user import AppUser
 from ..models.team import Team
 
 router = APIRouter(prefix="/api/capacities", tags=["capacity"])
-session = Session(engine)
 
 
 @router.post("/")

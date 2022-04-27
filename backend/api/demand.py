@@ -7,7 +7,6 @@ from ..models.team import Team
 from ..models.epic import Epic
 
 router = APIRouter(prefix="/api/demands", tags=["demand"])
-session = Session(engine)
 
 
 @router.post("/")

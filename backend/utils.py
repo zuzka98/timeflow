@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 from sqlmodel import Session, SQLModel, create_engine, text
 from sqlalchemy.schema import CreateSchema
+from fastapi import Depends
 
 
 def create_connection_str():
@@ -25,12 +26,11 @@ def create_connection_str():
 con_str = create_connection_str()
 
 # Create the engine to be used to enter data into the database
-engine = create_engine(con_str, echo=True, pool_size=10)
-
+engine = create_engine(con_str, echo=True, pool_size=20)
 
 def get_session():
-    session = Session(engine)
-    return session
+    with Session(engine) as session:
+        yield session
 
 
 def create_db():
@@ -43,22 +43,20 @@ def create_db():
     SQLModel.metadata.create_all(engine)
 
 
-def execute_sample_sql(session):
+def execute_sample_sql():
     """Read sample sql database and import it."""
     with open("backend/tests/sample.sql") as f:
         content = f.read()
 
     queries = filter(None, content.split(";\n"))
     queries = [text(query) for query in queries]
+    with Session(engine) as session:
+        for query in queries:
+            session.exec(query)
+            session.commit()
+            session.expire_all()
 
-    for query in queries:
-        session.exec(query)
 
-    session.commit()
-    session.expire_all()
-
-
-session = Session(engine)
 
 tags_metadata = [
     {

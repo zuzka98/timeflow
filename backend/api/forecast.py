@@ -6,7 +6,6 @@ from sqlmodel import Session, select, and_
 from sqlalchemy.exc import NoResultFound
 
 router = APIRouter(prefix="/api/forecasts", tags=["forecast"])
-session = Session(engine)
 
 
 @router.post("/")
