@@ -6,7 +6,6 @@ from ..models.role import Role
 from datetime import datetime
 
 router = APIRouter(prefix="/api/roles", tags=["role"])
-session = Session(engine)
 
 
 @router.post("/")

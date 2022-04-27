@@ -9,7 +9,6 @@ from typing import Optional
 from datetime import datetime, date
 
 router = APIRouter(prefix="/api/users", tags=["user"])
-session = Session(engine)
 
 
 @router.post("/")

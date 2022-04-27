@@ -6,7 +6,6 @@ from ..models.rate import Rate
 from datetime import datetime, timedelta
 
 router = APIRouter(prefix="/api/rates", tags=["rate"])
-session = Session(engine)
 
 
 @router.post("/")
