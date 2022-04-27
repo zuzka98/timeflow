@@ -10,7 +10,6 @@ from .utils import (
     create_db,
     tags_metadata,
     execute_sample_sql,
-    get_session
 )
 from .api import (
     user,
