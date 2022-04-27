@@ -72,7 +72,7 @@ async def get_active_epics_list(session: Session = Depends(get_session)):
 
 
 @router.get("/teams/{team_id}/sponsors/{sponsor_id}/")
-async def get_epic_by_team_sponsor(team_id: int, sponsor_id: int):
+async def get_epic_by_team_sponsor(team_id: int, sponsor_id: int, session: Session = Depends(get_session)):
     """
     Get list of epics by team id and sponsor id.
 
