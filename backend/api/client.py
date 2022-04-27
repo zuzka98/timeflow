@@ -7,7 +7,6 @@ from ..models.epic import Epic
 from datetime import datetime
 
 router = APIRouter(prefix="/api/clients", tags=["client"])
-session = Session(engine)
 
 
 @router.post("/")

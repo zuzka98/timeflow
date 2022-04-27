@@ -7,7 +7,6 @@ from sqlalchemy.exc import NoResultFound
 from datetime import datetime
 
 router = APIRouter(prefix="/api/teams", tags=["team"])
-session = Session(engine)
 
 
 @router.post("/")

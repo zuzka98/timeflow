@@ -7,7 +7,6 @@ from sqlalchemy.exc import NoResultFound
 from datetime import datetime
 
 router = APIRouter(prefix="/api/epic_areas", tags=["epic_area"])
-session = Session(engine)
 
 
 @router.post("/")
