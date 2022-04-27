@@ -13,8 +13,9 @@ def clients_names() -> List[Select]:
         client_name_rows.append(d)
     return client_name_rows
 
-def client_deactivation(client_id, is_active) -> bool:
-    api = f"{base_url}/api/clients/"
+def client_is_active(client_id, is_active) -> bool:
+    api = f"{base_url}/api/clients/{client_id}"
     params = {"is_active": is_active}
-    response= requests.get(api, params)
+    response= requests.put(api, params=params)
     return True
+
