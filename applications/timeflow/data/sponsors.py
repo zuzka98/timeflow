@@ -31,9 +31,11 @@ def get_active_sponsor_rows():
     rows = []
     for item in response.json():
         d = {
+            "Sponsor id": item["id"],
             "Sponsor name": item["sponsor_name"],
             "Sponsor short name": item["sponsor_short_name"],
             "Client name": item["client_name"],
+
         }
         rows.append(d)
 

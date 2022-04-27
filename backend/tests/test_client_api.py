@@ -47,7 +47,15 @@ def test_read_client_id(client):
     data2 = response2.json()
     assert data2 == "There is no client with id = 0"
 
+def test_deactivate_clients(client):
+    response = client.put("api/clients/1?is_active=false")
+    data = response.json()
+    assert response.status_code == 200
 
+def test_activate_clients(client):
+    response = client.put("api/clients/1?is_active=true")
+    data = response.json()
+    assert response.status_code == 200
 
 
 def test_update_clients(client):
