@@ -23,11 +23,6 @@ class AppUser(SQLModel, table=True):
 
     __table_args__ = {"schema": "app_db"}
 
-    @validator("username", always=True)
-    def valid_username(cls, sn_input):
-        assert sn_input.islower(), "username contains small letters only"
-        return sn_input
-
     @validator("first_name", always=True)
     def valid_first_name(cls, first_name):
         assert first_name.replace(
