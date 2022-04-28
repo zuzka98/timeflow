@@ -108,9 +108,9 @@ def create_epic_form(
         set_submitted_name(name)
 
     inp_short_name = Input(
-        set_short_name, "epics short name", width="[14%]", md_width="[32%]"
+        set_short_name, "New epics short name", placeholder="", width="[14%]", md_width="[32%]"
     )
-    inp_name = Input(set_name, "epics full name", width="[14%]", md_width="[32%]")
+    inp_name = Input(set_name, "New epics full name", placeholder="", width="[14%]", md_width="[32%]")
     selector_team = Selector2(set_team_id, teams_id_name(), width="14%", md_width="32%")
     selector_sponsor = Selector2(
         set_sponsor_id, sponsors_id_name(), width="14%", md_width="32%"
