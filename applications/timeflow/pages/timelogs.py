@@ -18,6 +18,7 @@ from ..data.common import (
 
 from ..data.timelogs import to_timelog, timelog_by_user_epic_year_month
 from ..data.epics import epics_names
+from ..data.epic_areas import epic_areas_names
 
 from ..config import base_url
 from uiflow.components.controls import TableActions
@@ -30,6 +31,7 @@ def page():
     day, set_day = use_state("")
     user_id, set_user_id = use_state("")
     epic_id, set_epic_id = use_state("")
+    epic_area_id, set_epic_area_id = use_state("")
     start_time, set_start_time = use_state("")
     end_time, set_end_time = use_state("")
     deleted_timelog, set_deleted_timelog = use_state("")
@@ -46,6 +48,8 @@ def page():
             set_user_id,
             epic_id,
             set_epic_id,
+            epic_area_id,
+            set_epic_area_id,
             start_time,
             set_start_time,
             end_time,
@@ -72,6 +76,8 @@ def create_timelog_form(
     set_user_id,
     epic_id,
     set_epic_id,
+    epic_area_id,
+    set_epic_area_id,
     start_time,
     set_start_time,
     end_time,
@@ -86,6 +92,7 @@ def create_timelog_form(
     "start_time": "string",
     "end_time": "string",
     "epic_id": 0,
+    "epic_area_id": 0,
     "count_hours": 0,
     "count_days": 0,
     "month": 0,
@@ -109,6 +116,7 @@ def create_timelog_form(
             end_time=end_time_post,
             user_id=user_id,
             epic_id=epic_id,
+            epic_area_id=epic_area_id,
             count_hours=0,
             count_days=0,
             month=month,
@@ -124,6 +132,10 @@ def create_timelog_form(
     selector_epic_id = Selector2(
         set_value=set_epic_id,
         data=epics_names(),
+    )
+    selector_epic_area_id = Selector2(
+        set_value=set_epic_area_id,
+        data=epic_areas_names(),
     )
     selector_year_month = Selector2(
         set_value=set_year_month,
@@ -164,6 +176,7 @@ def create_timelog_form(
                 },
                 selector_user,
                 selector_epic_id,
+                selector_epic_area_id,
                 selector_year_month,
                 selector_days,
                 selector_start_time,
@@ -190,6 +203,7 @@ def timelogs_table(user_id, epic_id, year_month, is_true):
                 "timelog id": item["id"],
                 "username": item["username"],
                 "epic name": item["epic_name"],
+                "epic area name": item["epic_area_name"],
                 "start time": (item["start_time"]).replace("T", " "),
                 "end time": (item["end_time"]).replace("T", " "),
                 "count hours": item["count_hours"],

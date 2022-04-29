@@ -56,10 +56,10 @@ VALUES
     (3, 2, '2022-03-01', '2022-04-01', 500, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE),
     (3, 3, '2022-01-01', '2022-02-01', 300, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
 
-INSERT INTO app_db.timelog (user_id, start_time, end_time, epic_id, epic_area_id, count_hours, count_days, month, year)
+INSERT INTO app_db.timelog (user_id, start_time, end_time, epic_id, count_hours, count_days, month, year, epic_area_id)
 VALUES
-    (1, '2022-04-03 08:30:00.000000', '2022-04-03 13:45:00.000000', 1, 1, 5.25, 0.66, 1, 2022),
-    (1, '2022-05-03 09:30:00.000000', '2022-05-03 12:15:00.000000', 1, 1, 3.25, 0.41, 4, 2022);
+    (1, '2022-04-03 08:30:00.000000', '2022-04-03 13:45:00.000000', 1, 5.25, 0.66, 1, 2022, 1),
+    (1, '2022-05-03 09:30:00.000000', '2022-05-03 12:15:00.000000', 1, 3.25, 0.41, 4, 2022, 1);
     
 INSERT INTO app_db.forecast (user_id, epic_id, days, month, year)
 VALUES
