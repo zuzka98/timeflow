@@ -4,6 +4,7 @@ from sqlmodel import Session, select
 from ..models.user import AppUser
 from ..models.timelog import TimeLog
 from ..models.epic import Epic
+from ..models.epic_area import EpicArea
 
 router = APIRouter(prefix="/api/timelogs", tags=["timelog"])
 
@@ -58,9 +59,9 @@ async def timelog(*, timelog: TimeLog, session: Session = Depends(get_session)):
     else:
         time_delta = timelog.end_time - timelog.start_time
         work_delta_hours = time_delta.total_seconds() / 3600
-        work_hours = "{:.2f}".format(work_delta_hours)
+        work_hours = "{:.3f}".format(work_delta_hours)
         work_delta_days = time_delta.total_seconds() / 3600 / 8
-        work_days = "{:.2f}".format(work_delta_days)
+        work_days = "{:.3f}".format(work_delta_days)
         timelog.count_hours = work_hours
         timelog.count_days = work_days
         session.add(timelog)
@@ -85,6 +86,7 @@ async def get_timelogs_all(session: Session = Depends(get_session)):
             TimeLog.id,
             AppUser.username.label("username"),
             Epic.short_name.label("epic_name"),
+            EpicArea.name.label("epic_area_name"),
             TimeLog.start_time,
             TimeLog.end_time,
             TimeLog.count_hours,
@@ -92,6 +94,7 @@ async def get_timelogs_all(session: Session = Depends(get_session)):
         )
         .join(AppUser)
         .join(Epic)
+        .join(EpicArea)
         .order_by(TimeLog.end_time.desc())
     )
     results = session.exec(statement).all()

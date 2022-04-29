@@ -18,7 +18,6 @@ def fetch_username():
     """
     Return GitHub username of logged in user.
     """
-    print(fastapi.use_scope())
     session = fastapi.use_scope()["session"]
     username = session["username"]
     return username

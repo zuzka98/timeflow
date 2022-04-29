@@ -29,6 +29,7 @@ class TimeLog(SQLModel, table=True):
     count_days: float
     month: int
     year: int
+    epic_area_id: int = Field(foreign_key="app_db.epicarea.id")
 
     __table_args__ = {"schema": "app_db"}
 

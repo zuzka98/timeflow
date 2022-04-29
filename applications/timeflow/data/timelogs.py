@@ -20,6 +20,7 @@ def to_timelog(
     end_time: str,
     user_id: int,
     epic_id: int,
+    epic_area_id: int,
     count_hours: float,
     count_days: float,
     month: int,
@@ -34,6 +35,7 @@ def to_timelog(
         count_days=0,
         month=str(month),
         year=str(year),
+        epic_area_id=epic_area_id,
     )
     response = requests.post(
         f"{base_url}/api/timelogs",
