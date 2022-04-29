@@ -25,6 +25,7 @@ class TimeLog(SQLModel, table=True):
     start_time: datetime
     end_time: datetime
     epic_id: int = Field(foreign_key="app_db.epic.id")
+    epic_area_id: int = Field(foreign_key="app_db.epic_area.id")
     count_hours: float
     count_days: float
     month: int
