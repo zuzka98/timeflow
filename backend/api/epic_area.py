@@ -91,7 +91,7 @@ async def deactivate_epic_area(
     Parameters
     ----------
     epic_area_name : str
-        Name of the epic area to be deactivated
+        ID of the epic area to be deactivated
     session : Session
         SQL session that is to be used to deactivate an epic area.
         Defaults to creating a dependency on the running SQL model session.
@@ -117,7 +117,7 @@ async def activate_epic_area(
     Parameters
     ----------
     epic_area_name : str
-        Name of the epic area to be activated
+        ID of the epic area to be activated
     session : Session
         SQL session that is to be used to activate an epic area.
         Defaults to creating a dependency on the running SQL model session.

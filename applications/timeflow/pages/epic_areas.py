@@ -123,9 +123,11 @@ def deactivate_epic_area(set_deact_name):
         epic_area_deactivation(name_to_deact)
         set_deact_name(name_to_deact)
 
-    # Create input field for name of epic area to be deactivated
+    # Create input field for id of epic area to be deactivated
     inp_deact_name = Input(
-        set_value=set_name_to_deact, label="epic area to be deactivated", width="full"
+        set_value=set_name_to_deact,
+        label="id of the epic area to be deactivated",
+        width="full",
     )
 
     # Create the deactivation button
