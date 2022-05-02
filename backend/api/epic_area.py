@@ -55,7 +55,7 @@ async def get_epic_areas_list(epic_id, session: Session = Depends(get_session)):
             EpicArea.name.label("epic_area_name"),
             Epic.id,
             Epic.name.label("epic_name"),
-        ).join(Epic).where(EpicArea.is_active == True).where(EpicArea.epic_id == epic_id)
+        ).join(Epic).where(EpicArea.is_active == True).where(EpicArea.epic_id == epic_id).order_by(EpicArea.name.asc())
     else:
         statement = select(EpicArea)
     results = session.exec(statement).all()
