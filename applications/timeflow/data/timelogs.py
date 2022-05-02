@@ -56,6 +56,7 @@ def timelog_by_user_epic_year_month(user_id, epic_id, year, month) -> List[Dict]
                 "timelog id": item["id"],
                 "username": item["username"],
                 "epic name": item["epic_name"],
+                "epic area name": item["epic_area_name"],
                 "start time": (item["start_time"]).replace("T", " "),
                 "end time": (item["end_time"]).replace("T", " "),
                 "count hours": item["count_hours"],

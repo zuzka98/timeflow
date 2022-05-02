@@ -146,6 +146,7 @@ async def get_timelog_user_id(
             TimeLog.id,
             AppUser.username.label("username"),
             Epic.short_name.label("epic_name"),
+            EpicArea.name.label("epic_area_name"),
             TimeLog.start_time,
             TimeLog.end_time,
             TimeLog.count_hours,
@@ -153,6 +154,7 @@ async def get_timelog_user_id(
         )
         .join(AppUser)
         .join(Epic)
+        .join(EpicArea)
         .where(TimeLog.user_id == user_id)
         .where(TimeLog.epic_id == epic_id)
         .where(TimeLog.month == month)
