@@ -38,7 +38,7 @@ async def post_epic_area(
 
 
 @router.get("/")
-async def get_epic_areas_list(session: Session = Depends(get_session)):
+async def get_epic_areas_list(epic_id, session: Session = Depends(get_session)):
     """
     Get list of epic areas.
 
@@ -48,8 +48,16 @@ async def get_epic_areas_list(session: Session = Depends(get_session)):
         SQL session that is to be used to get a list of the epic areas.
         Defaults to creating a dependency on the running SQL model session.
     """
-
-    statement = select(EpicArea)
+    if epic_id != None:
+        statement = select(
+            EpicArea.id,
+            EpicArea.epic_id,
+            EpicArea.name.label("epic_area_name"),
+            Epic.id,
+            Epic.name.label("epic_name"),
+        ).join(Epic).where(EpicArea.is_active == True).where(EpicArea.epic_id == epic_id)
+    else:
+        statement = select(EpicArea)
     results = session.exec(statement).all()
     return results
 

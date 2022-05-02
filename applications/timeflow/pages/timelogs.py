@@ -18,7 +18,7 @@ from ..data.common import (
 
 from ..data.timelogs import to_timelog, timelog_by_user_epic_year_month
 from ..data.epics import epics_names
-from ..data.epic_areas import epic_areas_names
+from ..data.epic_areas import epic_areas_names, epic_areas_names_by_epic_id
 
 from ..config import base_url
 from uiflow.components.controls import TableActions
@@ -30,7 +30,7 @@ def page():
     year_month, set_year_month = use_state("")
     day, set_day = use_state("")
     user_id, set_user_id = use_state("")
-    epic_id, set_epic_id = use_state("")
+    epic_id, set_epic_id = use_state(0)
     epic_area_id, set_epic_area_id = use_state("")
     start_time, set_start_time = use_state("")
     end_time, set_end_time = use_state("")
@@ -106,8 +106,6 @@ def create_timelog_form(
         year = a[:4]
         month = a[5:7]
 
-        # year_int = int(year)
-        # month_int = int(month)
         start_time_post = f"{year}-{month}-{day} {start_time}"
         end_time_post = f"{year}-{month}-{day} {end_time}"
 
@@ -117,8 +115,6 @@ def create_timelog_form(
             user_id=user_id,
             epic_id=epic_id,
             epic_area_id=epic_area_id,
-            count_hours=0,
-            count_days=0,
             month=month,
             year=year,
         )
@@ -135,7 +131,7 @@ def create_timelog_form(
     )
     selector_epic_area_id = Selector2(
         set_value=set_epic_area_id,
-        data=epic_areas_names(),
+        data=epic_areas_names_by_epic_id(epic_id),
     )
     selector_year_month = Selector2(
         set_value=set_year_month,

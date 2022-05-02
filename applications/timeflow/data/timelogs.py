@@ -9,6 +9,7 @@ class Timelog(TypedDict):
     end_time: str
     user_id: int
     epic_id: int
+    epic_area_id: int
     count_hours: float
     count_days: float
     month: int
@@ -21,8 +22,6 @@ def to_timelog(
     user_id: int,
     epic_id: int,
     epic_area_id: int,
-    count_hours: float,
-    count_days: float,
     month: int,
     year: int,
 ) -> bool:
@@ -31,17 +30,18 @@ def to_timelog(
         end_time=end_time,
         user_id=user_id,
         epic_id=epic_id,
+        epic_area_id=epic_area_id,
         count_hours=0,
         count_days=0,
         month=str(month),
         year=str(year),
-        epic_area_id=epic_area_id,
     )
     response = requests.post(
         f"{base_url}/api/timelogs",
         data=json.dumps(dict(data)),
         headers={"accept": "application/json", "Content-Type": "application/json"},
     )
+    print(data)
     return True
 
 
