@@ -66,7 +66,7 @@ async def get_active_epics_list(session: Session = Depends(get_session)):
         SQL session that is to be used to get a list of the active epics.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(Epic).where(Epic.is_active == True)
+    statement = select(Epic).where(Epic.is_active == True).order_by(Epic.short_name.asc())
     results = session.exec(statement).all()
     return results
 

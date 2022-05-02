@@ -47,6 +47,15 @@ def epic_areas_names() -> List[Select]:
         epic_area_name_rows.append(d)
     return epic_area_name_rows
 
+def epic_areas_names_by_epic_id(epic_id) -> List[Select]:
+    api = f"{base_url}/api/epic_areas"
+    params = {"epic_id": epic_id}
+    response = requests.get(api, params=params)
+    rows = [Select(value="", display_value="select epic area")]
+    for item in response.json():
+        d = Select(value=item["id"], display_value=item["epic_area_name"])
+        rows.append(d)
+    return rows
 
 def post_epic_area(epic_id: int, name: str):
     data = {

@@ -93,8 +93,8 @@ async def get_timelogs_all(session: Session = Depends(get_session)):
             TimeLog.count_days,
         )
         .join(AppUser)
-        .join(Epic)
         .join(EpicArea)
+        .join(Epic)
         .order_by(TimeLog.end_time.desc())
     )
     results = session.exec(statement).all()
@@ -146,12 +146,14 @@ async def get_timelog_user_id(
             TimeLog.id,
             AppUser.username.label("username"),
             Epic.short_name.label("epic_name"),
+            EpicArea.name.label("epic_area_name"),
             TimeLog.start_time,
             TimeLog.end_time,
             TimeLog.count_hours,
             TimeLog.count_days,
         )
         .join(AppUser)
+        .join(EpicArea)
         .join(Epic)
         .where(TimeLog.user_id == user_id)
         .where(TimeLog.epic_id == epic_id)

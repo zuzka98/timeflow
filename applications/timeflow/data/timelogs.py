@@ -13,23 +13,21 @@ class Timelog(TypedDict):
     count_days: float
     month: int
     year: int
-
+    epic_area_id: int
 
 def to_timelog(
     start_time: str,
     end_time: str,
     user_id: int,
     epic_id: int,
-    epic_area_id: int,
-    count_hours: float,
-    count_days: float,
     month: int,
     year: int,
+    epic_area_id: int,
 ) -> bool:
     data = Timelog(
+        user_id=user_id,
         start_time=start_time,
         end_time=end_time,
-        user_id=user_id,
         epic_id=epic_id,
         count_hours=0,
         count_days=0,
@@ -56,11 +54,11 @@ def timelog_by_user_epic_year_month(user_id, epic_id, year, month) -> List[Dict]
                 "timelog id": item["id"],
                 "username": item["username"],
                 "epic name": item["epic_name"],
+                "epic area name": item["epic_area_name"],
                 "start time": (item["start_time"]).replace("T", " "),
                 "end time": (item["end_time"]).replace("T", " "),
                 "count hours": item["count_hours"],
                 "count days": item["count_days"],
             }
             rows.append(d)
-        print(rows)
         return rows
