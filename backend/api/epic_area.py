@@ -26,9 +26,7 @@ async def post_epic_area(
         SQL session that is to be used to add the epic area.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement1 = select(EpicArea).where(
-        or_(EpicArea.name == epic_area.name, EpicArea.id == epic_area.id)
-    )
+    statement1 = select(EpicArea).where(EpicArea.id == epic_area.id)
     try:
         result = session.exec(statement1).one()
         return False
@@ -40,7 +38,7 @@ async def post_epic_area(
 
 
 @router.get("/")
-async def get_epic_areas_list(session: Session = Depends(get_session)):
+async def get_epic_areas_list(epic_id, session: Session = Depends(get_session)):
     """
     Get list of epic areas.
 
@@ -50,8 +48,16 @@ async def get_epic_areas_list(session: Session = Depends(get_session)):
         SQL session that is to be used to get a list of the epic areas.
         Defaults to creating a dependency on the running SQL model session.
     """
-
-    statement = select(EpicArea)
+    if epic_id != None:
+        statement = select(
+            EpicArea.id,
+            EpicArea.epic_id,
+            EpicArea.name.label("epic_area_name"),
+            Epic.id,
+            Epic.name.label("epic_name"),
+        ).join(Epic).where(EpicArea.is_active == True).where(EpicArea.epic_id == epic_id).order_by(EpicArea.name.asc())
+    else:
+        statement = select(EpicArea)
     results = session.exec(statement).all()
     return results
 
@@ -82,9 +88,9 @@ async def get_active_epic_area_list(session: Session = Depends(get_session)):
     return results
 
 
-@router.put("/{epic_area_name}/deactivate")
+@router.put("/{epic_area_id}/deactivate")
 async def deactivate_epic_area(
-    epic_area_name: str = None,
+    epic_area_id: str = None,
     session: Session = Depends(get_session),
 ):
     """
@@ -93,12 +99,12 @@ async def deactivate_epic_area(
     Parameters
     ----------
     epic_area_name : str
-        Name of the epic area to be deactivated
+        ID of the epic area to be deactivated
     session : Session
         SQL session that is to be used to deactivate an epic area.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(EpicArea).where(EpicArea.name == epic_area_name)
+    statement = select(EpicArea).where(EpicArea.id == epic_area_id)
     epic_area_to_deactivate = session.exec(statement).one()
     epic_area_to_deactivate.is_active = False
     epic_area_to_deactivate.updated_at = datetime.now()
@@ -108,9 +114,9 @@ async def deactivate_epic_area(
     return epic_area_to_deactivate
 
 
-@router.put("/{epic_area_name}/activate")
+@router.put("/{epic_area_id}/activate")
 async def activate_epic_area(
-    epic_area_name: str = None,
+    epic_area_id: str = None,
     session: Session = Depends(get_session),
 ):
     """
@@ -119,12 +125,12 @@ async def activate_epic_area(
     Parameters
     ----------
     epic_area_name : str
-        Name of the epic area to be activated
+        ID of the epic area to be activated
     session : Session
         SQL session that is to be used to activate an epic area.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(EpicArea).where(EpicArea.name == epic_area_name)
+    statement = select(EpicArea).where(EpicArea.id == epic_area_id)
     epic_area_to_activate = session.exec(statement).one()
     epic_area_to_activate.is_active = True
     epic_area_to_activate.updated_at = datetime.now()
