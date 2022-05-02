@@ -99,7 +99,6 @@ def create_timelog_form(
     "year": 0
     }
     """
-
     @event(prevent_default=True)
     async def handle_submit(event):
         a = year_month
