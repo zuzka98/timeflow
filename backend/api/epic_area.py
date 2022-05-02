@@ -26,9 +26,7 @@ async def post_epic_area(
         SQL session that is to be used to add the epic area.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement1 = select(EpicArea).where(
-        or_(EpicArea.name == epic_area.name, EpicArea.id == epic_area.id)
-    )
+    statement1 = select(EpicArea).where(EpicArea.id == epic_area.id)
     try:
         result = session.exec(statement1).one()
         return False
