@@ -1,5 +1,6 @@
 from idom import html, use_state, component, event, vdom
 import requests
+from datetime import datetime
 from uiflow.components.input import (
     Input,
     Selector2,
@@ -99,6 +100,7 @@ def create_timelog_form(
     "year": 0
     }
     """
+
     @event(prevent_default=True)
     async def handle_submit(event):
         a = year_month
@@ -116,6 +118,8 @@ def create_timelog_form(
             epic_area_id=epic_area_id,
             month=month,
             year=year,
+            created_at=str(datetime.now()),
+            updated_at=str(datetime.now()),
         )
         if is_true:
             set_is_true(False)
