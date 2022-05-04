@@ -13,6 +13,9 @@ class Forecast(SQLModel, table=True):
     days: float
     month: int
     year: int
+    created_at: datetime
+    updated_at: datetime
+    is_locked: bool
 
     __table_args__ = {"schema": "app_db"}
 

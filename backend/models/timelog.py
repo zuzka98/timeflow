@@ -30,6 +30,9 @@ class TimeLog(SQLModel, table=True):
     month: int
     year: int
     epic_area_id: int = Field(foreign_key="app_db.epicarea.id")
+    created_at: datetime
+    updated_at: datetime
+    is_locked: bool = False
 
     __table_args__ = {"schema": "app_db"}
 
