@@ -56,16 +56,16 @@ VALUES
     (3, 2, '2022-03-01', '2022-04-01', 500, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE),
     (3, 3, '2022-01-01', '2022-02-01', 300, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
 
-INSERT INTO app_db.timelog (user_id, start_time, end_time, epic_id, count_hours, count_days, month, year, epic_area_id)
+INSERT INTO app_db.timelog (user_id, start_time, end_time, epic_id, count_hours, count_days, month, year, epic_area_id, created_at, updated_at, is_locked)
 VALUES
-    (1, '2022-04-03 08:30:00.000000', '2022-04-03 13:45:00.000000', 1, 5.25, 0.66, 1, 2022, 1),
-    (1, '2022-05-03 09:30:00.000000', '2022-05-03 12:15:00.000000', 1, 3.25, 0.41, 4, 2022, 1);
+    (1, '2022-04-03 08:30:00.000000', '2022-04-03 13:45:00.000000', 1, 5.25, 0.66, 1, 2022, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE),
+    (1, '2022-05-03 09:30:00.000000', '2022-05-03 12:15:00.000000', 1, 3.25, 0.41, 4, 2022, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, TRUE);
     
-INSERT INTO app_db.forecast (user_id, epic_id, days, month, year)
+INSERT INTO app_db.forecast (user_id, epic_id, days, month, year, created_at, updated_at, is_locked)
 VALUES
-    (1, 1, 5.0, 4, 2022),
-    (2, 1, 5.0, 4, 2022),
-    (3, 1, 5.0, 4, 2022);
+    (1, 1, 5.0, 4, 2022, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, FALSE),
+    (2, 1, 5.0, 4, 2022, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, FALSE),
+    (3, 1, 5.0, 4, 2022, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, FALSE);
     
 INSERT INTO app_db.capacity (user_id, team_id, year, month, days, created_at, updated_at, is_locked)
 VALUES
