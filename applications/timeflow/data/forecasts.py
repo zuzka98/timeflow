@@ -2,6 +2,7 @@ import requests
 import json
 
 from ..config import base_url
+from datetime import datetime
 from typing import List, Dict, TypedDict
 from .common import Select
 from ..pages.utils import forecast_days_list
@@ -13,6 +14,9 @@ class Forecast(TypedDict):
     month: int
     year: int
     days: int
+    created_at: datetime
+    updated_at: datetime
+    is_locked: bool
 
 
 def forecast_by_user_epic_year_month(user_id, epic_id, year, month) -> List[Dict]:
@@ -53,6 +57,9 @@ def to_forecast(user_id: int, epic_id: int, month: str, year: str, days: int) ->
         month=int(month),
         year=int(year),
         days=days,
+        created_at=str(datetime.now()),
+        updated_at=str(datetime.now()),
+        is_locked=False,
     )
     print(dict(data))
     response = requests.post(

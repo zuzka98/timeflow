@@ -2,6 +2,7 @@ import requests
 import json
 from typing import List, Dict, TypedDict
 from ..config import base_url
+from datetime import datetime
 
 
 class Timelog(TypedDict):
@@ -14,6 +15,10 @@ class Timelog(TypedDict):
     month: int
     year: int
     epic_area_id: int
+    created_at: datetime
+    updated_at: datetime
+    is_locked: bool
+
 
 def to_timelog(
     start_time: str,
@@ -23,6 +28,8 @@ def to_timelog(
     month: int,
     year: int,
     epic_area_id: int,
+    created_at: datetime,
+    updated_at: datetime,
 ) -> bool:
     data = Timelog(
         user_id=user_id,
@@ -34,6 +41,9 @@ def to_timelog(
         month=str(month),
         year=str(year),
         epic_area_id=epic_area_id,
+        created_at=created_at,
+        updated_at=updated_at,
+        is_locked=False,
     )
     response = requests.post(
         f"{base_url}/api/timelogs",
