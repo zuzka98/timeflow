@@ -23,6 +23,7 @@ from ..data.epic_areas import epic_areas_names, epic_areas_names_by_epic_id
 from ..config import base_url
 from uiflow.components.controls import TableActions
 from uiflow.components.yourTimelog import YourTimelog
+from .utils import switch_state
 
 
 @component
@@ -30,13 +31,12 @@ def page():
     year_month, set_year_month = use_state("")
     day, set_day = use_state("")
     user_id, set_user_id = use_state("")
-    epic_id, set_epic_id = use_state(0)
+    epic_id, set_epic_id = use_state("")
     epic_area_id, set_epic_area_id = use_state("")
     start_time, set_start_time = use_state("")
     end_time, set_end_time = use_state("")
+    is_event, set_is_event = use_state(True)
     deleted_timelog, set_deleted_timelog = use_state("")
-    submitted_user, set_submitted_user = use_state("")
-    is_true, set_is_true = use_state(True)
     return html.div(
         {"class": "w-full"},
         create_timelog_form(
@@ -54,12 +54,12 @@ def page():
             set_start_time,
             end_time,
             set_end_time,
-            is_true,
-            set_is_true,
+            is_event,
+            set_is_event
         ),
         Container(
             Column(
-                Row(timelogs_table(user_id, epic_id, year_month, is_true)),
+                Row(timelogs_table(user_id, epic_id, year_month, is_event)),
             ),
             delete_timelog_input(set_deleted_timelog),
         ),
@@ -82,8 +82,8 @@ def create_timelog_form(
     set_start_time,
     end_time,
     set_end_time,
-    is_true,
-    set_is_true,
+    is_event,
+    set_is_event
 ):
     """
     schema:
@@ -117,17 +117,17 @@ def create_timelog_form(
             month=month,
             year=year,
         )
-        if is_true:
-            set_is_true(False)
-        else:
-            set_is_true(True)
-
+        switch_state(is_event, set_is_event)
+        set_epic_id("")
     selector_user = Selector2(set_value=set_user_id, data=username())
 
     selector_epic_id = Selector2(
         set_value=set_epic_id,
+        set_sel_value=set_epic_area_id,
+        sel_value="", 
         data=epics_names(),
     )
+
     selector_epic_area_id = Selector2(
         set_value=set_epic_area_id,
         data=epic_areas_names_by_epic_id(epic_id),
@@ -153,6 +153,7 @@ def create_timelog_form(
     if (
         user_id != ""
         and epic_id != ""
+        and epic_area_id != (0 or "")
         and year_month != ""
         and day != ""
         and start_time != ""
@@ -180,7 +181,6 @@ def create_timelog_form(
             ),
         ),
     )
-
 
 @component
 def timelogs_table(user_id, epic_id, year_month, is_true):

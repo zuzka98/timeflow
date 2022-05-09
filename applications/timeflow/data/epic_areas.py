@@ -49,6 +49,8 @@ def epic_areas_names() -> List[Select]:
 
 def epic_areas_names_by_epic_id(epic_id) -> List[Select]:
     api = f"{base_url}/api/epic_areas"
+    if epic_id == "":
+        epic_id = 0
     params = {"epic_id": epic_id}
     response = requests.get(api, params=params)
     rows = [Select(value="", display_value="select epic area")]
