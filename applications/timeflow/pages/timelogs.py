@@ -17,7 +17,7 @@ from ..data.common import (
     days_in_month,
 )
 
-from ..data.timelogs import to_timelog, timelog_by_user_epic_year_month
+from ..data.timelogs import to_timelog, timelog_by_user_id
 from ..data.epics import epics_names
 from ..data.epic_areas import epic_areas_names, epic_areas_names_by_epic_id
 
@@ -60,7 +60,7 @@ def page():
         ),
         Container(
             Column(
-                Row(timelogs_table(user_id, epic_id, year_month, is_event)),
+                Row(timelogs_table(user_id, is_event)),
             ),
             delete_timelog_input(set_deleted_timelog),
         ),
@@ -187,14 +187,12 @@ def create_timelog_form(
     )
 
 @component
-def timelogs_table(user_id, epic_id, year_month, is_true):
+def timelogs_table(user_id, is_event):
     api = f"{base_url}/api/timelogs"
     response = requests.get(api)
-    year = year_month[:4]
-    month = year_month[5:7]
 
-    if (user_id and epic_id and year_month) != "":
-        rows = timelog_by_user_epic_year_month(user_id, epic_id, year, month)
+    if user_id != "":
+        rows = timelog_by_user_id(user_id)
     else:
         rows = []
         for item in response.json():

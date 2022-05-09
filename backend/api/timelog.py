@@ -100,6 +100,27 @@ async def get_timelogs_all(session: Session = Depends(get_session)):
     results = session.exec(statement).all()
     return results
 
+@router.get("/users/{user_id}")
+async def get_timelog_by_user_id(user_id: int, session: Session = Depends(get_session)):
+    statement = (
+        select(
+            TimeLog.id,
+            AppUser.username.label("username"),
+            Epic.short_name.label("epic_name"),
+            EpicArea.name.label("epic_area_name"),
+            TimeLog.start_time,
+            TimeLog.end_time,
+            TimeLog.count_hours,
+            TimeLog.count_days,
+        )
+        .join(AppUser)
+        .join(EpicArea)
+        .join(Epic)
+        .where(TimeLog.user_id == user_id)
+        .order_by(TimeLog.end_time.desc())
+    )
+    results = session.exec(statement).all()
+    return results
 
 @router.get("/{timelog_id}")
 async def get_timelog_by_id(timelog_id: int, session: Session = Depends(get_session)):
