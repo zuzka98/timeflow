@@ -1,6 +1,6 @@
 import requests
 import json
-from typing import List, TypedDict
+from typing import List, TypedDict, Dict
 
 from ..config import base_url
 from .common import Select
@@ -70,6 +70,22 @@ def epics_names() -> List[Select]:
     return epic_name_rows
 
 
+def epics_all() -> List[Dict]:
+    api = f"{base_url}/api/epics"
+    response = requests.get(api)
+    rows = []
+    for item in response.json():
+        d = {
+            "epic id": item["epic_id"],
+            "epic name": item["epic_name"],
+            "team name": item["team_name"],
+            "sponsor name": item["sponsor_short_name"],
+            "start date": item["start_date"],
+        }
+        rows.append(d)
+    return rows
+
+
 def epics_by_team_sponsor(team_id: int, sponsor_id: int) -> List[Select]:
     """gets epics by team and sponsor
 
@@ -84,9 +100,9 @@ def epics_by_team_sponsor(team_id: int, sponsor_id: int) -> List[Select]:
         d = {
             "epic id": item["epic_id"],
             "epic name": item["epic_name"],
-            "start date": item["start_date"],
             "team name": item["team_name"],
             "sponsor name": item["sponsor_short_name"],
+            "start date": item["start_date"],
         }
         rows.append(d)
     return rows
