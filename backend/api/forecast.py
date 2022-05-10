@@ -54,22 +54,23 @@ async def get_forecasts(session: Session = Depends(get_session)):
     """
     statement = (
         select(
-            Forecast.id.label("forecast_id"), 
-            AppUser.username, 
-            Epic.short_name.label("epic_name"), 
-            Forecast.year, 
-            Forecast.month, 
-            Forecast.days.label("forecast_days"))
-            .select_from(Forecast)
-            .join(AppUser)
-            .join(Epic)
+            Forecast.id.label("forecast_id"),
+            AppUser.username,
+            Epic.short_name.label("epic_name"),
+            Forecast.year,
+            Forecast.month,
+            Forecast.days.label("forecast_days"),
+        )
+        .select_from(Forecast)
+        .join(AppUser)
+        .join(Epic)
     )
     result = session.exec(statement).all()
     return result
 
 
-@router.get("/{user_id}")
-async def get_forecasts_users(
+@router.get("/users/{user_id}")
+async def get_forecasts_by_user(
     user_id: str = None, session: Session = Depends(get_session)
 ):
     """
@@ -83,22 +84,22 @@ async def get_forecasts_users(
         SQL session that is to be used to get the forecasts.
         Defaults to creating a dependency on the running SQL model session.
     """
-    if user_id != None:
-        statement = (
-            select(
-                Epic.name,
-                Forecast.user_id,
-                Forecast.month,
-                Forecast.year,
-                Forecast.days,
-            )
-            .join(Epic)
-            .where(Forecast.user_id == user_id)
+    statement = (
+        select(
+            Forecast.id.label("forecast_id"),
+            AppUser.username,
+            Epic.short_name.label("epic_name"),
+            Forecast.year,
+            Forecast.month,
+            Forecast.days.label("forecast_days"),
         )
-        results = session.exec(statement).all()
-        return results
-    else:
-        raise ValueError
+        .select_from(Forecast)
+        .join(AppUser)
+        .join(Epic)
+        .where(Forecast.user_id == user_id)
+    )
+    result = session.exec(statement).all()
+    return result
 
 
 @router.get("/users/{user_id}/epics/{epic_id}")
@@ -147,11 +148,20 @@ async def get_forecasts_by_user_year_epic(
         Defaults to creating a dependency on the running SQL model session.
     """
     statement = (
-        select(Epic.name, Forecast.year, Forecast.month, Forecast.days)
+        select(
+            Forecast.id.label("forecast_id"),
+            AppUser.username,
+            Epic.short_name.label("epic_name"),
+            Forecast.year,
+            Forecast.month,
+            Forecast.days.label("forecast_days"),
+        )
+        .select_from(Forecast)
+        .join(AppUser)
+        .join(Epic)
         .where(Forecast.user_id == user_id)
         .where(Forecast.year == year)
         .where(Forecast.month == month)
-        .join(Epic)
     )
     results = session.exec(statement).all()
     return results
@@ -179,7 +189,17 @@ async def get_forecasts_by_user_year_epic(
         Defaults to creating a dependency on the running SQL model session.
     """
     statement = (
-        select(Forecast.id, Forecast.month, Forecast.year, Forecast.days)
+        select(
+            Forecast.id.label("forecast_id"),
+            AppUser.username,
+            Epic.short_name.label("epic_name"),
+            Forecast.year,
+            Forecast.month,
+            Forecast.days.label("forecast_days"),
+        )
+        .select_from(Forecast)
+        .join(AppUser)
+        .join(Epic)
         .where(Forecast.user_id == user_id)
         .where(Forecast.epic_id == epic_id)
         .where(Forecast.year == year)
