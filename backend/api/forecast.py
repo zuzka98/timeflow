@@ -2,6 +2,8 @@ from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
 from ..models.forecast import Forecast
 from ..models.epic import Epic
+from ..models.user import AppUser
+from ..models.epic_area import EpicArea
 from sqlmodel import Session, select, and_
 from sqlalchemy.exc import NoResultFound
 
@@ -50,7 +52,18 @@ async def get_forecasts(session: Session = Depends(get_session)):
         SQL session that is to be used to get a list of the forecasts.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(Forecast)
+    statement = (
+        select(
+            Forecast.id.label("forecast_id"), 
+            AppUser.username, 
+            Epic.short_name.label("epic_name"), 
+            Forecast.year, 
+            Forecast.month, 
+            Forecast.days.label("forecast_days"))
+            .select_from(Forecast)
+            .join(AppUser)
+            .join(Epic)
+    )
     result = session.exec(statement).all()
     return result
 
