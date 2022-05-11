@@ -24,6 +24,7 @@ async def timelog(*, timelog: TimeLog, session: Session = Depends(get_session)):
         SQL session that is to be used to add the timelog.
         Defaults to creating a dependency on the running SQL model session.
     """
+    # checking overlaping timelogs
     statement1 = (
         select(TimeLog)
         .where(TimeLog.user_id == timelog.user_id)
@@ -48,13 +49,20 @@ async def timelog(*, timelog: TimeLog, session: Session = Depends(get_session)):
         .where(TimeLog.start_time < timelog.start_time)
         .where(TimeLog.end_time > timelog.end_time)
     )
+    # Checking if timelog doesn't procede posted epic start date
+    statement5 = (
+        select(Epic)
+        .where(Epic.id == timelog.epic_id)
+        .where(Epic.start_date > timelog.start_time)
+    )
 
     results1 = session.exec(statement1).all()
     results2 = session.exec(statement2).all()
     results3 = session.exec(statement3).all()
     results4 = session.exec(statement4).all()
+    results5 = session.exec(statement5).all()
 
-    if results1 or results2 or results3 or results4:
+    if results1 or results2 or results3 or results4 or results5:
         return "currently posted timelog overlaps another timelog"
     else:
         time_delta = timelog.end_time - timelog.start_time
@@ -100,6 +108,7 @@ async def get_timelogs_all(session: Session = Depends(get_session)):
     results = session.exec(statement).all()
     return results
 
+
 @router.get("/users/{user_id}")
 async def get_timelog_by_user_id(user_id: int, session: Session = Depends(get_session)):
     statement = (
@@ -121,6 +130,7 @@ async def get_timelog_by_user_id(user_id: int, session: Session = Depends(get_se
     )
     results = session.exec(statement).all()
     return results
+
 
 @router.get("/{timelog_id}")
 async def get_timelog_by_id(timelog_id: int, session: Session = Depends(get_session)):
