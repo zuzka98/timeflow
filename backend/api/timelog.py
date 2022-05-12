@@ -49,7 +49,7 @@ async def timelog(*, timelog: TimeLog, session: Session = Depends(get_session)):
         .where(TimeLog.start_time < timelog.start_time)
         .where(TimeLog.end_time > timelog.end_time)
     )
-    # Checking if timelog doesn't procede posted epic start date
+    # Checking if timelog doesn't procede posted epic's start date
     statement5 = (
         select(Epic)
         .where(Epic.id == timelog.epic_id)
@@ -62,8 +62,10 @@ async def timelog(*, timelog: TimeLog, session: Session = Depends(get_session)):
     results4 = session.exec(statement4).all()
     results5 = session.exec(statement5).all()
 
-    if results1 or results2 or results3 or results4 or results5:
+    if results1 or results2 or results3 or results4:
         return "currently posted timelog overlaps another timelog"
+    elif results5:
+        return "epic was created later than timelog's start date"
     else:
         time_delta = timelog.end_time - timelog.start_time
         work_delta_hours = time_delta.total_seconds() / 3600
