@@ -11,7 +11,14 @@ from ..config import base_url
 
 from ..data.teams import teams_id_name
 from ..data.sponsors import sponsors_id_name
-from ..data.epics import to_epic, epics_by_team_sponsor, epics_all
+from ..data.epics import (
+    to_epic,
+    epics_by_team_sponsor,
+    epics_all,
+    epics_names,
+    epic_activate,
+    epic_deactivate,
+)
 from ..data.common import year_month_dict_list, days_in_month
 
 
@@ -54,7 +61,10 @@ def page():
             Column(
                 Row(list_epics(team_id, sponsor_id, is_event)),
             ),
-            Row(deactivate_epic(set_deact_epic), activate_epic(set_activ_epic)),
+            Row(
+                deactivate_epic(is_event, set_is_event),
+                activate_epic(is_event, set_is_event),
+            ),
         ),
     )
 
@@ -173,23 +183,22 @@ def list_epics(team_id, sponsor_id, is_event):
 
 
 @component
-def deactivate_epic(set_deact_epic):
+def deactivate_epic(is_event, set_is_event):
     """Deactivate an epic without deleting it."""
     epic_to_deact, set_epic_to_deact = use_state("")
 
     def handle_deactivation(event):
         """Set the given epic's is_active column to False."""
-        api = f"{base_url}/api/epics/{epic_to_deact}/deactivate"
-        response = requests.put(api)
-        set_deact_epic(epic_to_deact)
-        return True
+        epic_deactivate(epic_to_deact)
+        switch_state(is_event, set_is_event)
 
-    inp_deact_epic = Input(
-        set_value=set_epic_to_deact,
-        label="epic id to be deactivated",
-        width="[96%]",
-        md_width="[96%]",
+    inp_deact_epic = Selector2(
+        set_epic_to_deact,
+        data=epics_names(is_active=True, label="select epic to deactivate"),
+        width="96%",
+        md_width="96%",
     )
+
     is_disabled = True
     if epic_to_deact != "":
         is_disabled = False
@@ -198,23 +207,22 @@ def deactivate_epic(set_deact_epic):
 
 
 @component
-def activate_epic(set_activ_epic):
+def activate_epic(is_event, set_is_event):
     """Activate an inactivated epic"""
     epic_to_activ, set_epic_to_activ = use_state("")
 
     def handle_activation(event):
         """Set the given epic's is_active column to True."""
-        api = f"{base_url}/api/epics/{epic_to_activ}/activate"
-        response = requests.put(api)
-        set_activ_epic(epic_to_activ)
-        return True
+        epic_activate(epic_to_activ)
+        switch_state(is_event, set_is_event)
 
-    inp_activ_epic = Input(
-        set_value=set_epic_to_activ,
-        label="epic id to be activated",
-        width="[96%]",
-        md_width="[96%]",
+    inp_activ_epic = Selector2(
+        set_epic_to_activ,
+        data=epics_names(is_active=False, label="select epic to activate"),
+        width="96%",
+        md_width="96%",
     )
+
     is_disabled = True
     if epic_to_activ != "":
         is_disabled = False

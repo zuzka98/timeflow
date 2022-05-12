@@ -40,7 +40,9 @@ async def post_epic(
 
 
 @router.get("/")
-async def get_epics_list(session: Session = Depends(get_session)):
+async def get_epics_list(
+    session: Session = Depends(get_session), is_active: bool = None
+):
     """
     Get list of epics.
 
@@ -62,8 +64,22 @@ async def get_epics_list(session: Session = Depends(get_session)):
         .join(Team)
         .join(Sponsor)
     )
+    if is_active != None:
+        statement = (
+            select(
+                Epic.id.label("epic_id"),
+                Epic.name.label("epic_name"),
+                Epic.start_date,
+                Team.name.label("team_name"),
+                Sponsor.short_name.label("sponsor_short_name"),
+            )
+            .select_from(Epic)
+            .join(Team)
+            .join(Sponsor)
+            .where(Epic.is_active == is_active)
+        )
+
     results = session.exec(statement).all()
-    return results
     return results
 
 

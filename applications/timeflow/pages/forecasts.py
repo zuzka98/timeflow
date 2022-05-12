@@ -128,7 +128,7 @@ def create_forecast_form(
 
     selector_epic_id = Selector2(
         set_value=set_epic_id,
-        data=epics_names(),
+        data=epics_names(is_active=True),
         width="16%",
     )
     display_client = display_value(epic_id)
