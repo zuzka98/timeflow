@@ -1,3 +1,4 @@
+from applications.timeflow.pages.utils import switch_state
 from idom import html, use_state, component, event
 import requests
 from datetime import datetime
@@ -10,7 +11,7 @@ from ..config import base_url
 
 from ..data.teams import teams_id_name
 from ..data.sponsors import sponsors_id_name
-from ..data.epics import to_epic, epics_by_team_sponsor
+from ..data.epics import to_epic, epics_by_team_sponsor, epics_all
 from ..data.common import year_month_dict_list, days_in_month
 
 
@@ -25,7 +26,7 @@ def page():
     submitted_name, set_submitted_name = use_state("")
     deact_epic, set_deact_epic = use_state("")
     activ_epic, set_activ_epic = use_state("")
-
+    is_event, set_is_event = use_state(True)
     return html.div(
         {"class": "w-full"},
         Row(
@@ -43,14 +44,15 @@ def page():
                     set_year_month,
                     day,
                     set_day,
-                    set_submitted_name,
+                    is_event,
+                    set_is_event,
                 ),
             ),
             bg="bg-filter-block-bg",
         ),
         Container(
             Column(
-                Row(list_epics(team_id, sponsor_id, submitted_name)),
+                Row(list_epics(team_id, sponsor_id, is_event)),
             ),
             Row(deactivate_epic(set_deact_epic), activate_epic(set_activ_epic)),
         ),
@@ -71,7 +73,8 @@ def create_epic_form(
     set_year_month,
     day,
     set_day,
-    set_submitted_name,
+    is_event,
+    set_is_event,
 ):
     """Create a form that allows the admin to create a new epic
     post endpoint: /api/epics
@@ -105,12 +108,18 @@ def create_epic_form(
             updated_at=str(datetime.now()),
         )
         # Triggers state change
-        set_submitted_name(name)
+        switch_state(is_event, set_is_event)
 
     inp_short_name = Input(
-        set_short_name, "New epics short name", placeholder="", width="[14%]", md_width="[32%]"
+        set_short_name,
+        "Short epic's name",
+        placeholder="",
+        width="[14%]",
+        md_width="[32%]",
     )
-    inp_name = Input(set_name, "New epics full name", placeholder="", width="[14%]", md_width="[32%]")
+    inp_name = Input(
+        set_name, "Full epic's name", placeholder="", width="[14%]", md_width="[32%]"
+    )
     selector_team = Selector2(set_team_id, teams_id_name(), width="14%", md_width="32%")
     selector_sponsor = Selector2(
         set_sponsor_id, sponsors_id_name(), width="14%", md_width="32%"
@@ -155,9 +164,11 @@ def create_epic_form(
 
 
 @component
-def list_epics(team_id, sponsor_id, submitted_name):
+def list_epics(team_id, sponsor_id, is_event):
     """Calls a list of epics filtered by selected team id and sponsor id"""
-    rows = epics_by_team_sponsor(team_id, sponsor_id)
+    rows = epics_all()
+    if (team_id and sponsor_id) != "":
+        rows = epics_by_team_sponsor(team_id, sponsor_id)
     return html.div({"class": "flex w-full"}, SimpleTable(rows=rows))
 
 
