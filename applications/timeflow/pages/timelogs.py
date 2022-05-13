@@ -55,8 +55,8 @@ def page():
             set_start_time,
             end_time,
             set_end_time,
-            is_true,
-            set_is_true,
+            is_event,
+            set_is_event,
         ),
         Container(
             Column(
@@ -83,8 +83,8 @@ def create_timelog_form(
     set_start_time,
     end_time,
     set_end_time,
-    is_true,
-    set_is_true,
+    is_event,
+    set_is_event,
 ):
     """
     schema:
@@ -121,16 +121,16 @@ def create_timelog_form(
             created_at=str(datetime.now()),
             updated_at=str(datetime.now()),
         )
-        if is_true:
-            set_is_true(False)
-        else:
-            set_is_true(True)
+        switch_state(is_event, set_is_event)
+        set_epic_id("")
 
     selector_user = Selector2(set_value=set_user_id, data=username())
 
     selector_epic_id = Selector2(
         set_value=set_epic_id,
-        data=epics_names(),
+        set_sel_value=set_epic_area_id,
+        sel_value="",
+        data=epics_names(is_active=True),
     )
     selector_epic_area_id = Selector2(
         set_value=set_epic_area_id,

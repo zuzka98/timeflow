@@ -19,6 +19,40 @@ class Forecast(TypedDict):
     is_locked: bool
 
 
+def forecasts_all() -> List[Dict]:
+    api = f"{base_url}/api/forecasts/"
+    response = requests.get(api)
+    rows = []
+    for item in response.json():
+        d = {
+            "FORECAST ID": item["forecast_id"],
+            "USERNAME": item["username"],
+            "EPIC NAME": item["epic_name"],
+            "YEAR": item["year"],
+            "MONTH": item["month"],
+            "DAYS": item["forecast_days"],
+        }
+        rows.append(d)
+    return rows
+
+
+def forecasts_by_user(user_id: int) -> List[Dict]:
+    api = f"{base_url}/api/forecasts/users/{user_id}"
+    response = requests.get(api)
+    rows = []
+    for item in response.json():
+        d = {
+            "FORECAST ID": item["forecast_id"],
+            "USERNAME": item["username"],
+            "EPIC NAME": item["epic_name"],
+            "YEAR": item["year"],
+            "MONTH": item["month"],
+            "DAYS": item["forecast_days"],
+        }
+        rows.append(d)
+    return rows
+
+
 def forecast_by_user_epic_year_month(user_id, epic_id, year, month) -> List[Dict]:
     if user_id != "" and epic_id != "" and year != "" and month != "":
         api = f"{base_url}/api/forecasts/users/{user_id}/epics/{epic_id}/year/{year}/month/{month}"
@@ -26,13 +60,14 @@ def forecast_by_user_epic_year_month(user_id, epic_id, year, month) -> List[Dict
         rows = []
         for item in response.json():
             d = {
-                "forecast id": item["id"],
-                "year": item["year"],
-                "month": item["month"],
-                "days": item["days"],
+                "FORECAST ID": item["forecast_id"],
+                "USERNAME": item["username"],
+                "EPIC NAME": item["epic_name"],
+                "YEAR": item["year"],
+                "MONTH": item["month"],
+                "DAYS": item["forecast_days"],
             }
             rows.append(d)
-        print(rows)
         return rows
 
 

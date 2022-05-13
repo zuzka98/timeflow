@@ -1,6 +1,6 @@
 import requests
 import json
-from typing import List, TypedDict
+from typing import List, TypedDict, Dict
 
 from ..config import base_url
 from .common import Select
@@ -57,17 +57,34 @@ def to_epic(
     return True
 
 
-def epics_names() -> List[Select]:
+def epics_names(is_active: bool = None, label="select epic") -> List[Select]:
     """Gets list of active epics by name and id
     Returns a list of dictionaries
     """
-    api_epic_name = f"{base_url}/api/epics/active"
-    response_epic_name = requests.get(api_epic_name)
-    epic_name_rows = [Select(value="", display_value="select epic")]
-    for item in response_epic_name.json():
-        d = Select(value=item["id"], display_value=item["name"])
+    api = f"{base_url}/api/epics/"
+    params = {"is_active": is_active}
+    response = requests.get(api, params=params)
+    epic_name_rows = [Select(value="", display_value=label)]
+    for item in response.json():
+        d = Select(value=item["epic_id"], display_value=item["epic_name"])
         epic_name_rows.append(d)
     return epic_name_rows
+
+
+def epics_all() -> List[Dict]:
+    api = f"{base_url}/api/epics"
+    response = requests.get(api)
+    rows = []
+    for item in response.json():
+        d = {
+            "epic id": item["epic_id"],
+            "epic name": item["epic_name"],
+            "team name": item["team_name"],
+            "sponsor name": item["sponsor_short_name"],
+            "start date": item["start_date"],
+        }
+        rows.append(d)
+    return rows
 
 
 def epics_by_team_sponsor(team_id: int, sponsor_id: int) -> List[Select]:
@@ -84,9 +101,9 @@ def epics_by_team_sponsor(team_id: int, sponsor_id: int) -> List[Select]:
         d = {
             "epic id": item["epic_id"],
             "epic name": item["epic_name"],
-            "start date": item["start_date"],
             "team name": item["team_name"],
             "sponsor name": item["sponsor_short_name"],
+            "start date": item["start_date"],
         }
         rows.append(d)
     return rows
@@ -101,3 +118,15 @@ def client_name_by_epic_id(epic_id) -> Select:
     client_id = r.get("client_id")
     d = Select(value=client_id, display_value=client_name)
     return d
+
+
+def epic_activate(epic_id):
+    api = f"{base_url}/api/epics/{epic_id}/activate"
+    response = requests.put(api)
+    return True
+
+
+def epic_deactivate(epic_id):
+    api = f"{base_url}/api/epics/{epic_id}/deactivate"
+    response = requests.put(api)
+    return True

@@ -40,7 +40,9 @@ async def post_epic(
 
 
 @router.get("/")
-async def get_epic_list(session: Session = Depends(get_session)):
+async def get_epics_list(
+    session: Session = Depends(get_session), is_active: bool = None
+):
     """
     Get list of epics.
 
@@ -50,7 +52,33 @@ async def get_epic_list(session: Session = Depends(get_session)):
         SQL session that is to be used to get a list of the epics.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(Epic)
+    statement = (
+        select(
+            Epic.id.label("epic_id"),
+            Epic.name.label("epic_name"),
+            Epic.start_date,
+            Team.name.label("team_name"),
+            Sponsor.short_name.label("sponsor_short_name"),
+        )
+        .select_from(Epic)
+        .join(Team)
+        .join(Sponsor)
+    )
+    if is_active != None:
+        statement = (
+            select(
+                Epic.id.label("epic_id"),
+                Epic.name.label("epic_name"),
+                Epic.start_date,
+                Team.name.label("team_name"),
+                Sponsor.short_name.label("sponsor_short_name"),
+            )
+            .select_from(Epic)
+            .join(Team)
+            .join(Sponsor)
+            .where(Epic.is_active == is_active)
+        )
+
     results = session.exec(statement).all()
     return results
 
@@ -66,13 +94,17 @@ async def get_active_epics_list(session: Session = Depends(get_session)):
         SQL session that is to be used to get a list of the active epics.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(Epic).where(Epic.is_active == True).order_by(Epic.short_name.asc())
+    statement = (
+        select(Epic).where(Epic.is_active == True).order_by(Epic.short_name.asc())
+    )
     results = session.exec(statement).all()
     return results
 
 
 @router.get("/teams/{team_id}/sponsors/{sponsor_id}/")
-async def get_epic_by_team_sponsor(team_id: int, sponsor_id: int, session: Session = Depends(get_session)):
+async def get_epic_by_team_sponsor(
+    team_id: int, sponsor_id: int, session: Session = Depends(get_session)
+):
     """
     Get list of epics by team id and sponsor id.
 

@@ -1,3 +1,4 @@
+from applications.timeflow.pages.utils import switch_state
 from idom import html, use_state, component, event
 import requests
 from datetime import datetime
@@ -10,7 +11,14 @@ from ..config import base_url
 
 from ..data.teams import teams_id_name
 from ..data.sponsors import sponsors_id_name
-from ..data.epics import to_epic, epics_by_team_sponsor
+from ..data.epics import (
+    to_epic,
+    epics_by_team_sponsor,
+    epics_all,
+    epics_names,
+    epic_activate,
+    epic_deactivate,
+)
 from ..data.common import year_month_dict_list, days_in_month
 
 
@@ -25,7 +33,7 @@ def page():
     submitted_name, set_submitted_name = use_state("")
     deact_epic, set_deact_epic = use_state("")
     activ_epic, set_activ_epic = use_state("")
-
+    is_event, set_is_event = use_state(True)
     return html.div(
         {"class": "w-full"},
         Row(
@@ -43,16 +51,20 @@ def page():
                     set_year_month,
                     day,
                     set_day,
-                    set_submitted_name,
+                    is_event,
+                    set_is_event,
                 ),
             ),
             bg="bg-filter-block-bg",
         ),
         Container(
             Column(
-                Row(list_epics(team_id, sponsor_id, submitted_name)),
+                Row(list_epics(team_id, sponsor_id, is_event)),
             ),
-            Row(deactivate_epic(set_deact_epic), activate_epic(set_activ_epic)),
+            Row(
+                deactivate_epic(is_event, set_is_event),
+                activate_epic(is_event, set_is_event),
+            ),
         ),
     )
 
@@ -71,7 +83,8 @@ def create_epic_form(
     set_year_month,
     day,
     set_day,
-    set_submitted_name,
+    is_event,
+    set_is_event,
 ):
     """Create a form that allows the admin to create a new epic
     post endpoint: /api/epics
@@ -105,12 +118,18 @@ def create_epic_form(
             updated_at=str(datetime.now()),
         )
         # Triggers state change
-        set_submitted_name(name)
+        switch_state(is_event, set_is_event)
 
     inp_short_name = Input(
-        set_short_name, "New epics short name", placeholder="", width="[14%]", md_width="[32%]"
+        set_short_name,
+        "Short epic's name",
+        placeholder="",
+        width="[14%]",
+        md_width="[32%]",
     )
-    inp_name = Input(set_name, "New epics full name", placeholder="", width="[14%]", md_width="[32%]")
+    inp_name = Input(
+        set_name, "Full epic's name", placeholder="", width="[14%]", md_width="[32%]"
+    )
     selector_team = Selector2(set_team_id, teams_id_name(), width="14%", md_width="32%")
     selector_sponsor = Selector2(
         set_sponsor_id, sponsors_id_name(), width="14%", md_width="32%"
@@ -155,30 +174,31 @@ def create_epic_form(
 
 
 @component
-def list_epics(team_id, sponsor_id, submitted_name):
+def list_epics(team_id, sponsor_id, is_event):
     """Calls a list of epics filtered by selected team id and sponsor id"""
-    rows = epics_by_team_sponsor(team_id, sponsor_id)
+    rows = epics_all()
+    if (team_id and sponsor_id) != "":
+        rows = epics_by_team_sponsor(team_id, sponsor_id)
     return html.div({"class": "flex w-full"}, SimpleTable(rows=rows))
 
 
 @component
-def deactivate_epic(set_deact_epic):
+def deactivate_epic(is_event, set_is_event):
     """Deactivate an epic without deleting it."""
     epic_to_deact, set_epic_to_deact = use_state("")
 
     def handle_deactivation(event):
         """Set the given epic's is_active column to False."""
-        api = f"{base_url}/api/epics/{epic_to_deact}/deactivate"
-        response = requests.put(api)
-        set_deact_epic(epic_to_deact)
-        return True
+        epic_deactivate(epic_to_deact)
+        switch_state(is_event, set_is_event)
 
-    inp_deact_epic = Input(
-        set_value=set_epic_to_deact,
-        label="epic id to be deactivated",
-        width="[96%]",
-        md_width="[96%]",
+    inp_deact_epic = Selector2(
+        set_epic_to_deact,
+        data=epics_names(is_active=True, label="select epic to deactivate"),
+        width="96%",
+        md_width="96%",
     )
+
     is_disabled = True
     if epic_to_deact != "":
         is_disabled = False
@@ -187,23 +207,22 @@ def deactivate_epic(set_deact_epic):
 
 
 @component
-def activate_epic(set_activ_epic):
+def activate_epic(is_event, set_is_event):
     """Activate an inactivated epic"""
     epic_to_activ, set_epic_to_activ = use_state("")
 
     def handle_activation(event):
         """Set the given epic's is_active column to True."""
-        api = f"{base_url}/api/epics/{epic_to_activ}/activate"
-        response = requests.put(api)
-        set_activ_epic(epic_to_activ)
-        return True
+        epic_activate(epic_to_activ)
+        switch_state(is_event, set_is_event)
 
-    inp_activ_epic = Input(
-        set_value=set_epic_to_activ,
-        label="epic id to be activated",
-        width="[96%]",
-        md_width="[96%]",
+    inp_activ_epic = Selector2(
+        set_epic_to_activ,
+        data=epics_names(is_active=False, label="select epic to activate"),
+        width="96%",
+        md_width="96%",
     )
+
     is_disabled = True
     if epic_to_activ != "":
         is_disabled = False
