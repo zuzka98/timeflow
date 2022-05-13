@@ -61,6 +61,7 @@ async def get_users(
     if is_active != None:
         statement = (
             select(
+                AppUser.id,
                 AppUser.username,
                 AppUser.first_name,
                 AppUser.last_name,
