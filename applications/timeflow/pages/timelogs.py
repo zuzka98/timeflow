@@ -38,6 +38,7 @@ def page():
     deleted_timelog, set_deleted_timelog = use_state("")
     submitted_user, set_submitted_user = use_state("")
     is_true, set_is_true = use_state(True)
+    is_event, set_is_event = use_state("")
     return html.div(
         {"class": "w-full"},
         create_timelog_form(
