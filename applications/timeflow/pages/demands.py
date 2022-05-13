@@ -94,7 +94,10 @@ def create_demand_form(
         set_value=set_team_id, data=teams_id_name(), width="24%", md_width="24%"
     )
     selector_epic_id = Selector2(
-        set_value=set_epic_id, data=epics_names(), width="24%", md_width="24%"
+        set_value=set_epic_id,
+        data=epics_names(is_active=True),
+        width="24%",
+        md_width="24%",
     )
     selector_year_month = Selector2(
         set_value=set_year_month,

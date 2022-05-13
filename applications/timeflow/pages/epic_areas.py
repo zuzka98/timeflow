@@ -82,7 +82,10 @@ def create_epic_area_form(
 
     # Create dropdown of active epics which can then be selected
     selector_epic_id = Selector2(
-        set_value=set_epic_id, data=epics_names(), width="48%", md_width="48%"
+        set_value=set_epic_id,
+        data=epics_names(is_active=True),
+        width="48%",
+        md_width="48%",
     )
 
     # Create input field for the name of the epic area
