@@ -110,7 +110,6 @@ async def get_timelogs_all(session: Session = Depends(get_session)):
     results = session.exec(statement).all()
     return results
 
-
 @router.get("/users/{user_id}")
 async def get_timelog_by_user_id(user_id: int, session: Session = Depends(get_session)):
     statement = (
