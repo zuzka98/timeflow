@@ -8,9 +8,9 @@ from .input import Checkbox
 from .tablebatch_row import TablebatchRow
 
 per_page_list = [
-    5,
-    10,
     15,
+    30,
+    50,
 ]
 thClass = "w-[176px] text-left text-text-table-head uppercase py-1 leading-5"
 trClass = "border-b-[1px] border-border-table"
