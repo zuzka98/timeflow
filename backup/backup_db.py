@@ -69,7 +69,7 @@ def cloud_backup(backup_info: dict):
 
     try:
         if backup_info["folder_name"] == "0000-00-00":
-            for parquet_file in os.listdir(path_to_date):
+            for parquet_file in os.listdir(f"{os.getcwd()}\\0000-00-00"):
                 path = f"{os.getcwd()}\\0000-00-00"
                 file = open(path, "rb")
                 session.storbinary(f"STOR {path}", file)
