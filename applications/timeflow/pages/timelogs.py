@@ -9,6 +9,7 @@ from uiflow.components.layout import Row, Column, Container
 from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
 from uiflow.components.heading import H3
+from uiflow.components.input import InputDateTime
 
 from ..data.common import (
     year_month_dict_list,
@@ -37,26 +38,37 @@ def page():
     start_time, set_start_time = use_state("")
     end_time, set_end_time = use_state("")
     is_event, set_is_event = use_state(True)
+    start_datetime, set_start_datetime = use_state("")
+    end_datetime, set_end_datetime = use_state("")
     deleted_timelog, set_deleted_timelog = use_state("")
     return html.div(
         {"class": "w-full"},
-        create_timelog_form(
-            year_month,
-            set_year_month,
-            day,
-            set_day,
-            user_id,
-            set_user_id,
-            epic_id,
-            set_epic_id,
-            epic_area_id,
-            set_epic_area_id,
-            start_time,
-            set_start_time,
-            end_time,
-            set_end_time,
-            is_event,
-            set_is_event,
+        Row(
+            Container(
+                create_timelog_form(
+                    year_month,
+                    set_year_month,
+                    day,
+                    set_day,
+                    user_id,
+                    set_user_id,
+                    epic_id,
+                    set_epic_id,
+                    epic_area_id,
+                    set_epic_area_id,
+                    start_time,
+                    set_start_time,
+                    end_time,
+                    set_end_time,
+                    start_datetime,
+                    set_start_datetime,
+                    end_datetime,
+                    set_end_datetime,
+                    is_event,
+                    set_is_event,
+                ),
+            ),
+            bg="bg-filter-block-bg",
         ),
         Container(
             Column(
@@ -79,6 +91,10 @@ def create_timelog_form(
     set_epic_id,
     epic_area_id,
     set_epic_area_id,
+    start_datetime,
+    set_start_datetime,
+    end_datetime,
+    set_end_datetime,
     start_time,
     set_start_time,
     end_time,
@@ -103,13 +119,14 @@ def create_timelog_form(
 
     @event(prevent_default=True)
     async def handle_submit(event):
-        a = year_month
-        year = a[:4]
-        month = a[5:7]
+        year = start_datetime[0:4]
+        month = start_datetime[5:7]
 
-        start_time_post = f"{year}-{month}-{day} {start_time}"
-        end_time_post = f"{year}-{month}-{day} {end_time}"
+        # start_time_post = f"{year}-{month}-{day} {start_time}"
+        # end_time_post = f"{year}-{month}-{day} {end_time}"
 
+        start_time_post = start_datetime.replace("T", " ")
+        end_time_post = end_datetime.replace("T", " ")
         to_timelog(
             start_time=start_time_post,
             end_time=end_time_post,
@@ -124,66 +141,97 @@ def create_timelog_form(
         switch_state(is_event, set_is_event)
         set_epic_id("")
 
-    selector_user = Selector2(set_value=set_user_id, data=username())
+    selector_user = Selector2(
+        set_value=set_user_id,
+        data=username(),
+        width="[14%]",
+        md_width="[32%]",
+    )
 
     selector_epic_id = Selector2(
         set_value=set_epic_id,
         set_sel_value=set_epic_area_id,
         sel_value="",
         data=epics_names(is_active=True),
+        width="1/4",
+        md_width="1/4",
     )
 
     selector_epic_area_id = Selector2(
         set_value=set_epic_area_id,
         data=epic_areas_names_by_epic_id(epic_id),
+        width="[14%]",
+        md_width="[32%]",
     )
-    selector_year_month = Selector2(
-        set_value=set_year_month,
-        data=year_month_dict_list(),
-    )
-    selector_days = Selector2(
-        set_value=set_day,
-        data=days_in_month(),
-    )
+    # selector_year_month = Selector2(
+    #     set_value=set_year_month,
+    #     data=year_month_dict_list(),
+    # )
+    # selector_days = Selector2(
+    #     set_value=set_day,
+    #     data=days_in_month(),
+    # )
 
-    selector_start_time = Selector2(
-        set_value=set_start_time,
-        data=hours(),
+    # selector_start_time = Selector2(
+    #     set_value=set_start_time,
+    #     data=hours(),
+    # )
+    # selector_end_time = Selector2(
+    #     set_value=set_end_time,
+    #     data=hours(),
+    # )
+    input_start_datetime = InputDateTime(
+        set_start_datetime,
+        width="[14%]",
+        md_width="[32%]",
     )
-    selector_end_time = Selector2(
-        set_value=set_end_time,
-        data=hours(),
+    input_end_datetime = InputDateTime(
+        set_end_datetime,
+        width="[14%]",
+        md_width="[32%]",
+    )
+    print(
+        "datetimeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee is",
+        datetime,
+        type(datetime),
     )
     is_disabled = True
     if (
         user_id != ""
         and epic_id != ""
         and epic_area_id != (0 or "")
-        and year_month != ""
-        and day != ""
-        and start_time != ""
-        and end_time != ""
+        # and year_month != ""
+        # and day != ""
+        # and start_time != ""
+        # and end_time != ""
+        and start_datetime
+        and end_datetime
     ):
         is_disabled = False
 
     btn = Button(is_disabled, handle_submit, label="Submit")
     return html.section(
-        {"class": "bg-filter-block-bg py-4 text-sm"},
-        Container(
+        {
+            "class": "flex flex-wrap w-full justify-between items-center 2xl:justify-between"
+        },
+        Column(
             H3("Your current project"),
-            html.div(
-                {
-                    "class": "flex flex-wrap justify-between items-center md:justify-start 2xl:justify-between"
-                },
+            # Container
+            Row(
                 selector_user,
                 selector_epic_id,
                 selector_epic_area_id,
-                selector_year_month,
-                selector_days,
-                selector_start_time,
-                selector_end_time,
-                btn,
+                # selector_year_month,
+                # selector_days,
+                # selector_start_time,
+                # selector_end_time,
+                input_start_datetime,
+                input_end_datetime,
+                # justify="justify-between",
+                # wrap="flex-wrap",
             ),
+            # btn,
+            Row(btn),
         ),
     )
 

@@ -90,18 +90,25 @@ def Selector(
 
 @component
 def Selector2(
-    set_value: Callable, data: List, width: str = "14%", md_width: str = "121px", set_sel_value: Callable = None, sel_value: Any = None,
+    set_value: Callable,
+    data: List,
+    width: str = "14%",
+    md_width: str = "121px",
+    set_sel_value: Callable = None,
+    sel_value: Any = None,
 ):
     options = []
     for row in data:
         option = html.option({"value": row["value"]}, row["display_value"])
         options.append(option)
+
     @event()
     async def on_change(event):
         set_value(event["target"]["value"])
         if (set_sel_value and sel_value) != None:
-            set_sel_value(sel_value) 
+            set_sel_value(sel_value)
         return True
+
     return html.div(
         {
             "class": f"block relative w-full sm:w-[48%] md:w-[{md_width}] md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:border-t-appearance before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute xl:w-[{width}] 2xl:mr-0"
@@ -114,6 +121,7 @@ def Selector2(
             options,
         ),
     )
+
 
 def SelectorDropdownKeyValue(rows: List[Any]):
     crows = []
@@ -183,4 +191,19 @@ def Checkbox(value_checkbox, handle_change):
                 "type": "checkbox",
             }
         ),
+    )
+
+
+@component
+def InputDateTime(
+    set_value,
+    width: str = "[401px]",
+    md_width: str = "1/2",
+):
+    return html.input(
+        {
+            "class": f"w-full my-4 md:w-{md_width} flex justify-between items-center bg-nav border-input-border border-[1px] rounded-[3px] py-2 px-4 xl:max-w-{width} xl:w-full",
+            "type": "datetime-local",
+            "onChange": lambda event: set_value(event["target"]["value"]),
+        }
     )
