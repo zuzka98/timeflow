@@ -14,6 +14,7 @@ from ..data.rates import (
     rate_active_by_user_client,
     rate_update,
     to_rate,
+    rate_active
 )
 
 from ..data.clients import clients_names
@@ -50,7 +51,7 @@ def page():
         ),
         Container(
             Column(
-                Row(rates_table(user_id, client_id)),
+                Row(rates_table_zuzia()),
             ),
             Row(update_rate(set_updated_rate, user_id, client_id, month_start)),
         ),
@@ -134,13 +135,17 @@ def create_rates_form(
     )
 
 
-@component
-def rates_table(user_id, client_id):
-    # Get list of rates by user and client
-    if user_id != "" and client_id != "":
-        rows = rate_active_by_user_client(user_id, client_id)
-        return html.div({"class": "flex w-full"}, SimpleTable(rows))
+# @component
+# def rates_table(user_id, client_id):
+#     # Get list of rates by user and client
+#     if user_id != "" and client_id != "":
+#         rows = rate_active_by_user_client(user_id, client_id)
+#         return html.div({"class": "flex w-full"}, SimpleTable(rows))
 
+@component
+def rates_table_():
+    rows = rate_active()
+    return html.div({"class": "flex w-full"}, SimpleTable(rows))
 
 @component
 def update_rate(set_updated_rate, user_id, client_id, month_start):

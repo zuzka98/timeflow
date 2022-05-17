@@ -1,3 +1,5 @@
+from backend.models.user import AppUser
+from ..models.client import Client
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session, far_date, date_str_to_date
 from sqlmodel import Session, select
@@ -15,7 +17,7 @@ async def post_rate(
 ):
     """Post new rate"""
     """
-    Post new rate.
+    Post new rate. 
 
     Parameters
     ----------
@@ -58,22 +60,22 @@ async def post_rate(
             return True
 
 
-@router.get("/")
-async def read_rates(
-    session: Session = Depends(get_session),
-):
-    """
-    Get all rates.
+# @router.get("/")
+# async def read_rates(
+#     session: Session = Depends(get_session),
+# ):
+#     """
+#     Get all rates.
 
-    Parameters
-    ----------
-    session : Session
-        SQL session that is to be used to get the rates.
-        Defaults to creating a dependency on the running SQL model session.
-    """
-    statement = select(Rate)
-    result = session.exec(statement).all()
-    return result
+#     Parameters
+#     ----------
+#     session : Session
+#         SQL session that is to be used to get the rates.
+#         Defaults to creating a dependency on the running SQL model session.
+#     """
+#     statement = select(Rate)
+#     result = session.exec(statement).all()
+#     return result
 
 
 @router.get("/users/{user_id}/clients/{client_id}/")
@@ -217,3 +219,23 @@ async def update_rates(
     session.commit()
     session.refresh(rate_to_update)
     return True
+
+@router.get("/")
+async def get_rates(session: Session = Depends(get_session)):
+    
+    statement = (
+        select(
+            AppUser.username,
+            Rate.id,
+            Client.name,
+            Rate.user_id,
+            Rate.valid_from,
+            Rate.valid_to,
+            Rate.amount
+        )
+        .join(AppUser)
+        .join(Client)
+        
+    )
+    results = session.exec(statement).all()
+    return results 
