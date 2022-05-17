@@ -60,22 +60,34 @@ async def post_rate(
             return True
 
 
-# @router.get("/")
-# async def read_rates(
-#     session: Session = Depends(get_session),
-# ):
-#     """
-#     Get all rates.
+@router.get("/")
+async def get_rates(session: Session = Depends(get_session)):
+    """
+    Get all rates.
+    
+    Parameters
+    ----------
+        session (Session, optional): SQL session that is to be used to get the rates.
+                                        Defaults to Depends(get_session).
 
-#     Parameters
-#     ----------
-#     session : Session
-#         SQL session that is to be used to get the rates.
-#         Defaults to creating a dependency on the running SQL model session.
-#     """
-#     statement = select(Rate)
-#     result = session.exec(statement).all()
-#     return result
+    """
+    statement = (
+        select(
+            AppUser.username,
+            Rate.id,
+            Client.name,
+            Rate.user_id,
+            Rate.valid_from,
+            Rate.valid_to,
+            Rate.amount
+        )
+        .join(AppUser)
+        .join(Client)
+        .order_by(AppUser.username.asc())
+
+    )
+    results = session.exec(statement).all()
+    return results
 
 
 @router.get("/users/{user_id}/clients/{client_id}/")
@@ -98,7 +110,8 @@ async def rates_by_user_client(
         Defaults to creating a dependency on the running SQL model session.
     """
     statement = (
-        select(Rate).where(Rate.user_id == user_id).where(Rate.client_id == client_id)
+        select(Rate).where(Rate.user_id == user_id).where(
+            Rate.client_id == client_id)
     )
     result = session.exec(statement).all()
     return result
@@ -219,23 +232,3 @@ async def update_rates(
     session.commit()
     session.refresh(rate_to_update)
     return True
-
-@router.get("/")
-async def get_rates(session: Session = Depends(get_session)):
-    
-    statement = (
-        select(
-            AppUser.username,
-            Rate.id,
-            Client.name,
-            Rate.user_id,
-            Rate.valid_from,
-            Rate.valid_to,
-            Rate.amount
-        )
-        .join(AppUser)
-        .join(Client)
-        
-    )
-    results = session.exec(statement).all()
-    return results 

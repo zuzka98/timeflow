@@ -15,7 +15,7 @@ class Rate(TypedDict):
     updated_at: datetime
     is_active: bool
     
-def rate_active():
+def rates_all():
     api = f"{base_url}/api/rates/"
     response = requests.get(api)
     rows = []

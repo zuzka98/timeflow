@@ -14,7 +14,7 @@ from ..data.rates import (
     rate_active_by_user_client,
     rate_update,
     to_rate,
-    rate_active
+    rates_all
 )
 
 from ..data.clients import clients_names
@@ -51,7 +51,7 @@ def page():
         ),
         Container(
             Column(
-                Row(rates_table_zuzia()),
+                Row(rates_table()),
             ),
             Row(update_rate(set_updated_rate, user_id, client_id, month_start)),
         ),
@@ -135,17 +135,11 @@ def create_rates_form(
     )
 
 
-# @component
-# def rates_table(user_id, client_id):
-#     # Get list of rates by user and client
-#     if user_id != "" and client_id != "":
-#         rows = rate_active_by_user_client(user_id, client_id)
-#         return html.div({"class": "flex w-full"}, SimpleTable(rows))
-
 @component
-def rates_table_():
-    rows = rate_active()
+def rates_table():
+    rows = rates_all()
     return html.div({"class": "flex w-full"}, SimpleTable(rows))
+
 
 @component
 def update_rate(set_updated_rate, user_id, client_id, month_start):
@@ -157,7 +151,8 @@ def update_rate(set_updated_rate, user_id, client_id, month_start):
         set_updated_rate(new_amount)
 
     inp_rate_id = Input(set_rate_id, label="rate id", width="full")
-    inp_amount = Input(set_value=set_new_amount, label="new amount", width="full")
+    inp_amount = Input(set_value=set_new_amount,
+                       label="new amount", width="full")
     is_disabled = True
     if rate_id != None and new_amount != "":
         is_disabled = False

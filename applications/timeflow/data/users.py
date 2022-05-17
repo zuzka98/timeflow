@@ -59,7 +59,6 @@ def users_active():
     api = f"{base_url}/api/users/"
     params = {"is_active": True}
     response = requests.get(api, params=params)
-    print(response)
     rows = []
     for item in response.json():
         d = {
