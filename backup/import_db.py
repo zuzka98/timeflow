@@ -1,12 +1,22 @@
 import datetime
+from dotenv import load_dotenv
 import os
 import pandas as pd
 import re
 from sqlalchemy import create_engine
 
+
+load_dotenv()
+POSTGRE_USER = os.getenv("POSTGRE_USER")
+POSTGRE_PASS = os.getenv("POSTGRE_PASS")
+POSTGRE_DB = os.getenv("POSTGRE_DB")
+POSTGRE_PORT = os.getenv("POSTGRE_PORT")
+
 # Connection to database
 # cnxn = pyodbc.connect('DRIVER={PostgreSQL Unicode};Server=127.0.0.1;Port=5432;Database=test_db;Uid=pguser;Pwd=password;')
-engine = create_engine("postgresql://pguser:password@127.0.0.1:5432/test_db")
+engine = create_engine(
+    f"postgresql://{POSTGRE_USER}:{POSTGRE_PASS}@127.0.0.1:{POSTGRE_PORT}/{POSTGRE_DB}"
+)
 cnxn = engine.connect()
 
 # Order of which to update database by
