@@ -1,3 +1,8 @@
+"""
+Script is to be run with backup folders and parquet files within the same directory as this script.
+Importing directly from cloud has not yet been implemented.
+"""
+
 import datetime
 from dotenv import load_dotenv
 import os
