@@ -1,10 +1,14 @@
+"""
+Run this backup script locally.
+Must be run from within the same directory that the script lies in to trigger proper file organization
+"""
+
 from datetime import datetime, timedelta
 from sqlalchemy import create_engine
 from dotenv import load_dotenv
 import ftplib
 import dask
 import os
-import pyodbc
 import pandas as pd
 import re
 
