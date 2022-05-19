@@ -1,3 +1,4 @@
+from os import stat
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
 from ..models.demand import Demand
@@ -5,6 +6,7 @@ from sqlmodel import Session, select, and_
 from sqlalchemy.exc import NoResultFound
 from ..models.team import Team
 from ..models.epic import Epic
+from backend.models import epic
 
 router = APIRouter(prefix="/api/demands", tags=["demand"])
 
@@ -68,7 +70,6 @@ async def get_demands(
     year : int
         Year of the demand.
     """
-    statement = select(Demand)
     # Select demand by epic_id, team_id, month, year
     if (team_id and epic_id and month and year) != None:
         statement = (
@@ -88,7 +89,90 @@ async def get_demands(
             .where(Demand.month == month)
             .where(Demand.year == year)
         )
+    else:
+        statement = (
+            select(
+                Demand.id.label("demand_id"),
+                Team.short_name.label("team_short_name"),
+                Epic.short_name.label("epic_short_name"),
+                Demand.year,
+                Demand.month,
+                Demand.days,
+            )
+            .select_from(Demand)
+            .join(Team, Demand.team_id == Team.id)
+            .join(Epic, Demand.epic_id == Epic.id)
+        )
 
+    result = session.exec(statement).all()
+    return result
+
+
+@router.get("/teams/{team_id}/")
+async def get_demands_by_teams(
+    team_id: int,
+    session: Session = Depends(get_session),
+):
+    statement = (
+        select(
+            Demand.id.label("demand_id"),
+            Team.short_name.label("team_short_name"),
+            Epic.short_name.label("epic_short_name"),
+            Demand.year,
+            Demand.month,
+            Demand.days,
+        )
+        .select_from(Demand)
+        .join(Team, Demand.team_id == Team.id)
+        .join(Epic, Demand.epic_id == Epic.id)
+        .where(Demand.team_id == team_id)
+    )
+    result = session.exec(statement).all()
+    return result
+
+
+@router.get("/teams/{team_id}/epics/{epic_id}/")
+async def get_demands_by_teams_epics(
+    team_id: int,
+    epic_id: int,
+    session: Session = Depends(get_session)
+):
+    statement = (
+        select(
+            Demand.id.label("demand_id"),
+            Team.short_name.label("team_short_name"),
+            Epic.short_name.label("epic_short_name"),
+            Demand.year,
+            Demand.month,
+            Demand.days,
+        )
+        .join(Team, Demand.team_id == Team.id)
+        .join(Epic, Demand.epic_id == Epic.id)
+        .where(Demand.team_id == team_id)
+        .where(Demand.epic_id == epic_id)
+    )
+    result = session.exec(statement).all()
+    return result
+
+
+@router.get("/epics/{epic_id}/")
+async def get_demands_by_epics(
+    epic_id: int,
+    session: Session = Depends(get_session)
+):
+    statement = (
+        select(
+            Demand.id.label("demand_id"),
+            Team.short_name.label("team_short_name"),
+            Epic.short_name.label("epic_short_name"),
+            Demand.year,
+            Demand.month,
+            Demand.days,
+        )
+        .join(Team, Demand.team_id == Team.id)
+        .join(Epic, Demand.epic_id == Epic.id)
+        .where(Demand.epic_id == epic_id)
+    )
     result = session.exec(statement).all()
     return result
 

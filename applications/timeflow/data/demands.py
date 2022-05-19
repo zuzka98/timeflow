@@ -38,6 +38,72 @@ def to_demand(team_id: int, epic_id: int, year_month: str, days: int) -> bool:
     return True
 
 
+def demands_all():
+    api = f"{base_url}/api/demands/"
+    response = requests.get(api)
+    rows = []
+    for item in response.json():
+        d = {
+            "demand id": item["demand_id"],
+            "team": item["team_short_name"],
+            "epic": item["epic_short_name"],
+            "year": item["year"],
+            "month": item["month"],
+            "demand days": item["days"],
+        }
+        rows.append(d)
+    return rows
+
+
+def demands_by_team(team_id) -> List[Dict]:
+    api = f"{base_url}/api/demands/teams/{team_id}/"
+    response = requests.get(api)
+    rows = []
+    for item in response.json():
+        d = {
+            "demand id": item["demand_id"],
+            "team": item["team_short_name"],
+            "epic": item["epic_short_name"],
+            "year": item["year"],
+            "month": item["month"],
+            "demand days": item["days"],
+        }
+        rows.append(d)
+    return rows
+
+def demands_by_team_epic(team_id, epic_id) -> List[Dict]:
+    api = f"{base_url}/api/demands/teams/{team_id}/epics/{epic_id}/"
+    response = requests.get(api)
+    rows = []
+    for item in response.json():
+        d = {
+            "demand id": item["demand_id"],
+            "team": item["team_short_name"],
+            "epic": item["epic_short_name"],
+            "year": item["year"],
+            "month": item["month"],
+            "demand days": item["days"],
+        }
+        rows.append(d)
+    return rows
+
+def demands_by_epic(epic_id) -> List[Dict]:
+    api = f"{base_url}/api/demands/epics/{epic_id}/"
+    response = requests.get(api)
+    rows = []
+    for item in response.json():
+        d = {
+            "demand id": item["demand_id"],
+            "team": item["team_short_name"],
+            "epic": item["epic_short_name"],
+            "year": item["year"],
+            "month": item["month"],
+            "demand days": item["days"],
+        }
+        rows.append(d)
+    return rows
+    
+
 def demands_by_team_epic_year_month(team_id, epic_id, year_month) -> List[Dict]:
     if team_id != "" and epic_id != "" and year_month != "":
         api = f"{base_url}/api/demands/"
