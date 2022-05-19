@@ -71,6 +71,7 @@ def demands_by_team(team_id) -> List[Dict]:
         rows.append(d)
     return rows
 
+
 def demands_by_team_epic(team_id, epic_id) -> List[Dict]:
     api = f"{base_url}/api/demands/teams/{team_id}/epics/{epic_id}/"
     response = requests.get(api)
@@ -87,6 +88,7 @@ def demands_by_team_epic(team_id, epic_id) -> List[Dict]:
         rows.append(d)
     return rows
 
+
 def demands_by_epic(epic_id) -> List[Dict]:
     api = f"{base_url}/api/demands/epics/{epic_id}/"
     response = requests.get(api)
@@ -102,7 +104,7 @@ def demands_by_epic(epic_id) -> List[Dict]:
         }
         rows.append(d)
     return rows
-    
+
 
 def demands_by_team_epic_year_month(team_id, epic_id, year_month) -> List[Dict]:
     if team_id != "" and epic_id != "" and year_month != "":

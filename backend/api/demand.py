@@ -1,4 +1,3 @@
-from os import stat
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
 from ..models.demand import Demand
@@ -6,7 +5,6 @@ from sqlmodel import Session, select, and_
 from sqlalchemy.exc import NoResultFound
 from ..models.team import Team
 from ..models.epic import Epic
-from backend.models import epic
 
 router = APIRouter(prefix="/api/demands", tags=["demand"])
 
@@ -70,7 +68,6 @@ async def get_demands(
     year : int
         Year of the demand.
     """
-    # Select demand by epic_id, team_id, month, year
     if (team_id and epic_id and month and year) != None:
         statement = (
             select(
@@ -113,6 +110,12 @@ async def get_demands_by_teams(
     team_id: int,
     session: Session = Depends(get_session),
 ):
+    """Get list of all the demands by team_id.
+
+    Args:
+        team_id (int): ID of the team to get the demand from.
+        session (Session, optional): SQL session that is to be used to get a list of all of the demands. Defaults to Depends(get_session).
+    """
     statement = (
         select(
             Demand.id.label("demand_id"),
@@ -133,10 +136,15 @@ async def get_demands_by_teams(
 
 @router.get("/teams/{team_id}/epics/{epic_id}/")
 async def get_demands_by_teams_epics(
-    team_id: int,
-    epic_id: int,
-    session: Session = Depends(get_session)
+    team_id: int, epic_id: int, session: Session = Depends(get_session)
 ):
+    """Get list of all demands by team_id and epic_id.
+
+    Args:
+        team_id (int): ID of the team to get the demand from.
+        epic_id (int): ID of the epic to get the demand from.
+        session (Session, optional): SQL session that is to be used to get a list of all of the demands. Defaults to Depends(get_session).
+    """
     statement = (
         select(
             Demand.id.label("demand_id"),
@@ -156,10 +164,13 @@ async def get_demands_by_teams_epics(
 
 
 @router.get("/epics/{epic_id}/")
-async def get_demands_by_epics(
-    epic_id: int,
-    session: Session = Depends(get_session)
-):
+async def get_demands_by_epics(epic_id: int, session: Session = Depends(get_session)):
+    """Get list of all demands by epic_id.
+
+    Args:
+        epic_id (int): ID of the epic to get the demand from.
+        session (Session, optional): SQL session that is to be used to get a list of all of the demands. Defaults to Depends(get_session).
+    """
     statement = (
         select(
             Demand.id.label("demand_id"),

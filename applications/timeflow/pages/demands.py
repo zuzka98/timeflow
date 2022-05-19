@@ -18,7 +18,7 @@ from ..data.demands import (
     demands_all,
     demands_by_team,
     demands_by_team_epic,
-    demands_by_epic
+    demands_by_epic,
 )
 from ..data.teams import teams_id_name
 from ..data.epics import epics_names
