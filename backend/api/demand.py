@@ -110,12 +110,18 @@ async def get_demands_by_teams(
     team_id: int,
     session: Session = Depends(get_session),
 ):
-    """Get list of all the demands by team_id.
-
-    Args:
-        team_id (int): ID of the team to get the demand from.
-        session (Session, optional): SQL session that is to be used to get a list of all of the demands. Defaults to Depends(get_session).
     """
+    Get list of all the demands by team_id.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get a list of all of the demands.
+        Defaults to creating a dependency on the running SQL model session.
+    team_id : int
+        ID of the team to get the demand from.
+    """
+
     statement = (
         select(
             Demand.id.label("demand_id"),
@@ -138,13 +144,20 @@ async def get_demands_by_teams(
 async def get_demands_by_teams_epics(
     team_id: int, epic_id: int, session: Session = Depends(get_session)
 ):
-    """Get list of all demands by team_id and epic_id.
-
-    Args:
-        team_id (int): ID of the team to get the demand from.
-        epic_id (int): ID of the epic to get the demand from.
-        session (Session, optional): SQL session that is to be used to get a list of all of the demands. Defaults to Depends(get_session).
     """
+    Get list of all demands by team_id and epic_id.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get a list of all of the demands.
+        Defaults to creating a dependency on the running SQL model session.
+    team_id : int
+        ID of the team to get the demand from.
+    epic_id : int
+        ID of the epic to get the demand from.
+    """
+
     statement = (
         select(
             Demand.id.label("demand_id"),
@@ -165,12 +178,18 @@ async def get_demands_by_teams_epics(
 
 @router.get("/epics/{epic_id}/")
 async def get_demands_by_epics(epic_id: int, session: Session = Depends(get_session)):
-    """Get list of all demands by epic_id.
-
-    Args:
-        epic_id (int): ID of the epic to get the demand from.
-        session (Session, optional): SQL session that is to be used to get a list of all of the demands. Defaults to Depends(get_session).
     """
+    Get list of all the demands by team_id.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get a list of all of the demands.
+        Defaults to creating a dependency on the running SQL model session.
+    epic_id : int
+        ID of the epic to get the demand from.
+    """
+
     statement = (
         select(
             Demand.id.label("demand_id"),
