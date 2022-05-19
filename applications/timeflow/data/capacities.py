@@ -60,7 +60,6 @@ def capacities_by_user_team_year_month(user_id, team_id, year_month) -> List[Dic
                 "capacity days": item["days"],
             }
             rows.append(d)
-        print(rows)
         return rows
 
 

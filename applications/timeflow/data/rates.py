@@ -18,9 +18,7 @@ class Rate(TypedDict):
 
 def rate_active_by_user_client(user_id: int, client_id: int) -> List[Dict]:
     api = f"{base_url}/api/rates/users/{user_id}/clients/{client_id}/"
-    print(api)
     response = requests.get(api)
-    print(response)
     rows = []
     for item in response.json():
         d = {
