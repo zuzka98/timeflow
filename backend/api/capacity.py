@@ -1,3 +1,4 @@
+from webbrowser import get
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
 from ..models.capacity import Capacity
@@ -57,7 +58,7 @@ async def get_capacities(
     session : Session
         SQL session that is to be used to get a list of the epic areas.
         Defaults to creating a dependency on the running SQL model session.
-    is_locked : bool
+    # is_locked : bool
         Whether or not the capacity is locked or not.
     user_id : int
         User id of the user in question.
@@ -68,7 +69,6 @@ async def get_capacities(
     year : int
         Year of capacity in question.
     """
-    statement = select(Capacity)
     # Select capacity by user_id, team_id, month, year
     if (user_id and team_id and month and year) != None:
         statement = (
@@ -80,7 +80,6 @@ async def get_capacities(
                 Capacity.month,
                 Capacity.days,
             )
-            .select_from(Capacity)
             .join(AppUser, Capacity.user_id == AppUser.id)
             .join(Team, Capacity.team_id == Team.id)
             .where(Capacity.user_id == user_id)
@@ -88,7 +87,92 @@ async def get_capacities(
             .where(Capacity.month == month)
             .where(Capacity.year == year)
         )
+    else:
+        statement = (
+            select(
+                Capacity.id.label("capacity_id"),
+                AppUser.username.label("user_username"),
+                Team.short_name.label("team_short_name"),
+                Capacity.year,
+                Capacity.month,
+                Capacity.days,
+            )
+            .join(AppUser, Capacity.user_id == AppUser.id)
+            .join(Team, Capacity.team_id == Team.id)
+        )
 
+    result = session.exec(statement).all()
+    return result
+
+
+@router.get("/users/{user_id}/")
+async def get_capacities_user(
+    user_id: int,
+    session: Session = Depends(get_session)
+):
+    statement = (
+        select(
+            Capacity.id.label("capacity_id"),
+            AppUser.username.label("user_username"),
+            Team.short_name.label("team_short_name"),
+            Capacity.year,
+            Capacity.month,
+            Capacity.days,
+        )
+        .select_from(Capacity)
+        .join(AppUser, Capacity.user_id == AppUser.id)
+        .join(Team, Capacity.team_id == Team.id)
+        .where(Capacity.user_id == user_id)
+    )
+
+    result = session.exec(statement).all()
+    return result
+
+
+@router.get("/teams/{team_id}/")
+async def get_capacity_team(
+    team_id: int,
+    session: Session = Depends(get_session)
+):
+    statement = (
+        select(
+            Capacity.id.label("capacity_id"),
+            AppUser.username.label("user_username"),
+            Team.short_name.label("team_short_name"),
+            Capacity.year,
+            Capacity.month,
+            Capacity.days,
+        )
+        .select_from(Capacity)
+        .join(AppUser, Capacity.user_id == AppUser.id)
+        .join(Team, Capacity.team_id == Team.id)
+        .where(Capacity.team_id == team_id)
+    )
+    result = session.exec(statement).all()
+    return result
+
+
+@router.get("/users/{user_id}/teams/{team_id}/")
+async def get_capacities_user_team(
+    user_id: int,
+    team_id: int,
+    session: Session = Depends(get_session)
+):
+    statement = (
+        select(
+            Capacity.id.label("capacity_id"),
+            AppUser.username.label("user_username"),
+            Team.short_name.label("team_short_name"),
+            Capacity.year,
+            Capacity.month,
+            Capacity.days,
+        )
+        .select_from(Capacity)
+        .join(AppUser, Capacity.user_id == AppUser.id)
+        .join(Team, Capacity.team_id == Team.id)
+        .where(Capacity.user_id == user_id)
+        .where(Capacity.team_id == team_id)
+    )
     result = session.exec(statement).all()
     return result
 

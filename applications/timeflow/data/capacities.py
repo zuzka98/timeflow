@@ -1,3 +1,4 @@
+from email.mime import base
 import requests
 import json
 from ..config import base_url
@@ -33,35 +34,101 @@ def to_capacity(user_id: int, team_id: int, year_month: str, days: int) -> bool:
     response = requests.post(
         f"{base_url}/api/capacities",
         data=json.dumps(dict(data)),
-        headers={"accept": "application/json", "Content-Type": "application/json"},
+        headers={"accept": "application/json",
+                 "Content-Type": "application/json"},
     )
     return True
 
 
-def capacities_by_user_team_year_month(user_id, team_id, year_month) -> List[Dict]:
-    if user_id != "" and team_id != "" and year_month != "":
-        api = f"{base_url}/api/capacities/"
-        params = {
-            "user_id": user_id,
-            "team_id": team_id,
-            "year": int(year_month[:4]),
-            "month": int(year_month[5:7]),
+def capacities_all():
+    api = f"{base_url}/api/capacities/"
+    response = requests.get(api)
+    rows = []
+    for item in response.json():
+        d = {
+            "capacity id": item["capacity_id"],
+            "user": item["user_username"],
+            "team": item["team_short_name"],
+            "year": item["year"],
+            "month": item["month"],
+            "capacity days": item["days"],
         }
+        rows.append(d)
+    return rows
 
-        response = requests.get(api, params=params)
-        rows = []
-        for item in response.json():
-            d = {
-                "capacity id": item["capacity_id"],
-                "user": item["user_username"],
-                "team": item["team_short_name"],
-                "year": item["year"],
-                "month": item["month"],
-                "capacity days": item["days"],
-            }
-            rows.append(d)
-        print(rows)
-        return rows
+
+def capacities_by_user(user_id: int) -> List[Dict]:
+    api = f"{base_url}/api/capacities/users/{user_id}/"
+    response = requests.get(api)
+    rows = []
+    for item in response.json():
+        d = {
+            "capacity id": item["capacity_id"],
+            "user": item["user_username"],
+            "team": item["team_short_name"],
+            "year": item["year"],
+            "month": item["month"],
+            "capacity days": item["days"],
+        }
+        rows.append(d)
+    return rows
+
+def capacities_by_user_team(user_id: int, team_id: int) -> List[Dict]:
+    api = f"{base_url}/api/capacities/users/{user_id}/teams/{team_id}/"
+    response = requests.get(api)
+    rows = []
+    for item in response.json():
+        d = {
+            "capacity id": item["capacity_id"],
+            "user": item["user_username"],
+            "team": item["team_short_name"],
+            "year": item["year"],
+            "month": item["month"],
+            "capacity days": item["days"],
+        }
+        rows.append(d)
+    return rows
+
+
+def capacities_by_team(team_id: int) -> List[Dict]:
+    api = f"{base_url}/api/capacities/teams/{team_id}/"
+    response = requests.get(api)
+    rows = []
+    for item in response.json():
+        d = {
+            "capacity id": item["capacity_id"],
+            "user": item["user_username"],
+            "team": item["team_short_name"],
+            "year": item["year"],
+            "month": item["month"],
+            "capacity days": item["days"],
+        }
+        rows.append(d)
+    return rows
+
+# def capacities_by_user_team_year_month(user_id, team_id, year_month) -> List[Dict]:
+#     if user_id != "" and team_id != "" and year_month != "":
+#         api = f"{base_url}/api/capacities/users/{user_id}/teams/{team_id}/"
+#         params = {
+#             "user_id": user_id,
+#             "team_id": team_id,
+#             "year": int(year_month[:4]),
+#             "month": int(year_month[5:7]),
+#         }
+
+#         response = requests.get(api, params=params)
+#         rows = []
+#         for item in response.json():
+#             d = {
+#                 "capacity id": item["capacity_id"],
+#                 "user": item["user_username"],
+#                 "team": item["team_short_name"],
+#                 "year": item["year"],
+#                 "month": item["month"],
+#                 "capacity days": item["days"],
+#             }
+#             rows.append(d)
+#         return rows
 
 
 def capacity_days() -> List[Dict]:
