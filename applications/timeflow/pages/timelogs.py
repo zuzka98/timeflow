@@ -122,9 +122,6 @@ def create_timelog_form(
         year = start_datetime[0:4]
         month = start_datetime[5:7]
 
-        # start_time_post = f"{year}-{month}-{day} {start_time}"
-        # end_time_post = f"{year}-{month}-{day} {end_time}"
-
         start_time_post = start_datetime.replace("T", " ")
         end_time_post = end_datetime.replace("T", " ")
         to_timelog(
@@ -139,13 +136,12 @@ def create_timelog_form(
             updated_at=str(datetime.now()),
         )
         switch_state(is_event, set_is_event)
-        set_epic_id("")
 
     selector_user = Selector2(
         set_value=set_user_id,
         data=username(),
-        width="[14%]",
-        md_width="[32%]",
+        width="14%",
+        md_width="32%",
     )
 
     selector_epic_id = Selector2(
@@ -153,57 +149,25 @@ def create_timelog_form(
         set_sel_value=set_epic_area_id,
         sel_value="",
         data=epics_names(is_active=True),
-        width="1/4",
-        md_width="1/4",
+        width="14%",
+        md_width="32%",
     )
 
     selector_epic_area_id = Selector2(
         set_value=set_epic_area_id,
         data=epic_areas_names_by_epic_id(epic_id),
-        width="[14%]",
-        md_width="[32%]",
+        width="14%",
+        md_width="32%",
     )
-    # selector_year_month = Selector2(
-    #     set_value=set_year_month,
-    #     data=year_month_dict_list(),
-    # )
-    # selector_days = Selector2(
-    #     set_value=set_day,
-    #     data=days_in_month(),
-    # )
-
-    # selector_start_time = Selector2(
-    #     set_value=set_start_time,
-    #     data=hours(),
-    # )
-    # selector_end_time = Selector2(
-    #     set_value=set_end_time,
-    #     data=hours(),
-    # )
-    input_start_datetime = InputDateTime(
-        set_start_datetime,
-        width="[14%]",
-        md_width="[32%]",
-    )
-    input_end_datetime = InputDateTime(
-        set_end_datetime,
-        width="[14%]",
-        md_width="[32%]",
-    )
-    print(
-        "datetimeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee is",
-        datetime,
-        type(datetime),
-    )
+    h_start = H3("from:", "bold")
+    input_start_datetime = InputDateTime(set_start_datetime)
+    h_end = H3("to:", "bold")
+    input_end_datetime = InputDateTime(set_end_datetime)
     is_disabled = True
     if (
         user_id != ""
         and epic_id != ""
         and epic_area_id != (0 or "")
-        # and year_month != ""
-        # and day != ""
-        # and start_time != ""
-        # and end_time != ""
         and start_datetime
         and end_datetime
     ):
@@ -211,27 +175,22 @@ def create_timelog_form(
 
     btn = Button(is_disabled, handle_submit, label="Submit")
     return html.section(
-        {
-            "class": "flex flex-wrap w-full justify-between items-center 2xl:justify-between"
-        },
-        Column(
-            H3("Your current project"),
-            # Container
-            Row(
+        {"class": "bg-filter-block-bg py-4 text-sm"},
+        Container(
+            H3("Select timelog"),
+            html.div(
+                {
+                    "class": "flex flex-wrap justify-between items-center md:justify-start 2xl:justify-between"
+                },
                 selector_user,
                 selector_epic_id,
                 selector_epic_area_id,
-                # selector_year_month,
-                # selector_days,
-                # selector_start_time,
-                # selector_end_time,
+                h_start,
                 input_start_datetime,
+                h_end,
                 input_end_datetime,
-                # justify="justify-between",
-                # wrap="flex-wrap",
+                btn,
             ),
-            # btn,
-            Row(btn),
         ),
     )
 

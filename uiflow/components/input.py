@@ -195,15 +195,11 @@ def Checkbox(value_checkbox, handle_change):
 
 
 @component
-def InputDateTime(
-    set_value,
-    width: str = "[401px]",
-    md_width: str = "1/2",
-):
+def InputDateTime(set_value):
     return html.input(
         {
-            "class": f"w-full my-4 md:w-{md_width} flex justify-between items-center bg-nav border-input-border border-[1px] rounded-[3px] py-2 px-4 xl:max-w-{width} xl:w-full",
+            "class": "py-3 pl-3 w-full border-[1px] sm:w-[48%] md:w-[121px] bg-nav rounded-[3px] md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute xl:w-[14%]",
             "type": "datetime-local",
             "onChange": lambda event: set_value(event["target"]["value"]),
-        }
+        },
     )
