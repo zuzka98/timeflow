@@ -13,12 +13,12 @@ from ..data.capacities import (
     capacities_by_team,
     capacity_days,
     to_capacity,
-    # capacities_by_user_team_year_month,
+    capacities_by_user_team_year_month,
     capacity_deletion,
     capacities_all,
     capacities_by_user,
     capacities_by_user_team,
-    capacities_by_team
+    capacities_by_team,
 )
 from ..data.users import users_names
 from ..data.teams import teams_id_name

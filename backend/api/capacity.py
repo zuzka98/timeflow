@@ -1,4 +1,3 @@
-from webbrowser import get
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session
 from ..models.capacity import Capacity
@@ -69,7 +68,6 @@ async def get_capacities(
     year : int
         Year of capacity in question.
     """
-    # Select capacity by user_id, team_id, month, year
     if (user_id and team_id and month and year) != None:
         statement = (
             select(
@@ -106,10 +104,13 @@ async def get_capacities(
 
 
 @router.get("/users/{user_id}/")
-async def get_capacities_user(
-    user_id: int,
-    session: Session = Depends(get_session)
-):
+async def get_capacities_user(user_id: int, session: Session = Depends(get_session)):
+    """Get list of capacities by user_id.
+
+    Args:
+        user_id (int): The id of the person.
+        session (Session, optional): SQL session that is to be used to get a list of the capacities. Defaults to Depends(get_session).
+    """
     statement = (
         select(
             Capacity.id.label("capacity_id"),
@@ -130,10 +131,13 @@ async def get_capacities_user(
 
 
 @router.get("/teams/{team_id}/")
-async def get_capacity_team(
-    team_id: int,
-    session: Session = Depends(get_session)
-):
+async def get_capacity_team(team_id: int, session: Session = Depends(get_session)):
+    """Get list of all capacities by team_id.
+
+    Args:
+        team_id (int): The id of the team.
+        session (Session, optional): SQL session that is to be used to get a list of the capacities. Defaults to Depends(get_session).
+    """
     statement = (
         select(
             Capacity.id.label("capacity_id"),
@@ -154,10 +158,15 @@ async def get_capacity_team(
 
 @router.get("/users/{user_id}/teams/{team_id}/")
 async def get_capacities_user_team(
-    user_id: int,
-    team_id: int,
-    session: Session = Depends(get_session)
+    user_id: int, team_id: int, session: Session = Depends(get_session)
 ):
+    """Get list of all capacities by user_id and epic_id.
+
+    Args:
+        user_id (int): The id of the person.
+        team_id (int): The id of the team.
+        session (Session, optional): SQL session that is to be used to get a list of the capacities. Defaults to Depends(get_session).
+    """
     statement = (
         select(
             Capacity.id.label("capacity_id"),
