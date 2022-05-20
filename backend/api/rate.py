@@ -1,5 +1,5 @@
 from os import stat
-from backend.models.user import AppUser
+from ..models.user import AppUser
 from ..models.client import Client
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session, far_date, date_str_to_date
@@ -83,7 +83,7 @@ async def get_rates(session: Session = Depends(get_session)):
                 Rate.user_id,
                 Rate.valid_from,
                 Rate.valid_to,
-                Rate.amount
+                Rate.amount,
             )
             .join(AppUser)
             .join(Client)
@@ -101,7 +101,7 @@ async def get_rates(session: Session = Depends(get_session)):
                 Rate.user_id,
                 Rate.valid_from,
                 Rate.valid_to,
-                Rate.amount
+                Rate.amount,
             )
             .join(AppUser)
             .join(Client)
@@ -110,11 +110,9 @@ async def get_rates(session: Session = Depends(get_session)):
     results = session.exec(statement).all()
     return results
 
+
 @router.get("/users/{user_id}/")
-async def rates_by_user(
-    user_id: int,
-    session: Session = Depends(get_session)
-    ):
+async def rates_by_user(user_id: int, session: Session = Depends(get_session)):
     statement = (
         select(
             AppUser.username,
@@ -123,17 +121,15 @@ async def rates_by_user(
             Rate.user_id,
             Rate.valid_from,
             Rate.valid_to,
-            Rate.amount
+            Rate.amount,
         )
         .join(AppUser)
         .join(Client)
         .order_by(AppUser.username.asc())
         .where(Rate.user_id == user_id)
-        )
+    )
     results = session.exec(statement).all()
     return results
-    
-    
 
 
 @router.get("/users/{user_id}/clients/{client_id}/")
@@ -163,7 +159,7 @@ async def rates_by_user_client(
             Rate.user_id,
             Rate.valid_from,
             Rate.valid_to,
-            Rate.amount
+            Rate.amount,
         )
         .join(AppUser)
         .join(Client)
