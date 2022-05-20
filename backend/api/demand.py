@@ -68,8 +68,6 @@ async def get_demands(
     year : int
         Year of the demand.
     """
-    statement = select(Demand)
-    # Select demand by epic_id, team_id, month, year
     if (team_id and epic_id and month and year) != None:
         statement = (
             select(
@@ -88,7 +86,123 @@ async def get_demands(
             .where(Demand.month == month)
             .where(Demand.year == year)
         )
+    else:
+        statement = (
+            select(
+                Demand.id.label("demand_id"),
+                Team.short_name.label("team_short_name"),
+                Epic.short_name.label("epic_short_name"),
+                Demand.year,
+                Demand.month,
+                Demand.days,
+            )
+            .select_from(Demand)
+            .join(Team, Demand.team_id == Team.id)
+            .join(Epic, Demand.epic_id == Epic.id)
+        )
 
+    result = session.exec(statement).all()
+    return result
+
+
+@router.get("/teams/{team_id}/")
+async def get_demands_by_teams(
+    team_id: int,
+    session: Session = Depends(get_session),
+):
+    """
+    Get list of all the demands by team_id.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get a list of all of the demands.
+        Defaults to creating a dependency on the running SQL model session.
+    team_id : int
+        ID of the team to get the demand from.
+    """
+
+    statement = (
+        select(
+            Demand.id.label("demand_id"),
+            Team.short_name.label("team_short_name"),
+            Epic.short_name.label("epic_short_name"),
+            Demand.year,
+            Demand.month,
+            Demand.days,
+        )
+        .select_from(Demand)
+        .join(Team, Demand.team_id == Team.id)
+        .join(Epic, Demand.epic_id == Epic.id)
+        .where(Demand.team_id == team_id)
+    )
+    result = session.exec(statement).all()
+    return result
+
+
+@router.get("/teams/{team_id}/epics/{epic_id}/")
+async def get_demands_by_teams_epics(
+    team_id: int, epic_id: int, session: Session = Depends(get_session)
+):
+    """
+    Get list of all demands by team_id and epic_id.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get a list of all of the demands.
+        Defaults to creating a dependency on the running SQL model session.
+    team_id : int
+        ID of the team to get the demand from.
+    epic_id : int
+        ID of the epic to get the demand from.
+    """
+
+    statement = (
+        select(
+            Demand.id.label("demand_id"),
+            Team.short_name.label("team_short_name"),
+            Epic.short_name.label("epic_short_name"),
+            Demand.year,
+            Demand.month,
+            Demand.days,
+        )
+        .join(Team, Demand.team_id == Team.id)
+        .join(Epic, Demand.epic_id == Epic.id)
+        .where(Demand.team_id == team_id)
+        .where(Demand.epic_id == epic_id)
+    )
+    result = session.exec(statement).all()
+    return result
+
+
+@router.get("/epics/{epic_id}/")
+async def get_demands_by_epics(epic_id: int, session: Session = Depends(get_session)):
+    """
+    Get list of all the demands by team_id.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get a list of all of the demands.
+        Defaults to creating a dependency on the running SQL model session.
+    epic_id : int
+        ID of the epic to get the demand from.
+    """
+
+    statement = (
+        select(
+            Demand.id.label("demand_id"),
+            Team.short_name.label("team_short_name"),
+            Epic.short_name.label("epic_short_name"),
+            Demand.year,
+            Demand.month,
+            Demand.days,
+        )
+        .join(Team, Demand.team_id == Team.id)
+        .join(Epic, Demand.epic_id == Epic.id)
+        .where(Demand.epic_id == epic_id)
+    )
     result = session.exec(statement).all()
     return result
 
