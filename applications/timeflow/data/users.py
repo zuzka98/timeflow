@@ -65,7 +65,7 @@ def users_active():
             "username": item["username"],
             "first name": item["first_name"],
             "last name": item["last_name"],
-            "role": item["role_short_name"],
+            "role": item["role_name"],
             "main team": item["main_team"],
             "start date": item["start_date"],
         }
