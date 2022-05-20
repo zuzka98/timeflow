@@ -199,8 +199,10 @@ def create_timelog_form(
         and epic_id != ""
         and epic_id != ""
         and epic_area_id != (0 or "")
-        and start_datetime
-        and end_datetime
+        and year_month != ""
+        and day != ""
+        and start_time != ""
+        and end_time != ""
     ):
         is_disabled = False
     btn = Button(is_disabled, handle_submit, label="Submit")
