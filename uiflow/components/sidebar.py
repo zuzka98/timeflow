@@ -21,7 +21,6 @@ h1Class = (
 )
 navClass = "flex flex-col pb-4"
 collapse_class = "mt-2 w-full flex align-center text-nav py-2 text-left rounded-lg px-4 hover:bg-active-sidebar"
-# text-nav text-left px-4 py-2 mt-2 text-nav bg-active-sidebar rounded-lg focus:text-gray-900 hover:bg-active-sidebar focus:bg-active-sidebar focus:outline-none focus:shadow-outline
 
 
 @component
