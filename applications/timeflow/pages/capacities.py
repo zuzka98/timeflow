@@ -10,10 +10,15 @@ from uiflow.components.controls import Button
 
 from ..data.common import year_month_dict_list
 from ..data.capacities import (
+    capacities_by_team,
     capacity_days,
     to_capacity,
     capacities_by_user_team_year_month,
     capacity_deletion,
+    capacities_all,
+    capacities_by_user,
+    capacities_by_user_team,
+    capacities_by_team,
 )
 from ..data.users import users_names
 from ..data.teams import teams_id_name
@@ -46,7 +51,7 @@ def page():
         ),
         Container(
             Column(
-                Row(capacities_table(user_id, team_id, year_month)),
+                Row(capacities_table(user_id, team_id)),
             ),
             Row(delete_capacity(is_event, set_is_event)),
         ),
@@ -73,14 +78,14 @@ def create_capacity_form(
         """
         schema:
         {
-          "user_id": 0,
-          "team_id": 0,
-          "year": 0,
-          "month": 0,
-          "days": 0,
-          "created_at": "2022-03-15T15:25:44.266Z",
-          "updated_at": "2022-03-15T15:25:44.266Z",
-          "is_locked": false
+            "user_id": 0,
+            "team_id": 0,
+            "year": 0,
+            "month": 0,
+            "days": 0,
+            "created_at": "2022-03-15T15:25:44.266Z",
+            "updated_at": "2022-03-15T15:25:44.266Z",
+            "is_locked": false
         }"""
         to_capacity(
             user_id=user_id,
@@ -129,9 +134,16 @@ def create_capacity_form(
 
 
 @component
-def capacities_table(user_id, team_id, year_month):
+def capacities_table(user_id, team_id):
     """Generates a table component with capacity days by year month user and team"""
-    rows = capacities_by_user_team_year_month(user_id, team_id, year_month)
+    if (user_id and team_id) != "":
+        rows = capacities_by_user_team(user_id, team_id)
+    elif user_id != "":
+        rows = capacities_by_user(user_id)
+    elif team_id != "":
+        rows = capacities_by_team(team_id)
+    else:
+        rows = capacities_all()
     return html.div({"class": "flex w-full"}, SimpleTable(rows=rows))
 
 

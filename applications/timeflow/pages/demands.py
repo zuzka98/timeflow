@@ -11,9 +11,14 @@ from uiflow.components.controls import Button
 from ..data.common import year_month_dict_list
 from ..data.demands import (
     demand_days,
+    demands_by_epic,
     to_demand,
     demands_by_team_epic_year_month,
     demand_deletion,
+    demands_all,
+    demands_by_team,
+    demands_by_team_epic,
+    demands_by_epic,
 )
 from ..data.teams import teams_id_name
 from ..data.epics import epics_names
@@ -46,7 +51,7 @@ def page():
         ),
         Container(
             Column(
-                Row(demands_table(team_id, epic_id, year_month)),
+                Row(demands_table(team_id, epic_id)),
             ),
             Row(delete_demand(is_event, set_is_event)),
         ),
@@ -73,14 +78,14 @@ def create_demand_form(
         """
         schema:
         {
-          "team_id": 0,
-          "epic_id": 0,
-          "year": 0,
-          "month": 0,
-          "days": 0,
-          "created_at": "2022-03-15T15:25:44.266Z",
-          "updated_at": "2022-03-15T15:25:44.266Z",
-          "is_locked": false
+            "team_id": 0,
+            "epic_id": 0,
+            "year": 0,
+            "month": 0,
+            "days": 0,
+            "created_at": "2022-03-15T15:25:44.266Z",
+            "updated_at": "2022-03-15T15:25:44.266Z",
+            "is_locked": false
         }"""
         to_demand(
             team_id=team_id,
@@ -131,9 +136,16 @@ def create_demand_form(
 
 
 @component
-def demands_table(team_id, epic_id, year_month):
+def demands_table(team_id, epic_id):
     """Generates a table component with demand days by year month epic and team"""
-    rows = demands_by_team_epic_year_month(team_id, epic_id, year_month)
+    if (team_id and epic_id) != "":
+        rows = demands_by_team_epic(team_id, epic_id)
+    elif team_id != "":
+        rows = demands_by_team(team_id)
+    elif epic_id != "":
+        rows = demands_by_epic(epic_id)
+    else:
+        rows = demands_all()
     return html.div({"class": "flex w-full"}, SimpleTable(rows=rows))
 
 
