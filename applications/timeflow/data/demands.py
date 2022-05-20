@@ -128,7 +128,6 @@ def demands_by_team_epic_year_month(team_id, epic_id, year_month) -> List[Dict]:
                 "demand days": item["days"],
             }
             rows.append(d)
-        print(rows)
         return rows
 
 
