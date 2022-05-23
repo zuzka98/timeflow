@@ -83,7 +83,7 @@ async def get_rates(session: Session = Depends(get_session)):
                 Rate.user_id,
                 Rate.valid_from,
                 Rate.valid_to,
-                Rate.amount
+                Rate.amount,
             )
             .join(AppUser)
             .join(Client)
@@ -101,7 +101,7 @@ async def get_rates(session: Session = Depends(get_session)):
                 Rate.user_id,
                 Rate.valid_from,
                 Rate.valid_to,
-                Rate.amount
+                Rate.amount,
             )
             .join(AppUser)
             .join(Client)
@@ -110,11 +110,9 @@ async def get_rates(session: Session = Depends(get_session)):
     results = session.exec(statement).all()
     return results
 
+
 @router.get("/users/{user_id}/")
-async def rates_by_user(
-    user_id: int,
-    session: Session = Depends(get_session)
-    ):
+async def rates_by_user(user_id: int, session: Session = Depends(get_session)):
     statement = (
         select(
             AppUser.username,
@@ -123,17 +121,46 @@ async def rates_by_user(
             Rate.user_id,
             Rate.valid_from,
             Rate.valid_to,
-            Rate.amount
+            Rate.amount,
         )
         .join(AppUser)
         .join(Client)
         .order_by(AppUser.username.asc())
         .where(Rate.user_id == user_id)
-        )
+    )
     results = session.exec(statement).all()
     return results
-    
-    
+
+
+@router.get("/clients/{client_id}/")
+async def rates_by_client(client_id: int, session: Session = Depends(get_session)):
+    """
+    Get list of rates using given clients ids as keys.
+
+    Parameters
+    ----------
+    client_id : int
+        Client id that is used to get the list of rates.
+    session : Session
+        SQL session that is to be used to read a certain rates.
+        Defaults to creating a dependency on the running SQL model session.
+    """
+    statement = (
+        select(
+            AppUser.username,
+            Rate.id,
+            Client.name,
+            Rate.user_id,
+            Rate.valid_from,
+            Rate.valid_to,
+            Rate.amount,
+        )
+        .join(AppUser)
+        .join(Client)
+        .order_by(AppUser.username.asc())
+        .where(Rate.client_id == client_id)
+    )
+    return session.exec(statement).all()
 
 
 @router.get("/users/{user_id}/clients/{client_id}/")
@@ -163,7 +190,7 @@ async def rates_by_user_client(
             Rate.user_id,
             Rate.valid_from,
             Rate.valid_to,
-            Rate.amount
+            Rate.amount,
         )
         .join(AppUser)
         .join(Client)
