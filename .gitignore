@@ -156,3 +156,6 @@ certs
 
 # Random
 *.exe
+
+# Files
+*.parquet

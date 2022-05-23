@@ -1,3 +1,6 @@
+from os import stat
+from ..models.user import AppUser
+from ..models.client import Client
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session, far_date, date_str_to_date
 from sqlmodel import Session, select
@@ -15,7 +18,7 @@ async def post_rate(
 ):
     """Post new rate"""
     """
-    Post new rate.
+    Post new rate. 
 
     Parameters
     ----------
@@ -59,21 +62,105 @@ async def post_rate(
 
 
 @router.get("/")
-async def read_rates(
-    session: Session = Depends(get_session),
-):
+async def get_rates(session: Session = Depends(get_session)):
+    user_id = None
+    client_id = None
     """
     Get all rates.
+    
+    Parameters
+    ----------
+        session (Session, optional): SQL session that is to be used to get the rates.
+                                        Defaults to Depends(get_session).
+
+    """
+    if (user_id and client_id) != None:
+        statement = (
+            select(
+                AppUser.username,
+                Rate.id,
+                Client.name,
+                Rate.user_id,
+                Rate.valid_from,
+                Rate.valid_to,
+                Rate.amount,
+            )
+            .join(AppUser)
+            .join(Client)
+            .where(Rate.user_id == user_id)
+            .where(Rate.client_id == client_id)
+            .order_by(AppUser.username.asc())
+        )
+
+    else:
+        statement = (
+            select(
+                AppUser.username,
+                Rate.id,
+                Client.name,
+                Rate.user_id,
+                Rate.valid_from,
+                Rate.valid_to,
+                Rate.amount,
+            )
+            .join(AppUser)
+            .join(Client)
+            .order_by(AppUser.username.asc())
+        )
+    results = session.exec(statement).all()
+    return results
+
+
+@router.get("/users/{user_id}/")
+async def rates_by_user(user_id: int, session: Session = Depends(get_session)):
+    statement = (
+        select(
+            AppUser.username,
+            Rate.id,
+            Client.name,
+            Rate.user_id,
+            Rate.valid_from,
+            Rate.valid_to,
+            Rate.amount,
+        )
+        .join(AppUser)
+        .join(Client)
+        .order_by(AppUser.username.asc())
+        .where(Rate.user_id == user_id)
+    )
+    results = session.exec(statement).all()
+    return results
+
+
+@router.get("/clients/{client_id}/")
+async def rates_by_client(client_id: int, session: Session = Depends(get_session)):
+    """
+    Get list of rates using given clients ids as keys.
 
     Parameters
     ----------
+    client_id : int
+        Client id that is used to get the list of rates.
     session : Session
-        SQL session that is to be used to get the rates.
+        SQL session that is to be used to read a certain rates.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(Rate)
-    result = session.exec(statement).all()
-    return result
+    statement = (
+        select(
+            AppUser.username,
+            Rate.id,
+            Client.name,
+            Rate.user_id,
+            Rate.valid_from,
+            Rate.valid_to,
+            Rate.amount,
+        )
+        .join(AppUser)
+        .join(Client)
+        .order_by(AppUser.username.asc())
+        .where(Rate.client_id == client_id)
+    )
+    return session.exec(statement).all()
 
 
 @router.get("/users/{user_id}/clients/{client_id}/")
@@ -96,7 +183,20 @@ async def rates_by_user_client(
         Defaults to creating a dependency on the running SQL model session.
     """
     statement = (
-        select(Rate).where(Rate.user_id == user_id).where(Rate.client_id == client_id)
+        select(
+            AppUser.username,
+            Rate.id,
+            Client.name,
+            Rate.user_id,
+            Rate.valid_from,
+            Rate.valid_to,
+            Rate.amount,
+        )
+        .join(AppUser)
+        .join(Client)
+        .order_by(AppUser.username.asc())
+        .where(Rate.user_id == user_id)
+        .where(Rate.client_id == client_id)
     )
     result = session.exec(statement).all()
     return result

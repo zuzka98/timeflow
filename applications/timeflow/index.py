@@ -18,6 +18,7 @@ from uiflow.components.header import Header
 
 menu_items = {
     # 'title': 'page',
+    "Forecasts": "Forecasts",
     "Users": "Users",
     "Roles": "Roles",
     "Epics": "Epics",
@@ -40,9 +41,8 @@ def timeflow():
     github_username = fetch_username()
 
     current_page, set_current_page = use_state("Timelogs")
-    pages = ["Timelogs", "Forecasts"]
+    pages = ["Timelogs"]
 
-    print("here", current_page)
     if current_page == "Users":
         if user_role == "admin" or user_role == None:
             current_page_component = users_page(key="users_page")
@@ -56,12 +56,15 @@ def timeflow():
         if user_role == "admin" or user_role == None:
             current_page_component = epic_areas_page(key="epic_areas_page")
     elif current_page == "Timelogs":
-        current_page_component = timelogs_page(key="timelogs_page")
+        current_page_component = timelogs_page(
+            key="timelogs_page", app_role=user_role, github_username=github_username
+        )
     elif current_page == "Clients":
         if user_role == "admin" or user_role == None:
             current_page_component = clients_page(key="clients_page")
     elif current_page == "Forecasts":
-        current_page_component = forecasts_page(key="forecasts_page")
+        if user_role == "admin" or user_role == None:
+            current_page_component = forecasts_page(key="forecasts_page")
     elif current_page == "Rates":
         if user_role == "admin" or user_role == None:
             current_page_component = rates_page(key="rates_page")

@@ -65,7 +65,7 @@ async def get_users(
                 AppUser.username,
                 AppUser.first_name,
                 AppUser.last_name,
-                Role.short_name.label("role_short_name"),
+                Role.name.label("role_name"),
                 Team.short_name.label("main_team"),
                 AppUser.start_date,
             )
@@ -74,6 +74,18 @@ async def get_users(
             .join(Team, AppUser.team_id == Team.id, isouter=True)
             .where(AppUser.is_active == is_active)
             .order_by(AppUser.start_date.desc())
+        )
+    elif username != None:
+        statement = (
+            select(
+                AppUser.id,
+                AppUser.username,
+                AppUser.first_name,
+                AppUser.last_name,
+                AppUser.start_date,
+            )
+            .select_from(AppUser)
+            .where(AppUser.username == username)
         )
     result = session.exec(statement).all()
     return result

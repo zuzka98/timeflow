@@ -12,7 +12,7 @@ def YourTimelog():
         {"class": "py-6 xl:py-8"},
         html.div(
             {"class": "flex flex-wrap justify-between items-center"},
-            H3("Your Timelog"),
+            H3("Your Timelogs"),
             SearchInput(input_value, set_input_value),
         ),
     )
