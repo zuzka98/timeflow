@@ -27,7 +27,7 @@ def rates_all():
             "client name": item["name"],
             "valid from": item["valid_from"],
             "valid to": item["valid_to"],
-            "amount": item["amount"]
+            "amount": item["amount"],
         }
         rows.append(d)
     return rows
@@ -44,7 +44,24 @@ def rates_active_by_user(user_id: int) -> List[Dict]:
             "client name": item["name"],
             "valid from": item["valid_from"],
             "valid to": item["valid_to"],
-            "amount": item["amount"]
+            "amount": item["amount"],
+        }
+        rows.append(d)
+    return rows
+
+
+def rates_active_by_client(client_id: int) -> List[Dict]:
+    api = f"{base_url}/api/rates/clients/{client_id}/"
+    response = requests.get(api)
+    rows = []
+    for item in response.json():
+        d = {
+            "id": item["id"],
+            "username": item["username"],
+            "client name": item["name"],
+            "valid from": item["valid_from"],
+            "valid to": item["valid_to"],
+            "amount": item["amount"],
         }
         rows.append(d)
     return rows
@@ -61,7 +78,7 @@ def rate_active_by_user_client(user_id: int, client_id: int) -> List[Dict]:
             "client name": item["name"],
             "valid from": item["valid_from"],
             "valid to": item["valid_to"],
-            "amount": item["amount"]
+            "amount": item["amount"],
         }
         rows.append(d)
     return rows
@@ -111,7 +128,6 @@ def to_rate(
     response = requests.post(
         f"{base_url}/api/rates",
         data=json.dumps(dict(data)),
-        headers={"accept": "application/json",
-                 "Content-Type": "application/json"},
+        headers={"accept": "application/json", "Content-Type": "application/json"},
     )
     return True
