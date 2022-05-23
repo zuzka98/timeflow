@@ -20,7 +20,7 @@ h1Class = (
     "text-general-heading font-black uppercase text-xl font-black tracking-[2px] my-4",
 )
 navClass = "flex flex-col pb-4"
-collapse_class = " w-full flex align-center text-nav py-2 text-left rounded-lg px-4 hover:bg-active-sidebar"
+collapse_class = "mt-2 w-full flex align-center text-nav py-2 text-left rounded-lg px-4 hover:bg-active-sidebar"
 
 
 @component
@@ -71,7 +71,7 @@ def Sidebar(
     logout,
     title: str = "",
     user_welcome: str = "",
-    menu_items: object = {}
+    menu_items: object = {},
 ):
     # user_role = get_user()
     h3Class = f"""text-nav text-left px-4 py-2 mt-2 text-nav rounded-lg focus:text-gray-900 focus:bg-active-sidebarfocus:outline-none focus:shadow-outline"""
@@ -81,7 +81,7 @@ def Sidebar(
                 """
 
     collapse, set_collapse = use_state(True)
-    heading = 'Admin'
+    heading = "Admin"
     btn_class = f"""text-nav text-left px-4 py-2 mt-2 text-nav rounded-lg focus:text-gray-900 focus:bg-active-sidebarfocus:outline-none focus:shadow-outline"""
     pages_dropdown = []
     for key, value in menu_items.items():
@@ -101,7 +101,11 @@ def Sidebar(
                 Collapse(heading, collapse_class, collapse, set_collapse)
                 if (user_role == "admin" or user_role == None)
                 else "",
-                '' if collapse else ListPages(current_page, set_current_page, set_isOpen, pages=pages_dropdown) ,
+                ""
+                if collapse
+                else ListPages(
+                    current_page, set_current_page, set_isOpen, pages=pages_dropdown
+                ),
             ),
             html.h3({"class": btn_class}, logout),
         ),
