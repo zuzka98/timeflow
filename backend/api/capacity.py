@@ -73,7 +73,7 @@ async def get_capacities(
             select(
                 Capacity.id.label("capacity_id"),
                 AppUser.username.label("user_username"),
-                Team.short_name.label("team_short_name"),
+                Team.name.label("team_name"),
                 Capacity.year,
                 Capacity.month,
                 Capacity.days,
@@ -90,7 +90,7 @@ async def get_capacities(
             select(
                 Capacity.id.label("capacity_id"),
                 AppUser.username.label("user_username"),
-                Team.short_name.label("team_short_name"),
+                Team.name.label("team_name"),
                 Capacity.year,
                 Capacity.month,
                 Capacity.days,
@@ -120,7 +120,7 @@ async def get_capacities_user(user_id: int, session: Session = Depends(get_sessi
         select(
             Capacity.id.label("capacity_id"),
             AppUser.username.label("user_username"),
-            Team.short_name.label("team_short_name"),
+            Team.name.label("team_name"),
             Capacity.year,
             Capacity.month,
             Capacity.days,
@@ -153,7 +153,7 @@ async def get_capacity_team(team_id: int, session: Session = Depends(get_session
         select(
             Capacity.id.label("capacity_id"),
             AppUser.username.label("user_username"),
-            Team.short_name.label("team_short_name"),
+            Team.name.label("team_name"),
             Capacity.year,
             Capacity.month,
             Capacity.days,
@@ -189,7 +189,7 @@ async def get_capacities_user_team(
         select(
             Capacity.id.label("capacity_id"),
             AppUser.username.label("user_username"),
-            Team.short_name.label("team_short_name"),
+            Team.name.label("team_name"),
             Capacity.year,
             Capacity.month,
             Capacity.days,

@@ -72,7 +72,7 @@ async def get_demands(
         statement = (
             select(
                 Demand.id.label("demand_id"),
-                Team.short_name.label("team_short_name"),
+                Team.name.label("team_name"),
                 Epic.name.label("epic_name"),
                 Demand.year,
                 Demand.month,
@@ -90,7 +90,7 @@ async def get_demands(
         statement = (
             select(
                 Demand.id.label("demand_id"),
-                Team.short_name.label("team_short_name"),
+                Team.name.label("team_name"),
                 Epic.name.label("epic_name"),
                 Demand.year,
                 Demand.month,
@@ -125,8 +125,8 @@ async def get_demands_by_teams(
     statement = (
         select(
             Demand.id.label("demand_id"),
-            Team.short_name.label("team_short_name"),
-            Epic.short_name.label("epic_short_name"),
+            Team.name.label("team_name"),
+            Epic.name.label("epic_name"),
             Demand.year,
             Demand.month,
             Demand.days,
@@ -161,8 +161,8 @@ async def get_demands_by_teams_epics(
     statement = (
         select(
             Demand.id.label("demand_id"),
-            Team.short_name.label("team_short_name"),
-            Epic.short_name.label("epic_short_name"),
+            Team.name.label("team_name"),
+            Epic.name.label("epic_name"),
             Demand.year,
             Demand.month,
             Demand.days,
@@ -193,8 +193,8 @@ async def get_demands_by_epics(epic_id: int, session: Session = Depends(get_sess
     statement = (
         select(
             Demand.id.label("demand_id"),
-            Team.short_name.label("team_short_name"),
-            Epic.short_name.label("epic_short_name"),
+            Team.name.label("team_name"),
+            Epic.name.label("epic_name"),
             Demand.year,
             Demand.month,
             Demand.days,

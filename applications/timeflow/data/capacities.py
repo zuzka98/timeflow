@@ -46,7 +46,7 @@ def capacities_all():
         d = {
             "capacity id": item["capacity_id"],
             "user": item["user_username"],
-            "team": item["team_short_name"],
+            "team": item["team_name"],
             "year": item["year"],
             "month": item["month"],
             "capacity days": item["days"],
@@ -63,7 +63,7 @@ def capacities_by_user(user_id: int) -> List[Dict]:
         d = {
             "capacity id": item["capacity_id"],
             "user": item["user_username"],
-            "team": item["team_short_name"],
+            "team": item["team_name"],
             "year": item["year"],
             "month": item["month"],
             "capacity days": item["days"],
@@ -80,7 +80,7 @@ def capacities_by_user_team(user_id: int, team_id: int) -> List[Dict]:
         d = {
             "capacity id": item["capacity_id"],
             "user": item["user_username"],
-            "team": item["team_short_name"],
+            "team": item["team_name"],
             "year": item["year"],
             "month": item["month"],
             "capacity days": item["days"],
@@ -97,7 +97,7 @@ def capacities_by_team(team_id: int) -> List[Dict]:
         d = {
             "capacity id": item["capacity_id"],
             "user": item["user_username"],
-            "team": item["team_short_name"],
+            "team": item["team_name"],
             "year": item["year"],
             "month": item["month"],
             "capacity days": item["days"],
@@ -122,7 +122,7 @@ def capacities_by_user_team_year_month(user_id, team_id, year_month) -> List[Dic
             d = {
                 "capacity id": item["capacity_id"],
                 "user": item["user_username"],
-                "team": item["team_short_name"],
+                "team": item["team_name"],
                 "year": item["year"],
                 "month": item["month"],
                 "capacity days": item["days"],
