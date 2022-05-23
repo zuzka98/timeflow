@@ -13,7 +13,6 @@ from ..data.common import (
 from ..data.rates import (
     rate_active_by_user_client,
     rate_update,
-    rates_active_by_client,
     to_rate,
     rates_all,
     rates_active_by_user,
