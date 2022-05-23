@@ -11,11 +11,12 @@ def FlexContainer(*args: html):
 
 
 def Column(*args: html, width: str = "full"):
-    return html.div(
-        {"class": f"flex flex-col w-{width} space-y-2 pl-2 mt-2"}, args
-    )
+    return html.div({"class": f"flex flex-col w-{width} space-y-2 pl-2 mt-2"}, args)
 
 
 @component
 def Row(*args: html, justify: str = None, bg: str = None, wrap: str = None):
-    return html.div({"class": f"flex flex-col px-2 md:flex-row {justify} {bg} {wrap} space-x-4"}, args)
+    return html.div(
+        {"class": f"flex flex-col px-2 md:flex-row {justify} {bg} {wrap} space-x-4"},
+        args,
+    )

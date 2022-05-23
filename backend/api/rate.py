@@ -1,5 +1,5 @@
 from os import stat
-from backend.models.user import AppUser
+from ..models.user import AppUser
 from ..models.client import Client
 from fastapi import APIRouter, Depends
 from ..utils import engine, get_session, far_date, date_str_to_date
