@@ -34,7 +34,7 @@ async def post_client(*, client: Client, session: Session = Depends(get_session)
 
 
 @router.get("/")
-async def read_clients(session: Session = Depends(get_session)):
+async def read_clients(session: Session = Depends(get_session), is_active: bool = None):
     """
     Get a list of all clients.
 
@@ -44,24 +44,18 @@ async def read_clients(session: Session = Depends(get_session)):
         SQL session that is to be used to get a list of the clients.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(Client)
-    results = session.exec(statement).all()
-    return results
-
-
-@router.get("/active")
-async def read_clients(session: Session = Depends(get_session)):
-    """
-    Get a list of all active clients.
-
-    Parameters
-    ----------
-    session : Session
-        SQL session that is to be used to get a list of all of the active clients.
-        Defaults to creating a dependency on the running SQL model session.
-    """
-    statement = select(Client).where(Client.is_active == True).order_by(Client.id.asc())
-    results = session.exec(statement).all()
+    statement = select(
+        Client.id,
+        Client.name,
+        Client.is_active,
+    )
+    if is_active != None:
+        statement_final = statement.where(Client.is_active == is_active).order_by(
+            Client.is_active.desc()
+        )
+    else:
+        statement_final = statement.order_by(Client.is_active.desc())
+    results = session.exec(statement_final).all()
     return results
 
 
@@ -248,7 +242,6 @@ async def update_clients(
     new_client_name: str = None,
     is_active: bool = None,
     session: Session = Depends(get_session),
-
 ):
     """
     Update a client from a client_id.

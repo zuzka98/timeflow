@@ -4,15 +4,17 @@ from idom import html, use_state, component, event
 import requests
 from datetime import datetime
 
-from uiflow.components.input import Input
+from uiflow.components.input import Input, Selector2
 from uiflow.components.layout import Row, Column, FlexContainer
 from uiflow.components.table import SimpleTable, SubmitTable
 from uiflow.components.controls import Button
 
 from ..config import base_url
-from ..data.clients import to_client, clients_active, client_is_active
+from ..data.clients import to_client, clients_active, client_is_active, clients_names
 
 from .utils import switch_state
+
+
 @component
 def page():
     name, set_name = use_state("")
@@ -43,10 +45,10 @@ def create_client_form(name, set_name, set_submitted_name):
         endpoint: /api/clients
         schema:
         {
-      "name": "string",
-      "active": True,
-      "created_at": "2022-02-17T15:03:24.260Z",
-      "updated_at": "2022-02-17T15:03:24.260Z"
+        "name": "string",
+        "active": True,
+        "created_at": "2022-02-17T15:03:24.260Z",
+        "updated_at": "2022-02-17T15:03:24.260Z"
     }"""
 
     @event(prevent_default=True)
@@ -81,22 +83,41 @@ def list_clients(submitted_name):
 
 @component
 def deactivate_client(is_event, set_is_event):
-    del_client_id, set_del_client_id = use_state("")  
-    def deactivate_client(event):
+    del_client_id, set_del_client_id = use_state("")
+
+    def handle_deactivation(event):
         client_is_active(client_id=del_client_id, is_active=False)
         switch_state(is_event, set_is_event)
 
-    inp_deactivate_client = Input(set_value=set_del_client_id, label="Client id to be deactivated")
-    btn = Button(False, deactivate_client, "Deactivate")
-    return Column(inp_deactivate_client, btn)
+    selector_deactivate_client = Selector2(
+        set_del_client_id,
+        data=clients_names(is_active=True, label="Client id to be deactivated"),
+        width="96%",
+        md_width="96%",
+    )
+    is_disabled = True
+    if del_client_id != "":
+        is_disabled = False
+    btn = Button(is_disabled, handle_submit=handle_deactivation, label="Deactivate")
+    return Column(Row(selector_deactivate_client), Row(btn))
+
 
 @component
 def activate_client(is_event, set_is_event):
-    act_client_id, set_act_client_id = use_state("")  
-    def activate_client(event):
+    act_client_id, set_act_client_id = use_state("")
+
+    def handle_activation(event):
         client_is_active(client_id=act_client_id, is_active=True)
         switch_state(is_event, set_is_event)
 
-    inp_activate_client = Input(set_value=set_act_client_id, label="Client id to be activated")
-    btn = Button(False, activate_client, "Activate")
-    return Column(inp_activate_client, btn)
+    selector_activate_client = Selector2(
+        set_act_client_id,
+        data=clients_names(is_active=False, label="Client id to be activated"),
+        width="96%",
+        md_width="96%",
+    )
+    is_disabled = True
+    if act_client_id != "":
+        is_disabled = False
+    btn = Button(is_disabled, handle_submit=handle_activation, label="Deactivate")
+    return Column(Row(selector_activate_client), Row(btn))
