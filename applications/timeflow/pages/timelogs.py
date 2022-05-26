@@ -201,7 +201,7 @@ def create_timelog_form(
 @component
 def timelogs_table(user_id, is_event, app_role, github_username):
     """
-    Returns a table component
+    Returns a table component by current month
 
     Parameters
     ----------
