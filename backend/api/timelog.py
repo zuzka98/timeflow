@@ -202,6 +202,7 @@ async def get_timelog_user_id(
 async def delete_timelogs(
     *,
     timelog_id: int,
+    user_id: int = None,
     session: Session = Depends(get_session),
 ):
     """
@@ -216,7 +217,11 @@ async def delete_timelogs(
         Defaults to creating a dependency on the running SQL model session.
     """
     statement = select(TimeLog).where(TimeLog.id == timelog_id)
-    result = session.exec(statement).one()
+    if user_id != None:
+        statement_final = statement.where(TimeLog.user_id == user_id)
+    else:
+        statement_final = statement
+    result = session.exec(statement_final).one()
     timelog_to_delete = result
     session.delete(timelog_to_delete)
     session.commit()

@@ -55,6 +55,8 @@ def page(app_role: str, github_username: str):
     start_datetime, set_start_datetime = use_state("")
     end_datetime, set_end_datetime = use_state("")
     deleted_timelog, set_deleted_timelog = use_state("")
+    admin = True if app_role == "admin" or app_role == None else False
+
     return html.div(
         {"class": "w-full"},
         Row(
@@ -80,7 +82,7 @@ def page(app_role: str, github_username: str):
                     set_end_datetime,
                     is_event,
                     set_is_event,
-                    app_role,
+                    admin,
                     github_username,
                 ),
             ),
@@ -88,9 +90,9 @@ def page(app_role: str, github_username: str):
         ),
         Container(
             Column(
-                Row(timelogs_table(user_id, is_event, app_role, github_username)),
+                Row(timelogs_table(user_id, is_event, admin, github_username)),
             ),
-            delete_timelog_input(set_deleted_timelog),
+            delete_timelog_input(set_deleted_timelog, admin, github_username),
         ),
     )
 
@@ -117,7 +119,7 @@ def create_timelog_form(
     set_end_time,
     is_event,
     set_is_event,
-    app_role,
+    admin,
     github_username,
 ):
     """
@@ -154,8 +156,6 @@ def create_timelog_form(
             updated_at=str(datetime.now()),
         )
         switch_state(is_event, set_is_event)
-
-    admin = True if app_role == "admin" or app_role == None else False
 
     if admin == True:
         selector_user = Selector2(set_value=set_user_id, data=username())
@@ -223,10 +223,9 @@ def create_timelog_form(
 
 
 @component
-def timelogs_table(user_id, is_event, app_role, github_username):
+def timelogs_table(user_id, is_event, admin, github_username):
     api = f"{base_url}/api/timelogs"
     response = requests.get(api)
-    admin = True if app_role == "admin" or app_role == None else False
 
     if admin == False:
         user_id = get_user_id_by_username(github_username)
@@ -253,12 +252,18 @@ def timelogs_table(user_id, is_event, app_role, github_username):
 
 
 @component
-def delete_timelog_input(set_deleted_timelog):
+def delete_timelog_input(set_deleted_timelog, admin, github_username):
     timelog_to_delete, set_timelog_to_delete = use_state("")
+    """
+    Delete a timelog by selected timelog id. 
+    User can delete only his own timelogs (validation by user id)
+    """
 
     def handle_delete(event):
         api = f"{base_url}/api/timelogs/{timelog_to_delete}"
-        response = requests.delete(api)
+        user_id = get_user_id_by_username(github_username)
+        params = None if admin else {"user_id": user_id}
+        response = requests.delete(api, params=params)
         set_deleted_timelog(timelog_to_delete)
 
     inp_username = Input(
