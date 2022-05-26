@@ -2,6 +2,8 @@ import requests
 import json
 from typing import List
 
+from uiflow.components.input import display_value
+
 from ..config import base_url
 from datetime import datetime
 from .common import Select
@@ -26,8 +28,9 @@ def post_team(name: str, short_name: str, lead_user_id: int):
 
 def get_active_team_rows():
     """Get all active teams and store them in a list."""
-    api = f"{base_url}/api/teams/active"
-    response = requests.get(api)
+    api = f"{base_url}/api/teams/"
+    params = {"is_active": None}
+    response = requests.get(api, params=params)
 
     rows = []
     for item in response.json():
@@ -35,9 +38,21 @@ def get_active_team_rows():
             "Team name": item["team_name"],
             "Team short name": item["team_short_name"],
             "User lead": item["username"],
+            "Is active": item["is_active"],
         }
         rows.append(d)
     return rows
+
+
+def teams_names(is_active: bool = None, label="select team") -> List[Select]:
+    api_team = f"{base_url}/api/teams/"
+    params = {"is_active": is_active}
+    response = requests.get(api_team, params=params)
+    team_rows = [Select(value="", display_value=label)]
+    for item in response.json():
+        d = Select(value=item["team_name"], display_value=item["team_name"])
+        team_rows.append(d)
+    return team_rows
 
 
 def teams_id_name(label="select team", no_team: bool = False) -> List[Select]:
