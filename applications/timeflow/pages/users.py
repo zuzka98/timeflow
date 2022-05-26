@@ -12,7 +12,6 @@ from ..data.users import (
     users_names,
     activate_user,
     deactivate_user,
-    users_names_inactive,
 )
 from ..data.roles import roles_id_name
 from ..data.teams import teams_id_name
@@ -137,7 +136,7 @@ def deactivate_users(is_event, set_is_event):
 
     selector_user = Selector2(
         set_deactiv_user_id,
-        data=users_names(label="select user to deactivate"),
+        data=users_names(is_active=True, label="select user to deactivate"),
         width="96%",
         md_width="96%",
     )
@@ -157,11 +156,12 @@ def activate_users(is_event, set_is_event):
         """Set the given user's is_active column to False."""
         activate_user(activ_user_id)
         switch_state(value=is_event, set_value=set_is_event)
+
         return True
 
     selector_user = Selector2(
         set_activ_user_id,
-        data=users_names_inactive(label="select user to activate"),
+        data=users_names(is_active=False, label="select user to activate"),
         width="96%",
         md_width="96%",
     )

@@ -1,5 +1,8 @@
 import requests
 import json
+
+from applications.timeflow.pages.forecasts import display_value
+from backend.models import role
 from ..config import base_url
 from typing import List, TypedDict
 from datetime import datetime
@@ -37,8 +40,9 @@ def to_role(
 
 
 def roles_active():
-    api = f"{base_url}/api/roles/active"
-    response = requests.get(api)
+    api = f"{base_url}/api/roles/"
+    params = {"is_active": None}
+    response = requests.get(api, params=params)
     data = response.json()
     rows = []
     for item in data:
@@ -46,9 +50,32 @@ def roles_active():
             "id": item["id"],
             "full name": item["name"],
             "short_name": item["short_name"],
+            "is active": item["is_active"],
         }
         rows.append(d)
     return rows
+
+
+def roles_names_active(label="select user") -> List[Select]:
+    api_role_id = f"{base_url}/api/roles"
+    params = {"is_active": True}
+    response_role_id = requests.get(api_role_id, params=params)
+    role_id_rows = [Select(value="", display_value=label)]
+    for item in response_role_id.json():
+        d = Select(value=item["id"], display_value=item["id"])
+        role_id_rows.append(d)
+    return role_id_rows
+
+
+def roles_names_inactive(label="select user") -> List[Select]:
+    api_role_id = f"{base_url}/api/roles"
+    params = {"is_active": False}
+    response_role_id = requests.get(api_role_id, params=params)
+    role_id_rows = [Select(value="", display_value=label)]
+    for item in response_role_id.json():
+        d = Select(value=item["id"], display_value=item["id"])
+        role_id_rows.append(d)
+    return role_id_rows
 
 
 def role_update(id: int, new_name: str = None, new_short_name: str = None) -> bool:
