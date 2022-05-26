@@ -38,7 +38,9 @@ async def post_team(
 
 
 @router.get("/")
-async def get_teams_list(session: Session = Depends(get_session)):
+async def get_teams_list(
+    session: Session = Depends(get_session), is_active: bool = None
+):
     """
     Get list of all teams.
 
@@ -48,8 +50,27 @@ async def get_teams_list(session: Session = Depends(get_session)):
         SQL session that is to be used to get the list of teams.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(Team)
-    results = session.exec(statement).all()
+    statement = (
+        select(
+            Team.id,
+            Team.lead_user_id,
+            Team.name.label("team_name"),
+            Team.short_name.label("team_short_name"),
+            Team.is_active,
+            AppUser.id,
+            AppUser.username.label("username"),
+        )
+        .join(AppUser)
+        .where(AppUser.id == Team.lead_user_id)
+    )
+    if is_active != None:
+        statement_final = statement.where(Team.is_active == is_active).order_by(
+            Team.is_active.desc()
+        )
+    else:
+        statement_final = statement.order_by(Team.is_active.desc())
+
+    results = session.exec(statement_final).all()
     return results
 
 
