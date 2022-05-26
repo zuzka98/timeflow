@@ -4,6 +4,7 @@ from uiflow.components.controls import (
     activation_button,
     deactivation_button,
     submit_button,
+    Button,
 )
 from uiflow.components.input import Input, Selector2
 from uiflow.components.layout import Row, Column, Container
@@ -14,6 +15,7 @@ from ..data.teams import (
     team_activation,
     post_team,
     get_active_team_rows,
+    teams_names,
 )
 from ..data.users import users_names
 
@@ -146,18 +148,20 @@ def deactivate_team(set_deact_name):
         team_deactivation(name_to_deact)
         set_deact_name(name_to_deact)
 
-    # Create input field for name of team to be deactivated
-    inp_deact_name = Input(
-        set_value=set_name_to_deact,
-        label="team to be deactivated",
-        width="full",
-        md_width="full",
+    # Create selector field for name of team to be deactivated
+    selector_team_deact = Selector2(
+        set_name_to_deact,
+        data=teams_names(is_active=True, label="team to be deactivated"),
+        width="96%",
+        md_width="96%",
     )
 
     # Create the deactivation button
-    btn = deactivation_button(name_to_deact, handle_deactivation)
-
-    return Column(Row(inp_deact_name), Row(btn))
+    is_disabled = True
+    if name_to_deact != "":
+        is_disabled = False
+    btn = Button(is_disabled, handle_submit=handle_deactivation, label="Deactivate")
+    return Column(Row(selector_team_deact), Row(btn))
 
 
 @component
@@ -170,15 +174,17 @@ def activate_team(set_activ_name):
         team_activation(name_to_activ)
         set_activ_name(name_to_activ)
 
-    # Create input field for name of team to be activated
-    inp_activ_name = Input(
-        set_value=set_name_to_activ,
-        label="team to be activated",
-        width="full",
-        md_width="full",
+    # Create selector field for name of team to be activated
+    selector_team_act = Selector2(
+        set_name_to_activ,
+        data=teams_names(is_active=False, label="team to be activated"),
+        width="96%",
+        md_width="96%",
     )
 
     # Create the activation button
-    btn = activation_button(name_to_activ, handle_activation)
-
-    return Column(Row(inp_activ_name), Row(btn))
+    is_disabled = True
+    if name_to_activ != "":
+        is_disabled = False
+    btn = Button(is_disabled, handle_submit=handle_activation, label="Activate")
+    return Column(Row(selector_team_act), Row(btn))

@@ -33,7 +33,7 @@ async def post_role(*, role: Role, session: Session = Depends(get_session)):
 
 
 @router.get("/")
-async def read_roles(session: Session = Depends(get_session)):
+async def read_roles(session: Session = Depends(get_session), is_active: bool = None):
     """
     Get list of all roles.
 
@@ -43,24 +43,19 @@ async def read_roles(session: Session = Depends(get_session)):
         SQL session that is to be used to get the roles.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(Role)
-    results = session.exec(statement).all()
-    return results
-
-
-@router.get("/active")
-async def read_roles(session: Session = Depends(get_session)):
-    """
-    Get list of active roles.
-
-    Parameters
-    ----------
-    session : Session
-        SQL session that is to be used to get the roles.
-        Defaults to creating a dependency on the running SQL model session.
-    """
-    statement = select(Role).where(Role.is_active == True)
-    results = session.exec(statement).all()
+    statement = select(
+        Role.id,
+        Role.name,
+        Role.short_name,
+        Role.is_active,
+    )
+    if is_active != None:
+        statement_final = statement.where(Role.is_active == is_active).order_by(
+            Role.is_active.desc()
+        )
+    else:
+        statement_final = statement.order_by(Role.is_active.desc())
+    results = session.exec(statement_final).all()
     return results
 
 

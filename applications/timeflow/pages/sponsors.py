@@ -4,6 +4,7 @@ from uiflow.components.controls import (
     activation_button,
     deactivation_button,
     submit_button,
+    Button,
 )
 from uiflow.components.input import Input, Selector2
 from uiflow.components.layout import Row, Column, Container
@@ -14,6 +15,7 @@ from ..data.sponsors import (
     post_sponsor,
     sponsor_activation,
     sponsor_deactivation,
+    sponsor_names,
 )
 from ..data.clients import clients_names
 
@@ -105,7 +107,10 @@ def create_sponsor_form(
 
     # Create a dropdown of clients which can then be selected
     selector_client_id = Selector2(
-        set_value=set_client_id, data=clients_names(), width="32%", md_width="32%"
+        set_value=set_client_id,
+        data=clients_names(is_active=True),
+        width="32%",
+        md_width="32%",
     )
 
     # Create submit button
@@ -145,17 +150,19 @@ def deactivate_sponsor(set_deact_name):
         set_deact_name(name_to_deact)
 
     # Create input field for name of sponsor to be deactivated
-    inp_deact_name = Input(
-        set_value=set_name_to_deact,
-        label="sponsor to be deactivated",
-        width="full",
-        md_width="full",
+    sponsors_selector_deact = Selector2(
+        set_name_to_deact,
+        data=sponsor_names(is_active=True, label="sponsor to be deactivated"),
+        width="96%",
+        md_width="96%",
     )
 
     # Create the deactivation button
-    btn = deactivation_button(name_to_deact, handle_deactivation)
-
-    return Column(Row(inp_deact_name), Row(btn))
+    is_disabled = True
+    if name_to_deact != "":
+        is_disabled = False
+    btn = Button(is_disabled, handle_submit=handle_deactivation, label="Deactivate")
+    return Column(Row(sponsors_selector_deact), Row(btn))
 
 
 @component
@@ -169,14 +176,16 @@ def activate_sponsor(set_activ_name):
         set_activ_name(name_to_activ)
 
     # Create input field for name of sponsor to be activated
-    inp_activ_name = Input(
-        set_value=set_name_to_activ,
-        label="sponsor to be activated",
-        width="full",
-        md_width="full",
+    sponsors_selector_act = Selector2(
+        set_name_to_activ,
+        data=sponsor_names(is_active=False, label="sponsor to be activated"),
+        width="96%",
+        md_width="96%",
     )
 
     # Create the activation button
-    btn = activation_button(name_to_activ, handle_activation)
-
-    return Column(Row(inp_activ_name), Row(btn))
+    is_disabled = True
+    if name_to_activ != "":
+        is_disabled = False
+    btn = Button(is_disabled, handle_submit=handle_activation, label="Activate")
+    return Column(Row(sponsors_selector_act), Row(btn))

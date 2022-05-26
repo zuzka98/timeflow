@@ -73,7 +73,8 @@ def epics_names(is_active: bool = None, label="select epic") -> List[Select]:
 
 def epics_all() -> List[Dict]:
     api = f"{base_url}/api/epics"
-    response = requests.get(api)
+    params = {"is_active": None}
+    response = requests.get(api, params=params)
     rows = []
     for item in response.json():
         d = {
@@ -82,6 +83,7 @@ def epics_all() -> List[Dict]:
             "team name": item["team_name"],
             "sponsor name": item["sponsor_short_name"],
             "start date": item["start_date"],
+            "is active": item["is_active"],
         }
         rows.append(d)
     return rows
