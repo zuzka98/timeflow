@@ -261,8 +261,11 @@ def delete_timelog_input(set_deleted_timelog, admin, github_username):
 
     def handle_delete(event):
         api = f"{base_url}/api/timelogs/{timelog_to_delete}"
-        user_id = get_user_id_by_username(github_username)
-        params = None if admin else {"user_id": user_id}
+        if admin:
+            params = None
+        else:
+            user_id = get_user_id_by_username(github_username)
+            params = {"user_id": user_id}
         response = requests.delete(api, params=params)
         set_deleted_timelog(timelog_to_delete)
 
