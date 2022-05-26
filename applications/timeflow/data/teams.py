@@ -54,7 +54,7 @@ def teams_id_name(label="select team", no_team: bool = False) -> List[Select]:
     if no_team is True:
         rows.append(Select(value="", display_value="no team"))
     for item in response.json():
-        d = Select(value=item["id"], display_value=item["team_short_name"])
+        d = Select(value=item["id"], display_value=item["team_name"])
         rows.append(d)
     return rows
 

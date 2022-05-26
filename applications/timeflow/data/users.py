@@ -57,7 +57,7 @@ def to_user(
 
 def users_active():
     api = f"{base_url}/api/users/"
-    params = {"is_active": True}
+    params = {"is_active": None}
     response = requests.get(api, params=params)
     rows = []
     for item in response.json():
@@ -68,6 +68,7 @@ def users_active():
             "role": item["role_name"],
             "main team": item["main_team"],
             "start date": item["start_date"],
+            "is active": item["is_active"],
         }
         rows.append(d)
     return rows
@@ -115,22 +116,10 @@ def deactivate_user(user_id: int):
     return True
 
 
-def users_names(label="select user") -> List[Select]:
+def users_names(is_active: bool = None, label="select user") -> List[Select]:
     # Connect to users list endpoint
     api_username = f"{base_url}/api/users"
-    params = {"is_active": True}
-    response_username = requests.get(api_username, params=params)
-    username_rows = [Select(value="", display_value=label)]
-    for item in response_username.json():
-        d = Select(value=item["id"], display_value=item["username"])
-        username_rows.append(d)
-    return username_rows
-
-
-def users_names_inactive(label="select user") -> List[Select]:
-    # Connect to users list endpoint
-    api_username = f"{base_url}/api/users"
-    params = {"is_active": False}
+    params = {"is_active": is_active}
     response_username = requests.get(api_username, params=params)
     username_rows = [Select(value="", display_value=label)]
     for item in response_username.json():

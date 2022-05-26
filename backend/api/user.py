@@ -57,37 +57,35 @@ async def get_users(
     username : str
         Short name of user to be pulled.
     """
-    statement = select(AppUser)
+    statement = (
+        select(
+            AppUser.id,
+            AppUser.username,
+            AppUser.first_name,
+            AppUser.last_name,
+            Role.name.label("role_name"),
+            Team.short_name.label("main_team"),
+            AppUser.start_date,
+            AppUser.is_active,
+        )
+        .select_from(AppUser)
+        .join(Role, AppUser.role_id == Role.id, isouter=True)
+        .join(Team, AppUser.team_id == Team.id, isouter=True)
+    )
+
     if is_active != None:
-        statement = (
-            select(
-                AppUser.id,
-                AppUser.username,
-                AppUser.first_name,
-                AppUser.last_name,
-                Role.name.label("role_name"),
-                Team.short_name.label("main_team"),
-                AppUser.start_date,
-            )
-            .select_from(AppUser)
-            .join(Role, AppUser.role_id == Role.id, isouter=True)
-            .join(Team, AppUser.team_id == Team.id, isouter=True)
-            .where(AppUser.is_active == is_active)
-            .order_by(AppUser.start_date.desc())
+        statement_final = statement.where(AppUser.is_active == is_active).order_by(
+            AppUser.start_date.desc()
         )
+
     elif username != None:
-        statement = (
-            select(
-                AppUser.id,
-                AppUser.username,
-                AppUser.first_name,
-                AppUser.last_name,
-                AppUser.start_date,
-            )
-            .select_from(AppUser)
-            .where(AppUser.username == username)
+        statement_final.select_from(AppUser).where(AppUser.username == username)
+    else:
+        statement_final = statement.order_by(AppUser.start_date.desc()).order_by(
+            AppUser.is_active.desc()
         )
-    result = session.exec(statement).all()
+
+    result = session.exec(statement_final).all()
     return result
 
 
