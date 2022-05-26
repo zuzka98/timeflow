@@ -62,7 +62,7 @@ def roles_names_active(label="select user") -> List[Select]:
     response_role_id = requests.get(api_role_id, params=params)
     role_id_rows = [Select(value="", display_value=label)]
     for item in response_role_id.json():
-        d = Select(value=item["id"], display_value=item["id"])
+        d = Select(value=item["id"], display_value=item["name"])
         role_id_rows.append(d)
     return role_id_rows
 
@@ -73,7 +73,7 @@ def roles_names_inactive(label="select user") -> List[Select]:
     response_role_id = requests.get(api_role_id, params=params)
     role_id_rows = [Select(value="", display_value=label)]
     for item in response_role_id.json():
-        d = Select(value=item["id"], display_value=item["id"])
+        d = Select(value=item["id"], display_value=item["name"])
         role_id_rows.append(d)
     return role_id_rows
 
@@ -92,14 +92,15 @@ def role_update(id: int, new_name: str = None, new_short_name: str = None) -> bo
 def roles_id_name() -> List[Select]:
     """Gets list of roles by short_name and id
 
-    api get: /api/roles/active
+    api get: /api/roles/
     Returns:
         List[Select]: list of dictionaries
     """
-    api = f"{base_url}/api/roles/active"
-    response = requests.get(api)
+    api = f"{base_url}/api/roles/"
+    params = {"is_active": True}
+    response = requests.get(api, params=params)
     rows = [Select(value="", display_value="select role")]
     for item in response.json():
-        d = Select(value=item["id"], display_value=item["short_name"])
+        d = Select(value=item["id"], display_value=item["name"])
         rows.append(d)
     return rows

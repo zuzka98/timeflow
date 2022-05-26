@@ -183,7 +183,7 @@ def deactivate_role(set_deact_role):
 
     inp_deact_role = Selector2(
         set_role_to_deact,
-        data=roles_names_active(label="role id to deactivate"),
+        data=roles_names_active(label="role name to deactivate"),
         width="96%",
         md_width="[96%]",
     )
@@ -208,7 +208,7 @@ def activate_role(set_activ_role):
 
     inp_activ_role = Selector2(
         set_role_to_activ,
-        data=roles_names_inactive(label="role id to be activated"),
+        data=roles_names_inactive(label="role name to be activated"),
         width="96%",
         md_width="[96%]",
     )
