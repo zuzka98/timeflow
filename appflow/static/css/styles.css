@@ -388,6 +388,21 @@ Make sure disabled buttons don't get the pointer cursor.
 }
 
 /*
+Change button color when active and disabled
+*/
+.bg-button-active:active {
+  --tw-border-opacity: 1;
+  background-color: rgb(119 104 191 / var(--tw-border-opacity));
+}
+
+.bg-button-disabled:disabled {
+  --tw-border-opacity: 1;
+  background-color: rgb(148 152 171 / var(--tw-border-opacity));
+  border-color: rgb(148 152 171 / var(--tw-border-opacity))
+}
+
+*/
+/*
 1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)
 2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)
    This can trigger a poorly considered lint error in some tools but is included by design.
@@ -810,7 +825,7 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 
 .fill-text {
-  fill: #1F1254;
+  fill: #1f1254;
 }
 
 .fill-nav {
