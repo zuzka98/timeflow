@@ -200,6 +200,21 @@ def create_timelog_form(
 
 @component
 def timelogs_table(user_id, is_event, app_role, github_username):
+    """
+    Returns a table component
+
+    Parameters
+    ----------
+    user_id: int
+        Id of current or selected user
+    is_event:
+        Triggers table appearance while filtering
+    app_role: str
+        Role of user within the app.
+    github_username: str
+        GitHub username of user.
+    """
+
     month = datetime.now().month
     admin = True if app_role == "admin" or app_role == None else False
     if admin == False:
