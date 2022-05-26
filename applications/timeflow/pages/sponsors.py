@@ -107,7 +107,10 @@ def create_sponsor_form(
 
     # Create a dropdown of clients which can then be selected
     selector_client_id = Selector2(
-        set_value=set_client_id, data=clients_names(), width="32%", md_width="32%"
+        set_value=set_client_id,
+        data=clients_names(is_active=True),
+        width="32%",
+        md_width="32%",
     )
 
     # Create submit button
