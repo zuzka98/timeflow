@@ -144,7 +144,7 @@ async def get_timelog_by_user_id(
     else:
         statement_final = statement.order_by(TimeLog.end_time.desc())
 
-    results = session.exec(statement).all()
+    results = session.exec(statement_final).all()
     return results
 
 
