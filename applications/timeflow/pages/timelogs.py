@@ -2,7 +2,6 @@ from idom import html, use_state, component, event
 from idom.backend import fastapi
 import requests
 from datetime import datetime
-from applications.timeflow.config import get_user, fetch_username
 from uiflow.components.input import (
     Input,
     Selector2,
@@ -15,15 +14,12 @@ from uiflow.components.heading import H3
 from uiflow.components.input import InputDateTime
 
 from ..data.common import (
-    year_month_dict_list,
-    hours,
     username,
-    days_in_month,
 )
 
 from ..data.epics import epics_names
 from ..data.epic_areas import epic_areas_names_by_epic_id
-from ..data.timelogs import to_timelog, timelog_by_user_id
+from ..data.timelogs import to_timelog, timelog_by_user_id_month, timelogs_all_by_month
 from ..data.users import get_user_id_by_username
 
 from ..config import base_url
@@ -44,13 +40,9 @@ def page(app_role: str, github_username: str):
     github_username: str
         GitHub username of user.
     """
-    year_month, set_year_month = use_state("")
-    day, set_day = use_state("")
     user_id, set_user_id = use_state("")
     epic_id, set_epic_id = use_state("")
     epic_area_id, set_epic_area_id = use_state("")
-    start_time, set_start_time = use_state("")
-    end_time, set_end_time = use_state("")
     is_event, set_is_event = use_state(True)
     start_datetime, set_start_datetime = use_state("")
     end_datetime, set_end_datetime = use_state("")
@@ -62,20 +54,12 @@ def page(app_role: str, github_username: str):
         Row(
             Container(
                 create_timelog_form(
-                    year_month,
-                    set_year_month,
-                    day,
-                    set_day,
                     user_id,
                     set_user_id,
                     epic_id,
                     set_epic_id,
                     epic_area_id,
                     set_epic_area_id,
-                    start_time,
-                    set_start_time,
-                    end_time,
-                    set_end_time,
                     start_datetime,
                     set_start_datetime,
                     end_datetime,
@@ -99,10 +83,6 @@ def page(app_role: str, github_username: str):
 
 @component
 def create_timelog_form(
-    year_month,
-    set_year_month,
-    day,
-    set_day,
     user_id,
     set_user_id,
     epic_id,
@@ -113,10 +93,6 @@ def create_timelog_form(
     set_start_datetime,
     end_datetime,
     set_end_datetime,
-    start_time,
-    set_start_time,
-    end_time,
-    set_end_time,
     is_event,
     set_is_event,
     admin,
@@ -224,28 +200,28 @@ def create_timelog_form(
 
 @component
 def timelogs_table(user_id, is_event, admin, github_username):
-    api = f"{base_url}/api/timelogs"
-    response = requests.get(api)
+    """
+    Returns a table component by current month
 
+    Parameters
+    ----------
+    user_id: int
+        Id of current or selected user
+    is_event:
+        Triggers table appearance while filtering
+    app_role: str
+        Role of user within the app.
+    github_username: str
+        GitHub username of user.
+    """
+
+    month = datetime.now().month
     if admin == False:
         user_id = get_user_id_by_username(github_username)
-
     if user_id != "":
-        rows = timelog_by_user_id(user_id)
+        rows = timelog_by_user_id_month(user_id, month)
     else:
-        rows = []
-        for item in response.json():
-            d = {
-                "timelog id": item["id"],
-                "username": item["username"],
-                "epic name": item["epic_name"],
-                "epic area name": item["epic_area_name"],
-                "start time": (item["start_time"]).replace("T", " "),
-                "end time": (item["end_time"]).replace("T", " "),
-                "count hours": item["count_hours"],
-                "count days": item["count_days"],
-            }
-            rows.append(d)
+        rows = timelogs_all_by_month(month)
     return html.div(
         {"class": "w-full"}, YourTimelog(), TableActions(), SimpleTable(rows=rows)
     )
