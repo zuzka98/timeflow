@@ -74,7 +74,11 @@ def page(app_role: str, github_username: str):
         ),
         Container(
             Column(
-                Row(timelogs_table(user_id, is_event, admin, github_username)),
+                Row(
+                    timelogs_table(
+                        user_id, is_event, admin, github_username, start_datetime
+                    )
+                ),
             ),
             delete_timelog_input(set_deleted_timelog, admin, github_username),
         ),
@@ -199,7 +203,7 @@ def create_timelog_form(
 
 
 @component
-def timelogs_table(user_id, is_event, admin, github_username):
+def timelogs_table(user_id, is_event, admin, github_username, start_datetime):
     """
     Returns a table component by current month
 
@@ -214,14 +218,17 @@ def timelogs_table(user_id, is_event, admin, github_username):
     github_username: str
         GitHub username of user.
     """
-
     month = datetime.now().month
     if admin == False:
         user_id = get_user_id_by_username(github_username)
     if user_id != "":
         rows = timelog_by_user_id_month(user_id, month)
     else:
-        rows = timelogs_all_by_month(month)
+        if start_datetime != "":
+            select_month = start_datetime[5:7]
+        else:
+            select_month = month
+        rows = timelogs_all_by_month(select_month)
     return html.div(
         {"class": "w-full"}, YourTimelog(), TableActions(), SimpleTable(rows=rows)
     )
