@@ -79,7 +79,9 @@ async def get_users(
         )
 
     elif username != None:
-        statement_final.select_from(AppUser).where(AppUser.username == username)
+        statement_final = statement.select_from(AppUser).where(
+            AppUser.username == username
+        )
     else:
         statement_final = statement.order_by(AppUser.start_date.desc()).order_by(
             AppUser.is_active.desc()

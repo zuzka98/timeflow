@@ -36,10 +36,10 @@ menu_items = {
 def timeflow():
     # Get role of user
     user_role = get_user()
-
+    # user_role = "user"
     # Get user's github username
     github_username = fetch_username()
-
+    # github_username = "bmoore"
     current_page, set_current_page = use_state("Timelogs")
     pages = ["Timelogs"]
 
