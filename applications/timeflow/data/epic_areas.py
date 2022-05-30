@@ -21,8 +21,9 @@ def epic_area_deactivation(name_to_deact) -> bool:
 
 def get_active_epic_area_rows():
     """Get all active epic areas and store them in a list."""
-    api = f"{base_url}/api/epic_areas/active"
-    response = requests.get(api)
+    api = f"{base_url}/api/epic_areas/"
+    params = {"is_active": None}
+    response = requests.get(api, params=params)
 
     rows = []
     for item in response.json():
@@ -30,18 +31,20 @@ def get_active_epic_area_rows():
             "Epic": item["epic_name"],
             "Epic Area": item["epic_area_name"],
             "ID": item["id"],
+            "Is active": item["is_active"],
         }
         rows.append(d)
     return rows
 
 
-def epic_areas_names() -> List[Select]:
+def epic_areas_names(is_active: bool = None, label="select epic area") -> List[Select]:
     """Gets list of active epics by name and id
     Returns a list of dictionaries
     """
-    api_epic_area_name = f"{base_url}/api/epic_areas/active"
-    response_epic_name = requests.get(api_epic_area_name)
-    epic_area_name_rows = [Select(value="", display_value="select epic area")]
+    api_epic_area_name = f"{base_url}/api/epic_areas/"
+    params = {"is_active": is_active}
+    response_epic_name = requests.get(api_epic_area_name, params=params)
+    epic_area_name_rows = [Select(value="", display_value=label)]
     for item in response_epic_name.json():
         d = Select(value=item["id"], display_value=item["epic_area_name"])
         epic_area_name_rows.append(d)

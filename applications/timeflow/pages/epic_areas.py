@@ -4,6 +4,7 @@ from uiflow.components.controls import (
     activation_button,
     deactivation_button,
     submit_button,
+    Button,
 )
 from uiflow.components.input import Input, Selector2
 from uiflow.components.layout import Row, Column, Container
@@ -15,6 +16,7 @@ from ..data.epic_areas import (
     epic_area_deactivation,
     get_active_epic_area_rows,
     post_epic_area,
+    epic_areas_names,
 )
 
 
@@ -126,16 +128,19 @@ def deactivate_epic_area(set_deact_name):
         set_deact_name(name_to_deact)
 
     # Create input field for id of epic area to be deactivated
-    inp_deact_name = Input(
-        set_value=set_name_to_deact,
-        label="id of the epic area to be deactivated",
-        width="full",
+    selector_deact_name = Selector2(
+        set_name_to_deact,
+        data=epic_areas_names(is_active=True, label="epic area to be deactivated"),
+        width="96%",
+        md_width="96%",
     )
 
     # Create the deactivation button
-    btn = deactivation_button(name_to_deact, handle_deactivation)
-
-    return Column(Row(inp_deact_name), Row(btn))
+    is_disabled = True
+    if name_to_deact != "":
+        is_disabled = False
+    btn = Button(is_disabled, handle_submit=handle_deactivation, label="Deactivate")
+    return Column(Row(selector_deact_name), Row(btn))
 
 
 @component
@@ -149,11 +154,16 @@ def activate_epic_area(set_activ_name):
         set_activ_name(name_to_activ)
 
     # Create input field for name of epic area to be activated
-    inp_activ_name = Input(
-        set_value=set_name_to_activ, label="epic area to be activated", width="full"
+    selector_act_name = Selector2(
+        set_name_to_activ,
+        data=epic_areas_names(is_active=False, label="epic area to be activated"),
+        width="96%",
+        md_width="96%",
     )
 
     # Create the activation button
-    btn = activation_button(name_to_activ, handle_activation)
-
-    return Column(Row(inp_activ_name), Row(btn))
+    is_disabled = True
+    if name_to_activ != "":
+        is_disabled = False
+    btn = Button(is_disabled, handle_submit=handle_activation, label="Activate")
+    return Column(Row(selector_act_name), Row(btn))

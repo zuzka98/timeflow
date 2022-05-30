@@ -38,7 +38,9 @@ async def post_epic_area(
 
 
 @router.get("/")
-async def get_epic_areas_list(epic_id, session: Session = Depends(get_session)):
+async def get_epic_areas_list(
+    session: Session = Depends(get_session), is_active: bool = None, epic_id: int = None
+):
     """
     Get list of epic areas.
 
@@ -48,43 +50,23 @@ async def get_epic_areas_list(epic_id, session: Session = Depends(get_session)):
         SQL session that is to be used to get a list of the epic areas.
         Defaults to creating a dependency on the running SQL model session.
     """
-    if epic_id != None:
-        statement = select(
-            EpicArea.id,
-            EpicArea.epic_id,
-            EpicArea.name.label("epic_area_name"),
-            Epic.id,
-            Epic.name.label("epic_name"),
-        ).join(Epic).where(EpicArea.is_active == True).where(EpicArea.epic_id == epic_id).order_by(EpicArea.name.asc())
-    else:
-        statement = select(EpicArea)
-    results = session.exec(statement).all()
-    return results
-
-
-@router.get("/active")
-async def get_active_epic_area_list(session: Session = Depends(get_session)):
-    """
-    Get list of active epic areas along with the name of their respective epics.
-
-    Parameters
-    ----------
-    session : Session
-        SQL session that is to be used to get a list of the active epic areas.
-        Defaults to creating a dependency on the running SQL model session.
-    """
-    statement = (
-        select(
-            EpicArea.id,
-            EpicArea.epic_id,
-            EpicArea.name.label("epic_area_name"),
-            Epic.id,
-            Epic.name.label("epic_name"),
+    statement = select(
+        EpicArea.id,
+        EpicArea.epic_id,
+        EpicArea.name.label("epic_area_name"),
+        Epic.id,
+        Epic.name.label("epic_name"),
+        EpicArea.is_active,
+    ).join(Epic)
+    if is_active != None:
+        statement_final = statement.where(EpicArea.is_active == is_active).order_by(
+            EpicArea.is_active.desc()
         )
-        .join(Epic)
-        .where(EpicArea.is_active == True)
-    )
-    results = session.exec(statement).all()
+    elif epic_id != None:
+        statement_final = statement.where(EpicArea.epic_id == epic_id)
+    else:
+        statement_final = statement.order_by(EpicArea.is_active.desc())
+    results = session.exec(statement_final).all()
     return results
 
 
