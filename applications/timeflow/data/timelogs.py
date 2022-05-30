@@ -73,10 +73,12 @@ def timelog_by_user_epic_year_month(user_id, epic_id, year, month) -> List[Dict]
             rows.append(d)
         return rows
 
-def timelog_by_user_id(user_id) -> List[Dict]:
+
+def timelog_by_user_id_month(user_id, month) -> List[Dict]:
     if user_id != "":
         api = f"{base_url}/api/timelogs/users/{user_id}"
-        response = requests.get(api)
+        params = {"month": month}
+        response = requests.get(api, params=params)
         rows = []
         for item in response.json():
             d = {
@@ -91,3 +93,22 @@ def timelog_by_user_id(user_id) -> List[Dict]:
             }
             rows.append(d)
         return rows
+
+def timelogs_all_by_month(month) -> List[Dict]:
+    api = f"{base_url}/api/timelogs"
+    params = {"month":month}
+    response = requests.get(api, params=params)
+    rows = []
+    for item in response.json():
+        d = {
+            "timelog id": item["id"],
+            "username": item["username"],
+            "epic name": item["epic_name"],
+            "epic area name": item["epic_area_name"],
+            "start time": (item["start_time"]).replace("T", " "),
+            "end time": (item["end_time"]).replace("T", " "),
+            "count hours": item["count_hours"],
+            "count days": item["count_days"],
+        }
+        rows.append(d)
+    return rows

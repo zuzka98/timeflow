@@ -17,7 +17,7 @@ def Button(is_disabled: bool, handle_submit: Callable, label: str):
         },
         html.button(
             {
-                "class": "py-3 px-4 border-[1px] text-sm border-button-bg bg-button-bg text-button-text rounded-[3px] w-[145px] flex items-center justify-center font-black tracking-wider",
+                "class": "py-3 px-4 border-[1px] text-sm border-button-bg bg-button-bg bg-button-active bg-button-disabled text-button-text rounded-[3px] w-[145px] flex items-center justify-center font-black tracking-wider",
                 "onClick": handle_submit,
                 "disabled": is_disabled,
             },

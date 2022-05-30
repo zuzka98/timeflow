@@ -17,7 +17,8 @@ class Select(TypedDict):
 
 def username() -> List[Select]:
     api_username = f"{base_url}/api/users"
-    response_username = requests.get(api_username)
+    params = {"is_active": True}
+    response_username = requests.get(api_username, params=params)
     username_rows = [Select(value="", display_value="select username")]
     for item in response_username.json():
         d = Select(value=item["id"], display_value=item["username"])

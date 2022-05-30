@@ -81,7 +81,7 @@ async def timelog(*, timelog: TimeLog, session: Session = Depends(get_session)):
 
 
 @router.get("/")
-async def get_timelogs_all(session: Session = Depends(get_session)):
+async def get_timelogs_all(session: Session = Depends(get_session), month: int = None):
     """
     Get list all timelogs.
 
@@ -105,14 +105,21 @@ async def get_timelogs_all(session: Session = Depends(get_session)):
         .join(AppUser)
         .join(EpicArea)
         .join(Epic)
-        .order_by(TimeLog.end_time.desc())
     )
-    results = session.exec(statement).all()
+    if month != None:
+        statement_final = statement.where(TimeLog.month == month).order_by(
+            TimeLog.end_time.desc()
+        )
+    else:
+        statement_final = statement.order_by(TimeLog.end_time.desc())
+    results = session.exec(statement_final).all()
     return results
 
 
 @router.get("/users/{user_id}")
-async def get_timelog_by_user_id(user_id: int, session: Session = Depends(get_session)):
+async def get_timelog_by_user_id(
+    user_id: int, session: Session = Depends(get_session), month: int = None
+):
     statement = (
         select(
             TimeLog.id,
@@ -128,9 +135,16 @@ async def get_timelog_by_user_id(user_id: int, session: Session = Depends(get_se
         .join(EpicArea)
         .join(Epic)
         .where(TimeLog.user_id == user_id)
-        .order_by(TimeLog.end_time.desc())
     )
-    results = session.exec(statement).all()
+    if month != None:
+        statement_final = statement.where(TimeLog.month == month).order_by(
+            TimeLog.end_time.desc()
+        )
+
+    else:
+        statement_final = statement.order_by(TimeLog.end_time.desc())
+
+    results = session.exec(statement_final).all()
     return results
 
 
@@ -202,6 +216,7 @@ async def get_timelog_user_id(
 async def delete_timelogs(
     *,
     timelog_id: int,
+    user_id: int = None,
     session: Session = Depends(get_session),
 ):
     """
@@ -216,7 +231,11 @@ async def delete_timelogs(
         Defaults to creating a dependency on the running SQL model session.
     """
     statement = select(TimeLog).where(TimeLog.id == timelog_id)
-    result = session.exec(statement).one()
+    if user_id != None:
+        statement_final = statement.where(TimeLog.user_id == user_id)
+    else:
+        statement_final = statement
+    result = session.exec(statement_final).one()
     timelog_to_delete = result
     session.delete(timelog_to_delete)
     session.commit()

@@ -40,7 +40,9 @@ async def post_sponsor(
 
 
 @router.get("/")
-async def get_sponsor_list(session: Session = Depends(get_session)):
+async def get_sponsor_list(
+    session: Session = Depends(get_session), is_active: bool = None
+):
     """
     Get entire sponsor list (enabled and disabled).
 
@@ -50,34 +52,21 @@ async def get_sponsor_list(session: Session = Depends(get_session)):
         SQL session that is to be used to get a list of the sponsors.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(Sponsor)
-    results = session.exec(statement).all()
-    return results
-
-
-@router.get("/active")
-async def get_active_sponsor_list(session: Session = Depends(get_session)):
-    """
-    Get list of active sponsors along with the name of the client.
-
-    Parameters
-    ----------
-    session : Session
-        SQL session that is to be used to get a list of the sponsors.
-        Defaults to creating a dependency on the running SQL model session.
-    """
-    statement = (
-        select(
-            Sponsor.id,
-            Sponsor.client_id,
-            Sponsor.name.label("sponsor_name"),
-            Sponsor.short_name.label("sponsor_short_name"),
-            Client.name.label("client_name"),
+    statement = select(
+        Sponsor.id,
+        Sponsor.client_id,
+        Sponsor.name.label("sponsor_name"),
+        Sponsor.short_name.label("sponsor_short_name"),
+        Client.name.label("client_name"),
+        Sponsor.is_active,
+    ).join(Client)
+    if is_active != None:
+        statement_final = statement.where(Sponsor.is_active == is_active).order_by(
+            Sponsor.is_active.desc()
         )
-        .join(Client)
-        .where(Sponsor.is_active == True)
-    )
-    results = session.exec(statement).all()
+    else:
+        statement_final = statement.order_by(Sponsor.is_active.desc())
+    results = session.exec(statement_final).all()
     return results
 
 
@@ -127,9 +116,9 @@ async def get_client_name_by_sponsor_id(
     return result
 
 
-@router.put("/{sponsor_name}/activate")
+@router.put("/{sponsor_id}/activate")
 async def activate_sponsor(
-    sponsor_name: str = None,
+    sponsor_id: int = None,
     session: Session = Depends(get_session),
 ):
     """
@@ -143,7 +132,7 @@ async def activate_sponsor(
         SQL session that is to be used to activate the sponsor.
         Defaults to creating a dependency on the running SQL model session.
     """
-    statement = select(Sponsor).where(Sponsor.name == sponsor_name)
+    statement = select(Sponsor).where(Sponsor.id == sponsor_id)
     sponsor_to_activate = session.exec(statement).one()
     sponsor_to_activate.is_active = True
     sponsor_to_activate.updated_at = datetime.now()
@@ -155,7 +144,7 @@ async def activate_sponsor(
 
 @router.put("/{sponsor_id}/deactivate")
 async def deactivate_sponsor(
-    sponsor_id: str,
+    sponsor_id: int = None,
     session: Session = Depends(get_session),
 ):
     """

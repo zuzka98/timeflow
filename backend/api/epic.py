@@ -59,27 +59,20 @@ async def get_epics_list(
             Epic.start_date,
             Team.name.label("team_name"),
             Sponsor.short_name.label("sponsor_short_name"),
+            Epic.is_active,
         )
         .select_from(Epic)
         .join(Team)
         .join(Sponsor)
     )
     if is_active != None:
-        statement = (
-            select(
-                Epic.id.label("epic_id"),
-                Epic.name.label("epic_name"),
-                Epic.start_date,
-                Team.name.label("team_name"),
-                Sponsor.short_name.label("sponsor_short_name"),
-            )
-            .select_from(Epic)
-            .join(Team)
-            .join(Sponsor)
-            .where(Epic.is_active == is_active)
+        statement_final = statement.where(Epic.is_active == is_active).order_by(
+            Epic.is_active.desc()
         )
+    else:
+        statement_final = statement
 
-    results = session.exec(statement).all()
+    results = session.exec(statement_final).all()
     return results
 
 
