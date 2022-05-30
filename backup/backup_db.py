@@ -35,6 +35,12 @@ engine = create_engine(
 )
 cnxn = engine.connect()
 
+# Set current working directory
+if os.name == "posix":
+    cwd = os.getcwd()
+elif os.name == "nt":
+    cwd = os.getcwd().replace("\\", "/")
+
 
 @dask.delayed
 def get_table_names() -> pd.DataFrame:
@@ -60,7 +66,7 @@ def backup_db(df_table_names: pd.DataFrame):
     First backup is stored in a directory called 0000-00-00.
     Returns a dictionary containing the date that was updated and the batch number.
     """
-    path = f"{os.getcwd()}\\0000-00-00"
+    path = f"{cwd}/0000-00-00"
     if not os.path.exists(path):
         # First backup
         first_backup(df_table_names)
@@ -89,20 +95,20 @@ def cloud_backup(backup_info: dict):
 
         if folder_name == "0000-00-00":
             for parquet_file in os.listdir("0000-00-00"):
-                path = f"{os.getcwd()}\\0000-00-00\\{parquet_file}"
+                path = f"{cwd}/0000-00-00/{parquet_file}"
                 file = open(path, "rb")
-                session.storbinary(f"STOR {folder_name}\\{parquet_file}", file)
+                session.storbinary(f"STOR {folder_name}/{parquet_file}", file)
                 file.close()
 
         else:
-            path_to_date = f"{os.getcwd()}\\{folder_name}"
+            path_to_date = f"{cwd}/{folder_name}"
             for parquet_file in os.listdir(path_to_date):
                 priority = re.search(r"\d", parquet_file)
                 digit = int(priority.group())
                 if digit <= backup_info["batch"]:
-                    path = f"{os.getcwd()}\\{folder_name}\\{parquet_file}"
+                    path = f"{cwd}/{folder_name}/{parquet_file}"
                     file = open(path, "rb")
-                    session.storbinary(f"STOR {folder_name}\\{parquet_file}", file)
+                    session.storbinary(f"STOR {folder_name}/{parquet_file}", file)
                     file.close()
     except TypeError:
         pass
@@ -128,7 +134,7 @@ def first_backup(df_table_names: pd.DataFrame):
 
             except FileExistsError:
                 pass
-            path = f"{os.getcwd()}\\{folder_name}\\{table}0.parquet"
+            path = f"{cwd}/{folder_name}/{table}0.parquet"
             df.to_parquet(path=path, compression=None)
 
 
@@ -139,7 +145,7 @@ def update_backup(df_table_names: pd.DataFrame):
     """
     folder_name = ""
     date_now = str(current_datetime.date())
-    batch = get_latest_batch_number(f"{os.getcwd()}\\{date_now}") + 1
+    batch = get_latest_batch_number(f"{cwd}/{date_now}") + 1
 
     # Iterate over all database tables
     for table in df_table_names["table_name"]:
@@ -159,7 +165,7 @@ def update_backup(df_table_names: pd.DataFrame):
                 pass
 
             # Create path to new parquet file
-            path = f"{os.getcwd()}\\{folder_name}\\{table}{batch}.parquet"
+            path = f"{cwd}/{folder_name}/{table}{batch}.parquet"
             df.to_parquet(path=path, compression=None)
     return {"folder_name": folder_name, "batch": batch}
 
