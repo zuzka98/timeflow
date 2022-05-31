@@ -11,7 +11,7 @@ def H3(label, font="black"):
 
 @component
 def H4(label, font="black"):
-    return html.h3(
-        {"class": f"font-{font} text-xs text-heading my-2 tracking-wider"},
+    return html.h4(
+        {"class": f"font-{font} text-xs text-heading-4 my-2 tracking-wider"},
         label,
     )

@@ -944,6 +944,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   color: rgb(119 104 191 / var(--tw-text-opacity));
 }
 
+.text-heading-4 {
+  --tw-text-opacity: 1;
+  color: rgb(19 192 209 / var(--tw-text-opacity));
+}
+
 .text-button-text {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));

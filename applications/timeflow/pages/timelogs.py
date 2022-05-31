@@ -47,7 +47,7 @@ def page(app_role: str, github_username: str):
     start_datetime, set_start_datetime = use_state("")
     end_datetime, set_end_datetime = use_state("")
     deleted_timelog, set_deleted_timelog = use_state("")
-    post_response, set_post_response = use_state(" ")
+    post_response, set_post_response = use_state("")
 
     admin = True if app_role == "admin" or app_role == None else False
 
@@ -122,7 +122,14 @@ def create_timelog_form(
     "year": 0
     }
     """
-    print("post respoooooooonseoooooooooooooooooooooooooooo", post_response)
+    print(
+        "post respoooooooonseoooooooooooooooooooooooooooo",
+        post_response,
+        "epic id is",
+        epic_id,
+        "epic area id is",
+        epic_area_id,
+    )
 
     @event(prevent_default=True)
     async def handle_submit(event):
@@ -147,14 +154,22 @@ def create_timelog_form(
         return response
 
     if admin == True:
-        selector_user = Selector2(set_value=set_user_id, data=username())
+        selector_user = Selector2(
+            set_value=set_user_id,
+            data=username(),
+            set_sel_value=set_post_response,
+            sel_value="user test",
+        )
     elif admin == False:
         user_id = get_user_id_by_username(github_username)
         selector_user = display_value(user_id, github_username)
 
     selector_epic_id = Selector2(
         set_value=set_epic_id,
-        set_sel_values=dict(set_epic_area_id="", set_post_response=" "),
+        set_sel_value=set_epic_area_id,
+        sel_value="",
+        set_sel_value2=set_post_response,
+        sel_value2="epic test",
         data=epics_names(is_active=True),
         width="14%",
         md_width="32%",
@@ -162,15 +177,24 @@ def create_timelog_form(
 
     selector_epic_area_id = Selector2(
         set_value=set_epic_area_id,
-        set_sel_values=dict(set_post_response=" "),
+        set_sel_value=set_post_response,
+        sel_value="epic area test",
         data=epic_areas_names_by_epic_id(epic_id),
         width="14%",
         md_width="32%",
     )
     h_start = H3("from:", "bold")
-    input_start_datetime = InputDateTime(set_start_datetime)
+    input_start_datetime = InputDateTime(
+        set_start_datetime,
+        set_sel_value=set_post_response,
+        sel_value="start date test",
+    )
     h_end = H3("to:", "bold")
-    input_end_datetime = InputDateTime(set_end_datetime)
+    input_end_datetime = InputDateTime(
+        set_end_datetime,
+        set_sel_value=set_post_response,
+        sel_value="end date test",
+    )
     is_disabled = True
     if (
         admin == True
@@ -207,7 +231,7 @@ def create_timelog_form(
                 input_end_datetime,
                 btn,
             ),
-            Row(H4(post_response)),
+            H4(post_response),
         ),
     )
 
