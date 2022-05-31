@@ -122,14 +122,6 @@ def create_timelog_form(
     "year": 0
     }
     """
-    print(
-        "post respoooooooonseoooooooooooooooooooooooooooo",
-        post_response,
-        "epic id is",
-        epic_id,
-        "epic area id is",
-        epic_area_id,
-    )
 
     @event(prevent_default=True)
     async def handle_submit(event):
