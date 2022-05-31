@@ -58,11 +58,17 @@ async def get_epic_areas_list(
         Epic.name.label("epic_name"),
         EpicArea.is_active,
     ).join(Epic)
-    if is_active != None:
+    if is_active != None and epic_id != None:
+        statement_final = (
+            statement.where(EpicArea.is_active == is_active)
+            .where(EpicArea.epic_id == epic_id)
+            .order_by(EpicArea.name)
+        )
+    elif is_active != None and epic_id == None:
         statement_final = statement.where(EpicArea.is_active == is_active).order_by(
             EpicArea.is_active.desc()
         )
-    elif epic_id != None:
+    elif is_active == None and epic_id != None:
         statement_final = statement.where(EpicArea.epic_id == epic_id)
     else:
         statement_final = statement.order_by(EpicArea.is_active.desc())
