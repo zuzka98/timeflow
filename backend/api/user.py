@@ -75,7 +75,7 @@ async def get_users(
 
     if is_active != None:
         statement_final = statement.where(AppUser.is_active == is_active).order_by(
-            AppUser.start_date.desc()
+            AppUser.username.asc()
         )
 
     elif username != None:

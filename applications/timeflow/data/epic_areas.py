@@ -46,7 +46,10 @@ def epic_areas_names(is_active: bool = None, label="select epic area") -> List[S
     response_epic_name = requests.get(api_epic_area_name, params=params)
     epic_area_name_rows = [Select(value="", display_value=label)]
     for item in response_epic_name.json():
-        d = Select(value=item["id"], display_value=item["epic_area_name"])
+        d = Select(
+            value=item["id"],
+            display_value=item["epic_name"] + " - " + item["epic_area_name"],
+        )
         epic_area_name_rows.append(d)
     return epic_area_name_rows
 
