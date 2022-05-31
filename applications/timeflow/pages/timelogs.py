@@ -158,7 +158,7 @@ def create_timelog_form(
             set_value=set_user_id,
             data=username(),
             set_sel_value=set_post_response,
-            sel_value="user test",
+            sel_value="",
         )
     elif admin == False:
         user_id = get_user_id_by_username(github_username)
@@ -169,7 +169,7 @@ def create_timelog_form(
         set_sel_value=set_epic_area_id,
         sel_value="",
         set_sel_value2=set_post_response,
-        sel_value2="epic test",
+        sel_value2="",
         data=epics_names(is_active=True),
         width="14%",
         md_width="32%",
@@ -178,7 +178,7 @@ def create_timelog_form(
     selector_epic_area_id = Selector2(
         set_value=set_epic_area_id,
         set_sel_value=set_post_response,
-        sel_value="epic area test",
+        sel_value="",
         data=epic_areas_names_by_epic_id(epic_id),
         width="14%",
         md_width="32%",
@@ -187,13 +187,13 @@ def create_timelog_form(
     input_start_datetime = InputDateTime(
         set_start_datetime,
         set_sel_value=set_post_response,
-        sel_value="start date test",
+        sel_value="",
     )
     h_end = H3("to:", "bold")
     input_end_datetime = InputDateTime(
         set_end_datetime,
         set_sel_value=set_post_response,
-        sel_value="end date test",
+        sel_value="",
     )
     is_disabled = True
     if (
