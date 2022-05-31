@@ -27,14 +27,23 @@ async def post_epic_area(
         Defaults to creating a dependency on the running SQL model session.
     """
     statement1 = select(EpicArea).where(EpicArea.id == epic_area.id)
+    statement2 = (
+        select(EpicArea)
+        .where(EpicArea.name == epic_area.name)
+        .where(EpicArea.epic_id == epic_area.epic_id)
+    )
     try:
         result = session.exec(statement1).one()
         return False
     except NoResultFound:
-        session.add(epic_area)
-        session.commit()
-        session.refresh(epic_area)
-        return epic_area
+        try:
+            result = session.exec(statement2).one()
+            return False
+        except NoResultFound:
+            session.add(epic_area)
+            session.commit()
+            session.refresh(epic_area)
+            return epic_area
 
 
 @router.get("/")
@@ -58,14 +67,24 @@ async def get_epic_areas_list(
         Epic.name.label("epic_name"),
         EpicArea.is_active,
     ).join(Epic)
-    if is_active != None:
+    if is_active != None and epic_id != None:
+        statement_final = (
+            statement.where(EpicArea.is_active == is_active)
+            .where(EpicArea.epic_id == epic_id)
+            .order_by(EpicArea.name)
+        )
+    elif is_active != None and epic_id == None:
         statement_final = statement.where(EpicArea.is_active == is_active).order_by(
             EpicArea.is_active.desc()
         )
-    elif epic_id != None:
+    elif is_active == None and epic_id != None:
         statement_final = statement.where(EpicArea.epic_id == epic_id)
     else:
-        statement_final = statement.order_by(EpicArea.is_active.desc())
+        statement_final = (
+            statement.order_by(EpicArea.is_active.desc())
+            .order_by(Epic.name.asc())
+            .order_by(EpicArea.name.asc())
+        )
     results = session.exec(statement_final).all()
     return results
 
