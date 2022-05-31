@@ -18,13 +18,14 @@ from ..data.epic_areas import (
     post_epic_area,
     epic_areas_names,
 )
+from .utils import switch_state
 
 
 @component
 def page():
     epic_id, set_epic_id = use_state("")
     name, set_name = use_state("")
-    submitted_name, set_submitted_name = use_state("")
+    is_event, set_is_event = use_state(True)
     _, set_deact_name = use_state("")
     _, set_activ_name = use_state("")
 
@@ -37,29 +38,24 @@ def page():
                     set_epic_id,
                     name,
                     set_name,
-                    set_submitted_name,
+                    is_event,
+                    set_is_event,
                 )
             ),
             bg="bg-filter-block-bg",
         ),
         Container(
             Column(
-                Row(list_epic_areas(submitted_name)),
+                Row(list_epic_areas(is_event)),
             ),
-            Row(deactivate_epic_area(set_deact_name)),
-            Row(activate_epic_area(set_activ_name)),
+            Row(deactivate_epic_area(is_event, set_is_event)),
+            Row(activate_epic_area(is_event, set_is_event)),
         ),
     )
 
 
 @component
-def create_epic_area_form(
-    epic_id,
-    set_epic_id,
-    name,
-    set_name,
-    set_submitted_name,
-):
+def create_epic_area_form(epic_id, set_epic_id, name, set_name, is_event, set_is_event):
     """
     Create a form that allows admin to add a new epic area.
 
@@ -79,7 +75,7 @@ def create_epic_area_form(
         post_epic_area(epic_id, name)
 
         # Change the states
-        set_submitted_name(name)
+        switch_state(is_event, set_is_event)
 
     # Create dropdown of active epics which can then be selected
     selector_epic_id = Selector2(
@@ -105,7 +101,7 @@ def create_epic_area_form(
 
 
 @component
-def list_epic_areas(submitted_name):
+def list_epic_areas(is_event):
     """
     Return rows consisting of each epic area along with its epic.
 
@@ -118,14 +114,14 @@ def list_epic_areas(submitted_name):
 
 
 @component
-def deactivate_epic_area(set_deact_name):
+def deactivate_epic_area(is_event, set_is_event):
     """Deactivate an epic area without deleting it."""
     name_to_deact, set_name_to_deact = use_state("")
 
     def handle_deactivation(event):
         """Set the given epic area's active column to False."""
         epic_area_deactivation(name_to_deact)
-        set_deact_name(name_to_deact)
+        switch_state(is_event, set_is_event)
 
     # Create input field for id of epic area to be deactivated
     selector_deact_name = Selector2(
@@ -144,14 +140,14 @@ def deactivate_epic_area(set_deact_name):
 
 
 @component
-def activate_epic_area(set_activ_name):
+def activate_epic_area(is_event, set_is_event):
     """Activate an epic area."""
     name_to_activ, set_name_to_activ = use_state("")
 
     def handle_activation(event):
         """Set the given epic area's active column to True."""
         epic_area_activation(name_to_activ)
-        set_activ_name(name_to_activ)
+        switch_state(is_event, set_is_event)
 
     # Create input field for name of epic area to be activated
     selector_act_name = Selector2(
