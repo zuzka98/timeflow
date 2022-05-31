@@ -97,7 +97,7 @@ def cloud_backup(backup_info: dict):
             for parquet_file in os.listdir("0000-00-00"):
                 path = f"{cwd}/0000-00-00/{parquet_file}"
                 file = open(path, "rb")
-                session.storbinary(f"STOR {folder_name}/{parquet_file}", file)
+                session.storbinary(f"STOR {folder_name}\\{parquet_file}", file)
                 file.close()
 
         else:
@@ -108,7 +108,7 @@ def cloud_backup(backup_info: dict):
                 if digit <= backup_info["batch"]:
                     path = f"{cwd}/{folder_name}/{parquet_file}"
                     file = open(path, "rb")
-                    session.storbinary(f"STOR {folder_name}/{parquet_file}", file)
+                    session.storbinary(f"STOR {folder_name}\\{parquet_file}", file)
                     file.close()
     except TypeError:
         pass
