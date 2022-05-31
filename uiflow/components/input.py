@@ -94,8 +94,9 @@ def Selector2(
     data: List,
     width: str = "14%",
     md_width: str = "121px",
-    set_sel_value: Callable = None,
-    sel_value: Any = None,
+    set_sel_values: dict = None
+    # set_sel_value: Callable = None,
+    # sel_value: Any = None,
 ):
     options = []
     for row in data:
@@ -105,8 +106,11 @@ def Selector2(
     @event()
     async def on_change(event):
         set_value(event["target"]["value"])
-        if (set_sel_value and sel_value) != None:
-            set_sel_value(sel_value)
+        if set_sel_values != None:
+            for set_value_1, value_1 in set_sel_values.items():
+                set_value_1(value_1)
+        # if (set_sel_value and sel_value) != None:
+        #     set_sel_value(sel_value)
         return True
 
     return html.div(

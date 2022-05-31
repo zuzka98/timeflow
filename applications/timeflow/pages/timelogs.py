@@ -10,7 +10,7 @@ from uiflow.components.input import (
 from uiflow.components.layout import Row, Column, Container
 from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
-from uiflow.components.heading import H3
+from uiflow.components.heading import H3, H4
 from uiflow.components.input import InputDateTime
 
 from ..data.common import (
@@ -47,6 +47,8 @@ def page(app_role: str, github_username: str):
     start_datetime, set_start_datetime = use_state("")
     end_datetime, set_end_datetime = use_state("")
     deleted_timelog, set_deleted_timelog = use_state("")
+    post_response, set_post_response = use_state(" ")
+
     admin = True if app_role == "admin" or app_role == None else False
 
     return html.div(
@@ -68,6 +70,8 @@ def page(app_role: str, github_username: str):
                     set_is_event,
                     admin,
                     github_username,
+                    post_response,
+                    set_post_response,
                 ),
             ),
             bg="bg-filter-block-bg",
@@ -101,6 +105,8 @@ def create_timelog_form(
     set_is_event,
     admin,
     github_username,
+    post_response,
+    set_post_response,
 ):
     """
     schema:
@@ -116,6 +122,7 @@ def create_timelog_form(
     "year": 0
     }
     """
+    print("post respoooooooonseoooooooooooooooooooooooooooo", post_response)
 
     @event(prevent_default=True)
     async def handle_submit(event):
@@ -124,7 +131,7 @@ def create_timelog_form(
 
         start_time_post = start_datetime.replace("T", " ")
         end_time_post = end_datetime.replace("T", " ")
-        to_timelog(
+        response = to_timelog(
             start_time=start_time_post,
             end_time=end_time_post,
             user_id=user_id,
@@ -135,7 +142,9 @@ def create_timelog_form(
             created_at=str(datetime.now()),
             updated_at=str(datetime.now()),
         )
+        set_post_response(response)
         switch_state(is_event, set_is_event)
+        return response
 
     if admin == True:
         selector_user = Selector2(set_value=set_user_id, data=username())
@@ -145,8 +154,7 @@ def create_timelog_form(
 
     selector_epic_id = Selector2(
         set_value=set_epic_id,
-        set_sel_value=set_epic_area_id,
-        sel_value="",
+        set_sel_values=dict(set_epic_area_id="", set_post_response=" "),
         data=epics_names(is_active=True),
         width="14%",
         md_width="32%",
@@ -154,6 +162,7 @@ def create_timelog_form(
 
     selector_epic_area_id = Selector2(
         set_value=set_epic_area_id,
+        set_sel_values=dict(set_post_response=" "),
         data=epic_areas_names_by_epic_id(epic_id),
         width="14%",
         md_width="32%",
@@ -198,6 +207,7 @@ def create_timelog_form(
                 input_end_datetime,
                 btn,
             ),
+            Row(H4(post_response)),
         ),
     )
 
