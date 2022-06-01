@@ -63,7 +63,7 @@ async def timelog(*, timelog: TimeLog, session: Session = Depends(get_session)):
     results5 = session.exec(statement5).all()
 
     if results1 or results2 or results3 or results4:
-        return "currently posted timelog overlaps another timelog"
+        return "Currently posted timelog overlaps another timelog"
     elif results5:
         return "epic was created later than timelog's start date"
     else:
@@ -77,7 +77,7 @@ async def timelog(*, timelog: TimeLog, session: Session = Depends(get_session)):
         session.add(timelog)
         session.commit()
         session.refresh(timelog)
-        return timelog
+        return "Your log has been submitted"
 
 
 @router.get("/")

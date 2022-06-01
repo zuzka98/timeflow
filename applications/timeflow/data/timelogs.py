@@ -50,7 +50,7 @@ def to_timelog(
         data=json.dumps(dict(data)),
         headers={"accept": "application/json", "Content-Type": "application/json"},
     )
-    return True
+    return response.json()
 
 
 def timelog_by_user_epic_year_month(user_id, epic_id, year, month) -> List[Dict]:
@@ -94,9 +94,10 @@ def timelog_by_user_id_month(user_id, month) -> List[Dict]:
             rows.append(d)
         return rows
 
+
 def timelogs_all_by_month(month) -> List[Dict]:
     api = f"{base_url}/api/timelogs"
-    params = {"month":month}
+    params = {"month": month}
     response = requests.get(api, params=params)
     rows = []
     for item in response.json():
