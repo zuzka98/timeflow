@@ -96,6 +96,8 @@ def Selector2(
     md_width: str = "121px",
     set_sel_value: Callable = None,
     sel_value: Any = None,
+    set_sel_value2: Callable = None,
+    sel_value2: Any = None,
 ):
     options = []
     for row in data:
@@ -107,6 +109,8 @@ def Selector2(
         set_value(event["target"]["value"])
         if (set_sel_value and sel_value) != None:
             set_sel_value(sel_value)
+        if (set_sel_value2 and sel_value2) != None:
+            set_sel_value2(sel_value2)
         return True
 
     return html.div(
@@ -195,12 +199,23 @@ def Checkbox(value_checkbox, handle_change):
 
 
 @component
-def InputDateTime(set_value):
+def InputDateTime(
+    set_value,
+    set_sel_value: Callable = None,
+    sel_value: Any = None,
+):
+    @event()
+    async def on_change(event):
+        set_value(event["target"]["value"])
+        if (set_sel_value and sel_value) != None:
+            set_sel_value(sel_value)
+        return True
+
     return html.input(
         {
             "class": "py-3 pl-3 w-full border-[1px] sm:w-[48%] md:w-[121px] bg-nav rounded-[3px] md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute xl:w-[14%]",
             "type": "datetime-local",
-            "onChange": lambda event: set_value(event["target"]["value"]),
+            "onChange": on_change,
         },
     )
 
