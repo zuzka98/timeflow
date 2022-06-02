@@ -39,7 +39,6 @@ def page():
         {"class": "w-full"},
         Row(
             Container(
-                Row(update_epics(is_event, set_is_event)),
                 create_epic_form(
                     short_name,
                     set_short_name,
@@ -61,6 +60,7 @@ def page():
             Column(
                 Row(list_epics(team_id, sponsor_id, is_event)),
             ),
+            Row(update_epics(is_event, set_is_event)),
             Row(
                 deactivate_epic(is_event, set_is_event),
                 activate_epic(is_event, set_is_event),
