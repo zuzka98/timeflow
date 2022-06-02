@@ -1,9 +1,10 @@
 import requests
 import json
-from typing import List, TypedDict, Dict
+from typing import List, TypedDict, Dict, Optional
 
 from ..config import base_url
 from .common import Select
+from datetime import date, datetime
 
 
 class Epic(TypedDict):
@@ -72,7 +73,7 @@ def epics_names(is_active: bool = None, label="select epic") -> List[Select]:
 
 
 def epics_all() -> List[Dict]:
-    api = f"{base_url}/api/epics"
+    api = f"{base_url}/api/epics/"
     params = {"is_active": None}
     response = requests.get(api, params=params)
     rows = []
@@ -80,6 +81,7 @@ def epics_all() -> List[Dict]:
         d = {
             "epic id": item["epic_id"],
             "epic name": item["epic_name"],
+            "epic short name": item["short_name"],
             "team name": item["team_name"],
             "sponsor name": item["sponsor_short_name"],
             "start date": item["start_date"],
@@ -102,6 +104,7 @@ def epics_by_team_sponsor(team_id: int, sponsor_id: int) -> List[Select]:
     for item in response.json():
         d = {
             "epic id": item["epic_id"],
+            "short name": item["short_name"],
             "epic name": item["epic_name"],
             "team name": item["team_name"],
             "sponsor name": item["sponsor_short_name"],
@@ -131,4 +134,31 @@ def epic_activate(epic_id):
 def epic_deactivate(epic_id):
     api = f"{base_url}/api/epics/{epic_id}/deactivate"
     response = requests.put(api)
+    return True
+
+
+def update_epic(
+    epic_id: int,
+    new_epic_name: Optional[str] = None,
+    new_short_name: Optional[str] = None,
+    new_team_id: Optional[int] = None,
+    new_sponsor_id: Optional[int] = None,
+    new_start_date: Optional[date] = None,
+):
+    api = f"{base_url}/api/epics/{epic_id}/"
+    params = {
+        "new_epic_name": new_epic_name,
+        "new_short_name": new_short_name,
+        "new_team_id": new_team_id,
+        "new_sponsor_id": new_sponsor_id,
+        "new_start_date": new_start_date,
+    }
+
+    api_params = params.copy()
+
+    for param in params.keys():
+        if api_params[param] == "":
+            api_params.pop(param)
+
+    response = requests.put(api, params=api_params)
     return True
