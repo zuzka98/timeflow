@@ -62,8 +62,8 @@ async def get_epic_areas_list(
     statement = select(
         EpicArea.id,
         EpicArea.epic_id,
-        EpicArea.name.label("epic_area_name"),
         Epic.id,
+        EpicArea.name.label("epic_area_name"),
         Epic.name.label("epic_name"),
         EpicArea.is_active,
     ).join(Epic)
@@ -145,7 +145,7 @@ async def activate_epic_area(
     return epic_area_to_activate
 
 
-@router.put("/")
+@router.put("/{id}/")
 async def update_epic_area(
     id: int,
     new_epic_id: str = None,

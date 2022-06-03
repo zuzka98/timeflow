@@ -14,9 +14,11 @@ from ..data.epics import epics_names
 from ..data.epic_areas import (
     epic_area_activation,
     epic_area_deactivation,
+    epic_areas_names_by_epic_id,
     get_active_epic_area_rows,
     post_epic_area,
     epic_areas_names,
+    update_epic_area,
 )
 from .utils import switch_state
 
@@ -48,8 +50,11 @@ def page():
             Column(
                 Row(list_epic_areas(is_event)),
             ),
-            Row(deactivate_epic_area(is_event, set_is_event)),
-            Row(activate_epic_area(is_event, set_is_event)),
+            Row(update_epic_areas(is_event, set_is_event)),
+            Row(
+                deactivate_epic_area(is_event, set_is_event),
+                activate_epic_area(is_event, set_is_event),
+            ),
         ),
     )
 
@@ -163,3 +168,47 @@ def activate_epic_area(is_event, set_is_event):
         is_disabled = False
     btn = Button(is_disabled, handle_submit=handle_activation, label="Activate")
     return Column(Row(selector_act_name), Row(btn))
+
+
+@component
+def update_epic_areas(is_event, set_is_event):
+    new_name, set_new_name = use_state("")
+    new_epic_id, set_new_epic_id = use_state("")
+    update_id, set_update_id = use_state("")
+
+    @event(prevent_default=True)
+    def handle_update(event):
+        update_epic_area(
+            id=update_id,
+            new_name=new_name,
+            new_epic_id=new_epic_id,
+        )
+        switch_state(value=is_event, set_value=set_is_event)
+
+    epic_area_selector = Selector2(
+        set_update_id,
+        data=epic_areas_names(is_active=True, label="select epic area to update"),
+        width="48%",
+        md_width="48%",
+    )
+
+    epic_id_selector = Selector2(
+        set_new_epic_id,
+        data=epics_names(is_active=True, label="select new epic name"),
+        width="48%",
+        md_width="48%",
+    )
+
+    epic_area_name_input = Input(
+        set_value=set_new_name,
+        label="new epic area name",
+        width="[48%]",
+        md_width="[48%]",
+    )
+    is_disabled = False
+    btn = Button(is_disabled, handle_update, label="Update")
+    return Column(
+        Row(epic_area_selector),
+        Row(epic_id_selector, epic_area_name_input, justify="justify-between"),
+        Row(btn),
+    )
