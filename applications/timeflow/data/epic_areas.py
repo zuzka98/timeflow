@@ -28,9 +28,9 @@ def get_active_epic_area_rows():
     rows = []
     for item in response.json():
         d = {
+            "ID": item["id"],
             "Epic": item["epic_name"],
             "Epic Area": item["epic_area_name"],
-            "ID": item["id"],
             "Is active": item["is_active"],
         }
         rows.append(d)
@@ -80,4 +80,18 @@ def post_epic_area(epic_id: int, name: str):
         data=json.dumps(data),
         headers={"accept": "application/json", "Content-Type": "application/json"},
     )
+    return True
+
+
+def update_epic_area(id: int, new_epic_id: int, new_name: str = None):
+    api = f"{base_url}/api/epic_areas/{id}/"
+    params = {"new_name": new_name, "new_epic_id": new_epic_id}
+
+    api_params = params.copy()
+
+    for param in params.keys():
+        if api_params[param] == "":
+            api_params.pop(param)
+
+    response = requests.put(api, params=api_params)
     return True
