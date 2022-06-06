@@ -6,7 +6,8 @@ from ..models.client import Client
 from ..models.sponsor import Sponsor
 from ..models.team import Team
 from sqlalchemy.exc import NoResultFound
-from datetime import datetime
+from datetime import date, datetime
+from typing import Optional
 
 router = APIRouter(prefix="/api/epics", tags=["epic"])
 
@@ -41,7 +42,8 @@ async def post_epic(
 
 @router.get("/")
 async def get_epics_list(
-    session: Session = Depends(get_session), is_active: bool = None
+    session: Session = Depends(get_session),
+    is_active: bool = None,
 ):
     """
     Get list of epics.
@@ -55,10 +57,11 @@ async def get_epics_list(
     statement = (
         select(
             Epic.id.label("epic_id"),
+            Epic.short_name,
             Epic.name.label("epic_name"),
-            Epic.start_date,
             Team.name.label("team_name"),
             Sponsor.short_name.label("sponsor_short_name"),
+            Epic.start_date,
             Epic.is_active,
         )
         .select_from(Epic)
@@ -72,27 +75,9 @@ async def get_epics_list(
             .order_by(Epic.name.asc())
         )
     else:
-        statement_final = statement
+        statement_final = statement.order_by(Epic.is_active.desc())
 
     results = session.exec(statement_final).all()
-    return results
-
-
-@router.get("/active")
-async def get_active_epics_list(session: Session = Depends(get_session)):
-    """
-    Get list of active epics.
-
-    Parameters
-    ----------
-    session : Session
-        SQL session that is to be used to get a list of the active epics.
-        Defaults to creating a dependency on the running SQL model session.
-    """
-    statement = (
-        select(Epic).where(Epic.is_active == True).order_by(Epic.short_name.asc())
-    )
-    results = session.exec(statement).all()
     return results
 
 
@@ -211,36 +196,36 @@ async def deactivate_epic(
     return epic_to_deactivate
 
 
-@router.put("/")
+@router.put("/{epic_id}/")
 async def update_epic(
-    epic_id: str = None,
-    new_short_name: str = None,
-    new_name: str = None,
+    epic_id: int,
+    new_epic_name: Optional[str] = None,
+    new_short_name: Optional[str] = None,
+    new_team_id: Optional[int] = None,
+    new_sponsor_id: Optional[int] = None,
+    new_start_date: Optional[date] = None,
     session: Session = Depends(get_session),
+    is_active: Optional[bool] = None,
 ):
-    """
-    Update an epic.
 
-    Parameters
-    ----------
-    epic_id : str
-        ID of epic to be updated.
-    new_short_name : str
-        Name of new short name.
-    new_name : str
-        Name of new name.
-    session : Session
-        SQL session that is to be used to update the epic.
-        Defaults to creating a dependency on the running SQL model session.
-    """
-    statement = select(Epic).where(Epic.id == epic_id).where(Epic.is_active == True)
+    statement = select(Epic).where(Epic.id == epic_id)
+
     epic_to_update = session.exec(statement).one()
+
+    if is_active != None:
+        epic_to_update.is_active = is_active
+    if new_epic_name != None:
+        epic_to_update.name = new_epic_name
     if new_short_name != None:
         epic_to_update.short_name = new_short_name
-    if new_name != None:
-        epic_to_update.name = new_name
-    session.add(epic_to_update)
+    if new_team_id != None:
+        epic_to_update.team_id = new_team_id
+    if new_sponsor_id != None:
+        epic_to_update.sponsor_id = new_sponsor_id
+    if new_start_date != None:
+        epic_to_update.start_date = new_start_date
     epic_to_update.updated_at = datetime.now()
+    session.add(epic_to_update)
     session.commit()
     session.refresh(epic_to_update)
     return epic_to_update
