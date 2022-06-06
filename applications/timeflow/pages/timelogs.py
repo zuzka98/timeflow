@@ -162,7 +162,7 @@ def create_timelog_form(
         sel_value="",
         set_sel_value2=set_post_response,
         sel_value2="",
-        data=epics_names(is_active=True),
+        data=epics_names(),
         width="14%",
         md_width="32%",
     )

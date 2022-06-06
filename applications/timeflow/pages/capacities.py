@@ -96,7 +96,10 @@ def create_capacity_form(
         switch_state(is_event, set_is_event)
 
     selector_user_id = Selector2(
-        set_value=set_user_id, data=users_names(), width="24%", md_width="24%"
+        set_value=set_user_id,
+        data=users_names(is_active=True),
+        width="24%",
+        md_width="24%",
     )
 
     selector_team_id = Selector2(

@@ -110,7 +110,10 @@ def create_rates_form(
     )
 
     selector_client_id = Selector2(
-        set_value=set_client_id, data=clients_names(), width="24%", md_width="24%"
+        set_value=set_client_id,
+        data=clients_names(is_active=True),
+        width="24%",
+        md_width="24%",
     )
     selector_month_start = Selector2(
         set_value=set_month_start, data=months_start(), width="24%", md_width="24%"
