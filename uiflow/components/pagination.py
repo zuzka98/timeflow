@@ -1,5 +1,4 @@
 from idom import html, component
-from numpy import number
 
 from .input import SelectPerPage
 from .icons import arrow_left, arrow_right

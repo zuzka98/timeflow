@@ -8,7 +8,6 @@ from .input import Checkbox
 from .tablebatch_row import TablebatchRow
 
 per_page_list = [
-    1,
     15,
     30,
     50,
