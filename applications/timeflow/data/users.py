@@ -1,6 +1,6 @@
 import requests
 import json
-from typing import TypedDict, List
+from typing import TypedDict, List, Optional
 from datetime import date, datetime
 from ..config import base_url
 from .common import Select
@@ -76,11 +76,11 @@ def users_active():
 
 def update_user(
     user_id: int,
-    new_team_id: int = None,
-    new_role_id: int = None,
-    new_first_name: str = None,
-    new_last_name: str = None,
-    new_start_date: date = None,
+    new_team_id: Optional[int] = None,
+    new_role_id: Optional[int] = None,
+    new_first_name: Optional[str] = None,
+    new_last_name: Optional[str] = None,
+    new_start_date: Optional[date] = None,
 ):
     api = f"{base_url}/api/users/{user_id}/"
     func_params = {
@@ -95,7 +95,7 @@ def update_user(
 
     # Pop all keys with value of None
     for param in func_params.keys():
-        if api_params[param] == None:
+        if api_params[param] == "":
             api_params.pop(param)
 
     response = requests.put(api, params=api_params)

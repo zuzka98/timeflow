@@ -1,7 +1,7 @@
 from idom import html, use_state, component, event
 
 from .utils import switch_state
-from uiflow.components.input import Input, Selector2
+from uiflow.components.input import Input, InputDate, Selector2
 from uiflow.components.layout import Row, Column, Container
 from uiflow.components.table import SimpleTable
 from uiflow.components.controls import Button
@@ -25,10 +25,10 @@ def page():
     return html.div(
         {"class": "w-full"},
         Container(
+            Column(list_users(is_event)),
             Column(
                 Row(update_users(is_event, set_is_event)),
             ),
-            Column(list_users(is_event)),
             Row(
                 Column(deactivate_users(is_event, set_is_event)),
                 Column(activate_users(is_event, set_is_event)),
@@ -50,16 +50,8 @@ def update_users(is_event, set_is_event):
     new_last_name, set_new_last_name = use_state("")
     new_role_id, set_new_role_id = use_state("")
     new_team_id, set_new_team_id = use_state("")
+    new_start_date, set_new_start_date = use_state("")
     update_user_id, set_update_user_id = use_state("")
-
-    # Initializes day state, should be in parent(?), here due to a bug
-    day, set_day = use_state("")
-    year_month, set_year_month = use_state("")
-
-    ym = year_month
-    year = ym[:4]
-    month = ym[5:7]
-    new_start_date = year + "-" + month + "-" + day
 
     @event(prevent_default=True)
     def handle_update(event):
@@ -102,22 +94,16 @@ def update_users(is_event, set_is_event):
         width="48%",
         md_width="48%",
     )
-    selector_start_month = Selector2(
-        set_year_month,
-        year_month_dict_list(label="select start month"),
-        width="48%",
-        md_width="48%",
-    )
-    selector_start_day = Selector2(
-        set_day, days_in_month(label="select start day"), width="48%", md_width="48%"
-    )
+
+    selector_date = InputDate(set_new_start_date)
+
     is_disabled = False
     btn = Button(is_disabled, handle_update, label="Update")
     return Column(
         Row(selector_user),
         Row(inp_first_name, inp_last_name, justify="justify-between"),
         Row(selector_role, selector_team, justify="justify-between"),
-        Row(selector_start_month, selector_start_day, justify="justify-between"),
+        Row(selector_date),
         Row(btn),
     )
 
