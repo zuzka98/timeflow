@@ -163,8 +163,12 @@ def AutoSelect(
 
 
 @component
-def SelectPerPage(set_select_per_page, per_page_list):
+def SelectPerPage(set_select_per_page, per_page_list, set_page_number):
     dropdown = [html.option({"value": el}, el) for el in per_page_list]
+
+    def onChange(event):
+        set_select_per_page(event["target"]["value"])
+        set_page_number(1)
 
     return html.div(
         {
@@ -174,7 +178,7 @@ def SelectPerPage(set_select_per_page, per_page_list):
         html.select(
             {
                 "class": selectClass,
-                "onChange": lambda event: set_select_per_page(event["target"]["value"]),
+                "onChange": onChange,
             },
             dropdown,
         ),

@@ -1,5 +1,4 @@
 from idom import html, component
-
 from .input import SelectPerPage
 from .icons import arrow_left, arrow_right
 
@@ -40,7 +39,7 @@ def PaginationBlock(set_page_number, qty_page, set_per_page, per_page_list):
     )
     return html.div(
         {"class": "flex justify-between w-full items-center"},
-        SelectPerPage(set_per_page, per_page_list),
+        SelectPerPage(set_per_page, per_page_list, set_page_number),
         html.div(
             {"class": wrapperClass},
             html.a({"class": pageButtonClass}, arrow_left),
